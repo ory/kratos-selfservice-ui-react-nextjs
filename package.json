@@ -2,24 +2,36 @@
   "name": "react-nextjs-example",
   "version": "0.1.0",
   "private": true,
+  "prettier": "ory-prettier-styles",
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm-run-all -p dev:next dev:proxy",
+    "dev:next": "next dev",
+    "dev:proxy": "ory proxy local --port 4000 http://localhost:3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "proxy": "ory proxy"
+    "format": "prettier -w **/*.{tsx,ts,json,md,js,css}"
   },
   "dependencies": {
-    "@ory/cli": "0.0.59",
+    "@ory/cli": "0.0.66",
+    "@ory/client": "^0.0.1-alpha.18",
+    "@ory/kratos-client": "^0.7.3-alpha.6",
+    "@ory/themes": "0.0.100",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "styled-components": "^5.3.1",
     "typescript": "^4.4.2"
   },
   "devDependencies": {
+    "@types/classnames": "^2.3.1",
     "@types/react": "17.0.19",
+    "@types/styled-components": "^5.1.13",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
+    "npm-run-all": "^4.1.5",
+    "ory-prettier-styles": "^1.1.2",
+    "prettier": "^2.3.2",
     "typescript": "4.4.2"
   }
 }
