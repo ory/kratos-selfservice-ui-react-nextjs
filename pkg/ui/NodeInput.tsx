@@ -1,20 +1,25 @@
 import { UiNode, UiNodeInputAttributes } from '@ory/client'
 import { getLabel } from './Node'
 import { Button, Checkbox, TextInput } from '@ory/themes'
-import { useEffect, useState } from 'react'
 
 interface Props {
   node: UiNode
   attributes: UiNodeInputAttributes
+  value: any
+  disabled: boolean
+  setValue: (value: string | number | boolean) => void
 }
 
-export const NodeInput = ({ node, attributes }: Props) => {
-  const [value, setValue] = useState('')
-
-  useEffect(() => {
-    setValue(attributes.value)
-  }, [attributes.value])
-
+export const NodeInput = ({
+  node,
+  attributes,
+  value = '',
+  setValue,
+  disabled
+}: Props) => {
+  // Some attributes have dynamic JavaScript - this is for example required for WebAuthn.
+  //
+  // Unfortunately, there is currently no other way than to run eval here.
   const onClick = () => {
     if (attributes.onclick) {
       eval(attributes.onclick)
@@ -23,14 +28,17 @@ export const NodeInput = ({ node, attributes }: Props) => {
 
   switch (attributes.type) {
     case 'hidden':
+      // Render a hidden input field
       return (
         <input
           type={attributes.type}
           name={attributes.name}
-          value={attributes.value}
+          value={attributes.value || 'true'}
         />
       )
     case 'checkbox':
+      // Render a checkbox. We have one hidden element which is the real value (true/false), and one
+      // display element which is the toggle value (true)!
       return (
         <>
           <input
@@ -41,7 +49,7 @@ export const NodeInput = ({ node, attributes }: Props) => {
           <Checkbox
             name={attributes.name}
             value="true"
-            disabled={attributes.disabled}
+            disabled={attributes.disabled || disabled}
             label={getLabel(node)}
             state={
               node.messages.find(({ type }) => type === 'error')
@@ -53,30 +61,33 @@ export const NodeInput = ({ node, attributes }: Props) => {
         </>
       )
     case 'button':
+      // Render a button
       return (
         <Button
           name={attributes.name}
           onClick={onClick}
-          value={attributes.value}
-          disabled={attributes.disabled}
+          value={attributes.value || 'true'}
+          disabled={attributes.disabled || disabled}
         >
           {getLabel(node)}
         </Button>
       )
     case 'submit':
+      // Render the submit button
       return (
         <Button
           type="submit"
           name={attributes.name}
           onClick={onClick}
-          value={attributes.value}
-          disabled={attributes.disabled}
+          value={attributes.value || 'true'}
+          disabled={attributes.disabled || disabled}
         >
           {getLabel(node)}
         </Button>
       )
   }
 
+  // Render a generic text input field.
   return (
     <TextInput
       title={node.meta.label?.text}
@@ -87,7 +98,7 @@ export const NodeInput = ({ node, attributes }: Props) => {
       type={attributes.type}
       name={attributes.name}
       value={value}
-      disabled={attributes.disabled}
+      disabled={attributes.disabled || disabled}
       help={node.messages.length > 0}
       state={
         node.messages.find(({ type }) => type === 'error') ? 'error' : undefined

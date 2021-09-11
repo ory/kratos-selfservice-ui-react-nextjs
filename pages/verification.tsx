@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { SelfServiceVerificationFlow } from '@ory/client'
+import {
+  SelfServiceVerificationFlow,
+  SubmitSelfServiceVerificationFlowBody,
+  SubmitSelfServiceSettingsFlowBody
+} from '@ory/client'
 import { Card, CardTitle } from '@ory/themes'
 import { Flow } from '../pkg/ui/Flow'
 import { AxiosError } from 'axios'
@@ -64,6 +68,34 @@ const Verification: NextPage = () => {
       })
   }, [flowId, router.isReady])
 
+  const onSubmit = (values: SubmitSelfServiceVerificationFlowBody) =>
+    router
+      // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
+      // his data when she/he reloads the page.
+      .push(`/verification?flow=${flow?.id}`, undefined, { shallow: true })
+      .then(() =>
+        ory
+          .submitSelfServiceVerificationFlow(
+            String(flow?.id),
+            undefined,
+            values
+          )
+          .then(({ data }) => {
+            // Form submission was successful, show the message to the user!
+            setFlow(data)
+          })
+          .catch((err: AxiosError) => {
+            switch (err.response?.status) {
+              case 400:
+                // Status code 400 implies the form validation had an error
+                setFlow(err.response?.data)
+                return
+            }
+
+            throw err
+          })
+      )
+
   return (
     <>
       <Head>
@@ -72,7 +104,7 @@ const Verification: NextPage = () => {
       </Head>
       <MarginCard>
         <CardTitle>Verify your account</CardTitle>
-        <Flow flow={flow} />
+        <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
       <ActionCard>
         <Link href="/" passHref>

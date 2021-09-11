@@ -82,6 +82,8 @@ app in action!
 
 ### Open Source Ory Kratos
 
+## THIS DOES NOT WORK YET
+
 If you are using Open Source Ory Kratos
 ([read the quickstart](https://www.ory.sh/kratos/docs/quickstart)), set the
 `ORY_KRATOS_PUBLIC_URL` to Ory Kratos' Public URL:

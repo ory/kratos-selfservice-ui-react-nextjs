@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { SelfServiceRecoveryFlow } from '@ory/client'
+import {
+  SelfServiceRecoveryFlow,
+  SubmitSelfServiceLoginFlowBody,
+  SubmitSelfServiceRecoveryFlowBody
+} from '@ory/client'
 import { Card, CardTitle } from '@ory/themes'
 import { Flow } from '../pkg/ui/Flow'
 import { AxiosError } from 'axios'
@@ -67,6 +71,30 @@ const Recovery: NextPage = () => {
       })
   }, [flowId, router.isReady])
 
+  const onSubmit = (values: SubmitSelfServiceRecoveryFlowBody) =>
+    router
+      // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
+      // his data when she/he reloads the page.
+      .push(`/recovery?flow=${flow?.id}`, undefined, { shallow: true })
+      .then(() =>
+        ory
+          .submitSelfServiceRecoveryFlow(String(flow?.id), undefined, values)
+          .then(({ data }) => {
+            // Form submission was successful, show the message to the user!
+            setFlow(data)
+          })
+          .catch((err: AxiosError) => {
+            switch (err.response?.status) {
+              case 400:
+                // Status code 400 implies the form validation had an error
+                setFlow(err.response?.data)
+                return
+            }
+
+            throw err
+          })
+      )
+
   return (
     <>
       <Head>
@@ -75,7 +103,7 @@ const Recovery: NextPage = () => {
       </Head>
       <MarginCard>
         <CardTitle>Recover your account</CardTitle>
-        <Flow flow={flow} />
+        <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
       <ActionCard>
         <Link href="/" passHref>

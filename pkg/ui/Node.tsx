@@ -12,6 +12,9 @@ import { NodeInput } from './NodeInput'
 
 interface Props {
   node: UiNode
+  disabled: boolean
+  value: any
+  setValue: (value: string | number | boolean) => void
 }
 
 // A TypeScript type guard for nodes of the type <a>
@@ -71,7 +74,7 @@ export const getLabel = (n: UiNode): string => {
   return ''
 }
 
-export const Node = ({ node }: Props) => {
+export const Node = ({ node, value, setValue, disabled }: Props) => {
   if (isUiNodeImageAttributes(node.attributes)) {
     return <NodeImage node={node} attributes={node.attributes} />
   }
@@ -81,7 +84,15 @@ export const Node = ({ node }: Props) => {
   }
 
   if (isUiNodeInputAttributes(node.attributes)) {
-    return <NodeInput node={node} attributes={node.attributes} />
+    return (
+      <NodeInput
+        value={value}
+        setValue={setValue}
+        node={node}
+        disabled={disabled}
+        attributes={node.attributes}
+      />
+    )
   }
 
   return null

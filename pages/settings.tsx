@@ -1,9 +1,13 @@
 import { ReactNode, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { SelfServiceSettingsFlow } from '@ory/client'
+import {
+  SelfServiceSettingsFlow,
+  SubmitSelfServiceRegistrationFlowBody,
+  SubmitSelfServiceSettingsFlowBody
+} from '@ory/client'
 import { Card, CardTitle, H3, P } from '@ory/themes'
-import { Flow } from '../pkg/ui/Flow'
+import { Flow, Methods } from '../pkg/ui/Flow'
 import { AxiosError } from 'axios'
 import { ActionCard, CenterLink } from '../pkg/styled'
 import Link from 'next/link'
@@ -14,12 +18,18 @@ import { Props as FlowProps } from '../pkg/ui/Flow'
 //
 // import {ory} from "../../pkg/open-source";
 import { ory } from '../pkg/cloud'
+import { Messages } from '../pkg/ui/Messages'
 
-const SettingsCard = ({
+interface Props {
+  flow?: SelfServiceSettingsFlow
+  only?: Methods
+}
+
+function SettingsCard({
   flow,
   only,
   children
-}: FlowProps & { children: ReactNode }) => {
+}: Props & { children: ReactNode }) {
   if (!flow) {
     return null
   }
@@ -74,6 +84,30 @@ const Settings: NextPage = () => {
     })
   }, [flowId, router.isReady])
 
+  const onSubmit = (values: SubmitSelfServiceSettingsFlowBody) =>
+    router
+      // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
+      // his data when she/he reloads the page.
+      .push(`/settings?flow=${flow?.id}`, undefined, { shallow: true })
+      .then(() => {
+        ory
+          .submitSelfServiceSettingsFlow(String(flow?.id), undefined, values)
+          .then(({ data }) => {
+            // The settings have been saved and the flow was updated. Let's show it to the user!
+            setFlow(data)
+          })
+          .catch((err: AxiosError) => {
+            switch (err.response?.status) {
+              case 400:
+                // Status code 400 implies the form validation had an error
+                setFlow(err.response?.data)
+                return
+            }
+
+            throw err
+          })
+      })
+
   return (
     <>
       <Head>
@@ -88,23 +122,45 @@ const Settings: NextPage = () => {
       </CardTitle>
       <SettingsCard only="profile" flow={flow}>
         <H3>Profile Settings</H3>
-        <Flow only="profile" flow={flow} />
+        <Messages messages={flow?.ui.messages} />
+        <Flow
+          hideGlobalMessages
+          onSubmit={onSubmit}
+          only="profile"
+          flow={flow}
+        />
       </SettingsCard>
       <SettingsCard only="password" flow={flow}>
         <H3>Change Password</H3>
-        <Flow only="password" flow={flow} />
+
+        <Messages messages={flow?.ui.messages} />
+        <Flow
+          hideGlobalMessages
+          onSubmit={onSubmit}
+          only="password"
+          flow={flow}
+        />
       </SettingsCard>
       <SettingsCard only="oidc" flow={flow}>
         <H3>Manage Social Sign In</H3>
-        <Flow only="oidc" flow={flow} />
+
+        <Messages messages={flow?.ui.messages} />
+        <Flow hideGlobalMessages onSubmit={onSubmit} only="oidc" flow={flow} />
       </SettingsCard>
       <SettingsCard only="lookup_secret" flow={flow}>
         <H3>Manage 2FA Backup Recovery Codes</H3>
+        <Messages messages={flow?.ui.messages} />
         <P>
           Recovery codes can be used in panic situations where you have lost
           access to your 2FA device.
         </P>
-        <Flow only="lookup_secret" flow={flow} />
+
+        <Flow
+          hideGlobalMessages
+          onSubmit={onSubmit}
+          only="lookup_secret"
+          flow={flow}
+        />
       </SettingsCard>
       <SettingsCard only="totp" flow={flow}>
         <H3>Manage 2FA TOTP Authenticator App</H3>
@@ -130,15 +186,22 @@ const Settings: NextPage = () => {
           </a>
           ).
         </P>
-        <Flow only="totp" flow={flow} />
+        <Messages messages={flow?.ui.messages} />
+        <Flow hideGlobalMessages onSubmit={onSubmit} only="totp" flow={flow} />
       </SettingsCard>
       <SettingsCard only="webauthn" flow={flow}>
         <H3>Manage Hardware Tokens and Biometrics</H3>
+        <Messages messages={flow?.ui.messages} />
         <P>
           Use Hardware Tokens (e.g. YubiKey) or Biometrics (e.g. FaceID,
           TouchID) to enhance your account security.
         </P>
-        <Flow only="webauthn" flow={flow} />
+        <Flow
+          hideGlobalMessages
+          onSubmit={onSubmit}
+          only="webauthn"
+          flow={flow}
+        />
       </SettingsCard>
       <ActionCard wide>
         <Link href="/" passHref>

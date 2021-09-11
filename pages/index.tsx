@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { ory } from '../pkg/cloud'
 import { AxiosError } from 'axios'
 import { DocsButton, MarginCard } from '../pkg/styled'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
   const [session, setSession] = useState<string>(
@@ -13,6 +14,7 @@ const Home: NextPage = () => {
   )
   const [hasSession, setHasSession] = useState<boolean>(false)
   const [logoutUrl, setLogoutUrl] = useState<string>('')
+  const router = useRouter()
 
   useEffect(() => {
     ory
@@ -24,6 +26,14 @@ const Home: NextPage = () => {
       .catch((err: AxiosError) => {
         switch (err.response?.status) {
           case 403:
+          // This is a legacy error code thrown. See code 422 for
+          // more details.
+          case 422:
+            // This status code is returned when we are trying to
+            // validate a session which has not yet completed
+            // it's second factor
+            router.push('/login?aal=aal2')
+            return
           case 401:
             // do nothing, the user is not logged in
             return

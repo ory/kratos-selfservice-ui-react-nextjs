@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { SelfServiceLoginFlow } from '@ory/client'
+import {
+  SelfServiceLoginFlow,
+  SubmitSelfServiceLoginFlowBody
+} from '@ory/client'
 import { Card, CardTitle } from '@ory/themes'
-import { Flow } from '../pkg/ui/Flow'
+import { Flow, Values } from '../pkg/ui/Flow'
 import { AxiosError } from 'axios'
 import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
 import Link from 'next/link'
@@ -17,9 +20,21 @@ import Head from 'next/head'
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceLoginFlow>()
 
+  // This might be confusing, but we want to show the user an option
+  // to sign out if they are performing two-factor authentication!
+  const [logoutUrl, setLogoutUrl] = useState<string>('')
+
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId } = router.query
+  const {
+    flow: flowId,
+    // Refresh means we want to refresh the session. This is needed, for example, when we want to update the password
+    // of a user.
+    refresh,
+    // AAL = Authorization Assurance Level. This implies that we want to upgrade the AAL, meaning that we want
+    // to perform two-factor authentication/verification.
+    aal
+  } = router.query
 
   useEffect(() => {
     if (!router.isReady) {
@@ -52,7 +67,10 @@ const Login: NextPage = () => {
 
     // Otherwise we initialize it
     ory
-      .initializeSelfServiceLoginFlowForBrowsers()
+      .initializeSelfServiceLoginFlowForBrowsers(
+        Boolean(refresh),
+        aal ? String(aal) : undefined
+      )
       .then(({ data }) => {
         setFlow(data)
       })
@@ -65,7 +83,44 @@ const Login: NextPage = () => {
 
         throw err
       })
-  }, [flowId, router.isReady])
+
+    // This might be confusing but we want to show a logout link
+    // when the user is performing MFA or refreshing her/his session.
+    if (aal || refresh) {
+      ory
+        .createSelfServiceLogoutFlowUrlForBrowsers()
+        .then(({ data }) => {
+          setLogoutUrl(String(data.logout_url))
+        })
+        .catch(() => {
+          // Do nothing.
+        })
+    }
+  }, [flowId, router.isReady, aal, refresh])
+
+  const onSubmit = (values: SubmitSelfServiceLoginFlowBody) =>
+    router
+      // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
+      // his data when she/he reloads the page.
+      .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
+      .then(() => {
+        ory
+          .submitSelfServiceLoginFlow(String(flow?.id), undefined, values)
+          .then(() => {
+            // We logged in successfully! Let's bring the user home.
+            return router.push('/').then(() => {})
+          })
+          .catch((err: AxiosError) => {
+            switch (err.response?.status) {
+              case 400:
+                // Status code 400 implies the form validation had an error
+                setFlow(err.response?.data)
+                return
+            }
+
+            throw err
+          })
+      })
 
   return (
     <>
@@ -75,18 +130,26 @@ const Login: NextPage = () => {
       </Head>
       <MarginCard>
         <CardTitle>Sign In</CardTitle>
-        <Flow flow={flow} />
+        <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
-      <ActionCard>
-        <Link href="/registration" passHref>
-          <CenterLink>Create account</CenterLink>
-        </Link>
-      </ActionCard>
-      <ActionCard>
-        <Link href="/recover" passHref>
-          <CenterLink>Recover your account</CenterLink>
-        </Link>
-      </ActionCard>
+      {aal || refresh ? (
+        <ActionCard>
+          <CenterLink href={logoutUrl}>Log out</CenterLink>
+        </ActionCard>
+      ) : (
+        <>
+          <ActionCard>
+            <Link href="/registration" passHref>
+              <CenterLink>Create account</CenterLink>
+            </Link>
+          </ActionCard>
+          <ActionCard>
+            <Link href="/recover" passHref>
+              <CenterLink>Recover your account</CenterLink>
+            </Link>
+          </ActionCard>
+        </>
+      )}
     </>
   )
 }
