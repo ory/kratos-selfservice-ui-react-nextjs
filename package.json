@@ -8,7 +8,9 @@
     "dev:next": "next dev",
     "dev:proxy": "ory proxy local --port 4000 http://localhost:3000",
     "build": "next build",
-    "start": "next start",
+    "start": "npm-run-all -p start:next start:proxy",
+    "start:next": "PORT=4000 next start",
+    "start:proxy": "ory proxy production --port $PORT http://localhost:4000 https://$VERCEL_URL",
     "lint": "next lint",
     "format": "prettier -w **/*.{tsx,ts,json,md,js,css}"
   },
@@ -17,6 +19,7 @@
     "@ory/client": "^0.0.1-alpha.18",
     "@ory/kratos-client": "^0.7.3-alpha.6",
     "@ory/themes": "0.0.100",
+    "classnames": "^2.3.1",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -24,7 +27,6 @@
     "typescript": "^4.4.2"
   },
   "devDependencies": {
-    "@types/classnames": "^2.3.1",
     "@types/react": "17.0.19",
     "@types/styled-components": "^5.1.13",
     "eslint": "7.32.0",

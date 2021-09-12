@@ -202,3 +202,13 @@ from the creators of Next.js.
 Check out our
 [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
 details.
+
+**work in progress**
+
+```
+npx vercel deploy --prod
+```
+
+Add access token:
+
+![Add Access Token](./docs/images/vercel-deploy.png)

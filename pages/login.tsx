@@ -96,7 +96,7 @@ const Login: NextPage = () => {
           // Do nothing.
         })
     }
-  }, [flowId, router.isReady, aal, refresh])
+  }, [flowId, router, router.isReady, aal, refresh])
 
   const onSubmit = (values: SubmitSelfServiceLoginFlowBody) =>
     router
