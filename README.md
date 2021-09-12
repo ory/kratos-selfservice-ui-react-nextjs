@@ -150,65 +150,50 @@ NextJS using `npm-run-all` with the `--parallel` flag:
   },
 ```
 
-##
-
----
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with
-[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the
-result.
-
-You can start editing the page by modifying `pages/index.js`. The page
-auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello). This
-endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are
-treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead
-of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out
-[the Next.js GitHub repository](https://github.com/vercel/next.js/) - your
-feedback and contributions are welcome!
-
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the
+**THIS DOES NOT WORK YET**
+
+Please not that this section only works with Ory Cloud, as the Ory Proxy is required. If you run open source Ory Kratos,
+setting up this example app on Vercel heavily depends on your deployment environment!
+
+The easiest way to deploy your Next.js + Ory Cloud app is to use the
 [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
 from the creators of Next.js.
 
-Check out our
-[Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
+If you have never deployed on Vercel, check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
 details.
 
-**work in progress**
+Deploying the app is easy. Ensure that your build works by running
+
+```
+npm run build
+```
+
+Then, set up your [Vercel](https://vercel.com/) account and
+create a new app. You will need to configure your Ory Cloud Personal
+Access Token as an environment variable for your app:
+
+![Add Ory Cloud Personal Access Token to Vercel](./docs/images/vercel-deploy.png)
+
+Next all you need to do is to run the deploy command:
 
 ```
 npx vercel deploy --prod
 ```
 
-Add access token:
+### Deploying to Production with Ory Proxy and Vercel
 
-![Add Access Token](./docs/images/vercel-deploy.png)
+Behind the scenes we are using the same trick as we are doing for local environments
+for production as well:
+
+```diff
+  "scripts": {
+    // ...
+-   "start": "next start",
++   "start": "npm-run-all -p start:next start:proxy",
++   "start:next": "PORT=4000 next start",
++   "start:proxy": "ory proxy production --port $PORT http://localhost:4000 https://$VERCEL_URL",
+    // ...
+  },
+```
