@@ -82,7 +82,7 @@ const Settings: NextPage = () => {
     ory.initializeSelfServiceSettingsFlowForBrowsers().then(({ data }) => {
       setFlow(data)
     })
-  }, [flowId, router.isReady])
+  }, [flowId, router, router.isReady])
 
   const onSubmit = (values: SubmitSelfServiceSettingsFlowBody) =>
     router
@@ -167,13 +167,14 @@ const Settings: NextPage = () => {
         <P>
           Add a TOTP Authenticator App to your account to improve your account
           security. Popular Authenticator Apps are{' '}
-          <a href="https://www.lastpass.com" target="_blank">
+          <a href="https://www.lastpass.com" rel="noreferrer" target="_blank">
             LastPass
           </a>{' '}
           and Google Authenticator (
           <a
             href="https://apps.apple.com/us/app/google-authenticator/id388497605"
             target="_blank"
+            rel="noreferrer"
           >
             iOS
           </a>
@@ -181,6 +182,7 @@ const Settings: NextPage = () => {
           <a
             href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US"
             target="_blank"
+            rel="noreferrer"
           >
             Android
           </a>

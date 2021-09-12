@@ -66,7 +66,7 @@ const Verification: NextPage = () => {
 
         throw err
       })
-  }, [flowId, router.isReady])
+  }, [flowId, router, router.isReady])
 
   const onSubmit = (values: SubmitSelfServiceVerificationFlowBody) =>
     router
