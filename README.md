@@ -174,7 +174,7 @@ Then, set up your [Vercel](https://vercel.com/) account and
 create a new app. You will need to configure your Ory Cloud Personal
 Access Token as an environment variable for your app:
 
-![Add Ory Cloud Personal Access Token to Vercel](./docs/images/vercel-deploy.png)
+BAD IDEA - will be bundled!
 
 Next all you need to do is to run the deploy command:
 
