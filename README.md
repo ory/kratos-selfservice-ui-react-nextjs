@@ -57,6 +57,10 @@ endpoint after you have signed up or signed in!
 
 ![Ory Cloud Project User Interface Configuration](./docs/images/redirects.png)
 
+We are setting these values to ensure that all flows (e.g. clicking on that
+password reset link) end up at your application. If you deploy to production,
+set these values to your production URL!
+
 Once that is done, start the NPM process:
 
 ```
