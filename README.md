@@ -154,14 +154,16 @@ NextJS using `npm-run-all` with the `--parallel` flag:
 
 **THIS DOES NOT WORK YET**
 
-Please not that this section only works with Ory Cloud, as the Ory Proxy is required. If you run open source Ory Kratos,
-setting up this example app on Vercel heavily depends on your deployment environment!
+Please not that this section only works with Ory Cloud, as the Ory Proxy is
+required. If you run open source Ory Kratos, setting up this example app on
+Vercel heavily depends on your deployment environment!
 
 The easiest way to deploy your Next.js + Ory Cloud app is to use the
 [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
 from the creators of Next.js.
 
-If you have never deployed on Vercel, check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
+If you have never deployed on Vercel, check out the
+[Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
 details.
 
 Deploying the app is easy. Ensure that your build works by running
@@ -170,9 +172,9 @@ Deploying the app is easy. Ensure that your build works by running
 npm run build
 ```
 
-Then, set up your [Vercel](https://vercel.com/) account and
-create a new app. You will need to configure your Ory Cloud Personal
-Access Token as an environment variable for your app:
+Then, set up your [Vercel](https://vercel.com/) account and create a new app.
+You will need to configure your Ory Cloud Personal Access Token as an
+environment variable for your app:
 
 BAD IDEA - will be bundled!
 
@@ -184,8 +186,8 @@ npx vercel deploy --prod
 
 ### Deploying to Production with Ory Proxy and Vercel
 
-Behind the scenes we are using the same trick as we are doing for local environments
-for production as well:
+Behind the scenes we are using the same trick as we are doing for local
+environments for production as well:
 
 ```diff
   "scripts": {

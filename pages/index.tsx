@@ -1,20 +1,20 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Card, CardTitle, P, H2, H3, LinkButton, CodeBox } from '@ory/themes'
-import styled from 'styled-components'
+import { Card, CardTitle, P, H2, H3, CodeBox } from '@ory/themes'
 import { useEffect, useState } from 'react'
 import { ory } from '../pkg/cloud'
 import { AxiosError } from 'axios'
 import { DocsButton, MarginCard } from '../pkg/styled'
 import { useRouter } from 'next/router'
+import { createLogoutHandler } from '../pkg/hooks'
 
 const Home: NextPage = () => {
   const [session, setSession] = useState<string>(
     'No valid Ory Session was found.\nPlease sign in to receive one.'
   )
   const [hasSession, setHasSession] = useState<boolean>(false)
-  const [logoutUrl, setLogoutUrl] = useState<string>('')
   const router = useRouter()
+  const onLogout = createLogoutHandler()
 
   useEffect(() => {
     ory
@@ -32,26 +32,7 @@ const Home: NextPage = () => {
             // This status code is returned when we are trying to
             // validate a session which has not yet completed
             // it's second factor
-            router.push('/login?aal=aal2')
-            return
-          case 401:
-            // do nothing, the user is not logged in
-            return
-        }
-
-        // Something else happened!
-        return Promise.reject(err)
-      })
-  })
-
-  useEffect(() => {
-    ory
-      .createSelfServiceLogoutFlowUrlForBrowsers()
-      .then(({ data }) => {
-        setLogoutUrl(String(data.logout_url))
-      })
-      .catch((err: AxiosError) => {
-        switch (err.response?.status) {
+            return router.push('/login?aal=aal2')
           case 401:
             // do nothing, the user is not logged in
             return
@@ -168,8 +149,8 @@ const Home: NextPage = () => {
           <DocsButton
             unresponsive
             testid="logout"
-            href={logoutUrl}
-            disabled={!Boolean(logoutUrl)}
+            onClick={onLogout}
+            disabled={!hasSession}
             title={'Logout'}
           />
         </div>

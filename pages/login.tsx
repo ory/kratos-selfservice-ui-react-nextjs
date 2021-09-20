@@ -16,13 +16,10 @@ import Link from 'next/link'
 // import {ory} from "../../pkg/open-source";
 import { ory } from '../pkg/cloud'
 import Head from 'next/head'
+import { createLogoutHandler } from '../pkg/hooks'
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceLoginFlow>()
-
-  // This might be confusing, but we want to show the user an option
-  // to sign out if they are performing two-factor authentication!
-  const [logoutUrl, setLogoutUrl] = useState<string>('')
 
   // Get ?flow=... from the URL
   const router = useRouter()
@@ -35,6 +32,10 @@ const Login: NextPage = () => {
     // to perform two-factor authentication/verification.
     aal
   } = router.query
+
+  // This might be confusing, but we want to show the user an option
+  // to sign out if they are performing two-factor authentication!
+  const onLogout = createLogoutHandler([aal, refresh])
 
   useEffect(() => {
     if (!router.isReady) {
@@ -83,19 +84,6 @@ const Login: NextPage = () => {
 
         throw err
       })
-
-    // This might be confusing but we want to show a logout link
-    // when the user is performing MFA or refreshing her/his session.
-    if (aal || refresh) {
-      ory
-        .createSelfServiceLogoutFlowUrlForBrowsers()
-        .then(({ data }) => {
-          setLogoutUrl(String(data.logout_url))
-        })
-        .catch(() => {
-          // Do nothing.
-        })
-    }
   }, [flowId, router, router.isReady, aal, refresh])
 
   const onSubmit = (values: SubmitSelfServiceLoginFlowBody) =>
@@ -134,7 +122,7 @@ const Login: NextPage = () => {
       </MarginCard>
       {aal || refresh ? (
         <ActionCard>
-          <CenterLink href={logoutUrl}>Log out</CenterLink>
+          <CenterLink onClick={onLogout}>Log out</CenterLink>
         </ActionCard>
       ) : (
         <>

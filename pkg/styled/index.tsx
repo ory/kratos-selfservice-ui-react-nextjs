@@ -43,7 +43,8 @@ export const TextLeftButton = styled(LinkButton)`
 
 export interface DocsButtonProps {
   title: string
-  href: string
+  href?: string
+  onClick?: () => void
   testid: string
   disabled?: boolean
   unresponsive?: boolean
@@ -52,13 +53,19 @@ export interface DocsButtonProps {
 export const DocsButton = ({
   title,
   href,
+  onClick,
   testid,
   disabled,
   unresponsive
 }: DocsButtonProps) => (
   <div className={cn('col-xs-4', { 'col-md-12': !unresponsive })}>
     <div className="box">
-      <TextLeftButton disabled={disabled} data-testid={testid} href={href}>
+      <TextLeftButton
+        onClick={onClick}
+        disabled={disabled}
+        data-testid={testid}
+        href={href}
+      >
         {title}
       </TextLeftButton>
     </div>
