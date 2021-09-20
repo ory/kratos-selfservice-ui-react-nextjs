@@ -12,10 +12,9 @@ This is an example using ReactJS to build an app with
   account)
 - [account verification](pages/ui/recovery.tsx) (e.g. reset password)
 
-To avoid the complexity of setting up routing and state management - in the
-hopes of making this example easy to consume
-
-- we have chosen NextJS as the framework.
+To avoid the complexity of setting up routing and state management and in the
+hopes of making this example easy to consume, we have chosen NextJS as the
+framework.
 
 All pages work with Ory Cloud's SDKs and APIs as well as with open source Ory
 Kratos!
@@ -32,30 +31,28 @@ Get started by
 [signing up for an Ory Cloud account](https://console.ory.sh/registration) and
 creating your first
 [Ory Cloud Project](https://www.ory.sh/docs/start-building/create-project). Then
-create a
-[personal access token](https://www.ory.sh/docs/guides/create-personal-access-token)
 get the Project's
 [SDK Configuration](https://www.ory.sh/docs/concepts/services-api/#sdk-configuration)
 and set it in your environment and start the process:
 
 ```
 npm i
-export ORY_ACCESS_TOKEN=...
+export ORY_SDK_URL=...
 ```
 
 To get everything to work smoothly, we recommend setting the appropriate UI
 endpoints in your Ory Cloud Project under the "User Interface" menu item:
 
-- Login UI: `https://localhost:4000/login`
-- Registration UI: `https://localhost:4000/registration`
-- Settings UI: `https://localhost:4000/settings`
-- Verification UI: `https://localhost:4000/verification`
-- Recovery UI: `https://localhost:4000/recovery`
-- Error UI: `https://localhost:4000/error`
+- Login UI: `http://localhost:3000/login`
+- Registration UI: `http://localhost:3000/registration`
+- Settings UI: `http://localhost:3000/settings`
+- Verification UI: `http://localhost:3000/verification`
+- Recovery UI: `http://localhost:3000/recovery`
+- Error UI: `http://localhost:3000/error`
 
 ![Ory Cloud Project User Interface Configuration](./docs/images/ui-settings.png)
 
-Also, ensure to set up your redirects correctly so you end up at the right
+Also, ensure to set up your redirects correctly, so you end up at the right
 endpoint after you have signed up or signed in!
 
 ![Ory Cloud Project User Interface Configuration](./docs/images/redirects.png)
@@ -66,37 +63,12 @@ Once that is done, start the NPM process:
 npm run dev
 ```
 
-This command will set up the Ory Proxy and NextJS (see details in the following
-sections). Due to this, you will be prompted for a password in order to set up
-HTTPS on your machine. Depending on the order of execution, it is possible that
-the prompt is a bit hidden like here:
-
-```
-To modify your operating system certificate store, you might might be prompted for your password now:
-Password:event - compiled successfully
-```
-
-In that case, type your password and press enter and everything will come live!
-Next head over to [https://localhost:4000/](https://localhost:4000/) to see the
-app in action!
+Next head over to [http://localhost:3000/](http://localhost:3000/) to see the
+app in action with login, registration - a working user management!
 
 ### Open Source Ory Kratos
 
-## THIS DOES NOT WORK YET
-
-If you are using Open Source Ory Kratos
-([read the quickstart](https://www.ory.sh/kratos/docs/quickstart)), set the
-`ORY_KRATOS_PUBLIC_URL` to Ory Kratos' Public URL:
-
-```
-npm i
-export ORY_KRATOS_PUBLIC_URL=http://...
-
-# In the case of the Quickstart this would be:
-# export ORY_KRATOS_PUBLIC_URL=http://localhost:4455
-
-npm run dev:next
-```
+**this has to be documented**
 
 ## Start From Scratch
 
@@ -106,59 +78,34 @@ To start from scratch, initialize the NextJS App
 npx create-next-app --ts
 ```
 
-and install `npm-run-all` which allows us to run both the Ory Proxy as well as
-NextJS alongside each other.
+### Installing Ory
+
+To make things easy, also the Ory Cloud SDK and the Ory Cloud Integration
+package. The Ory Cloud SDK is used to interact with Ory Cloud's APIs. The Ory
+Cloud Integration package contains code to easily connect apps to Ory's APIs and
+make cookies and other features work out of the box:
 
 ```
-npm i --save-dev npm-run-all
+npm i --save @ory/client @ory/integrations
 ```
 
-### Installing Ory Components
+#### Installing Open Source Ory Kratos
 
-Install the [Ory Proxy](https://www.ory.sh/docs/guides/proxy) which is shipped
-with the Ory CLI:
-
-```
-npm i --save @ory/cli
-```
-
-To make things easy, also install the Ory Cloud SDK. If you are using the Open
-Source, then install the Ory Kratos SDK:
+If you use Open Source Ory Kratos you only need to install `@ory/kratos-client`
+to interface with Ory Kratos' APIs. Please be aware that Ory Kratos and your
+NextJS app must run on the same domain name! Be aware that `127.0.0.1` and
+`localhost` are different domain names!
 
 ```
-# Cloud:
-npm i --save @ory/client
-
-# Open source:
 npm i --save @ory/kratos-client
 ```
 
-### Running Proxy and NextJS in Parallel
+## Deploy on Vercel with Ory Cloud
 
-And finally set up our `package.json` so that it runs the Ory Proxy as well as
-NextJS using `npm-run-all` with the `--parallel` flag:
-
-```diff
-  "scripts": {
--   "dev": "next dev",
-+   "dev": "npm-run-all --parallel dev:next dev:proxy",
-+   "dev:next": "next dev",
-+   "dev:proxy": "ory proxy local --port 4000 http://localhost:3000",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-  },
-```
-
-## Deploy on Vercel
-
-**THIS DOES NOT WORK YET**
-
-Please not that this section only works with Ory Cloud, as the Ory Proxy is
-required. If you run open source Ory Kratos, setting up this example app on
-Vercel heavily depends on your deployment environment!
-
-The easiest way to deploy your Next.js + Ory Cloud app is to use the
+This section only works in combination with Ory Cloud. If you run Open Source
+Ory Kratos, ensure that your NextJS app and Ory Kratos run on the same top-level
+domain (e.g. `example.org`) and configure Ory Kratos with the correct cookie
+settings. The easiest way to deploy your Next.js + Ory Cloud app is to use the
 [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
 from the creators of Next.js.
 
@@ -173,29 +120,14 @@ npm run build
 ```
 
 Then, set up your [Vercel](https://vercel.com/) account and create a new app.
-You will need to configure your Ory Cloud Personal Access Token as an
+You will need to configure your
+[Ory Cloud Project SDK URL](https://www.ory.sh/docs/concepts/services-api) as an
 environment variable for your app:
 
-BAD IDEA - will be bundled!
+![TODO]()
 
 Next all you need to do is to run the deploy command:
 
 ```
 npx vercel deploy --prod
-```
-
-### Deploying to Production with Ory Proxy and Vercel
-
-Behind the scenes we are using the same trick as we are doing for local
-environments for production as well:
-
-```diff
-  "scripts": {
-    // ...
--   "start": "next start",
-+   "start": "npm-run-all -p start:next start:proxy",
-+   "start:next": "PORT=4000 next start",
-+   "start:proxy": "ory proxy production --port $PORT http://localhost:4000 https://$VERCEL_URL",
-    // ...
-  },
 ```
