@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Card, CardTitle, P, H2, H3, CodeBox } from '@ory/themes'
 import { useEffect, useState } from 'react'
-import { ory } from '../pkg/cloud'
+import ory from '../pkg/sdk'
 import { AxiosError } from 'axios'
 import { DocsButton, MarginCard } from '../pkg/styled'
 import { useRouter } from 'next/router'
@@ -103,7 +103,7 @@ const Home: NextPage = () => {
                 Below you will find the decoded Ory Session if you are logged
                 in.
               </P>
-              <CodeBox code={session} />
+              <CodeBox data-testid="session-content" code={session} />
             </div>
           </div>
         </div>

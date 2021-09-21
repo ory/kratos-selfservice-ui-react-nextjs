@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { SelfServiceError, SelfServiceLoginFlow } from '@ory/client'
-import { Card, CardTitle, CodeBox } from '@ory/themes'
-import { Flow } from '../pkg/ui/Flow'
+import { SelfServiceError } from '@ory/client'
+import { CardTitle, CodeBox } from '@ory/themes'
 import { AxiosError } from 'axios'
 import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
 import Link from 'next/link'
-
-// Or if you use the open source:
-//
-// import {ory} from "../../pkg/open-source";
-import { ory } from '../pkg/cloud'
+import ory from '../pkg/sdk'
 
 const Login: NextPage = () => {
   const [error, setError] = useState<SelfServiceError | string>()

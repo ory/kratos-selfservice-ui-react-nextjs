@@ -69,7 +69,31 @@ set these values to your production URL!
 
 ### Open Source Ory Kratos
 
-**this has to be documented**
+Of course, this application also integrates with Open Source Ory Kratos! Instead
+of setting up the `ORY_SDK_URL` you will need to set the environment variable
+`NEXT_PUBLIC_ORY_KRATOS_PUBLIC` to your Ory Kratos public API!
+
+If you are running the
+[Ory Kratos Quickstart](https://www.ory.sh/kratos/docs/quickstart) this is:
+
+```
+NEXT_PUBLIC_ORY_KRATOS_PUBLIC=http://localhost:4433
+```
+
+#### CORS
+
+Please be aware that you need to add the port where your NextJS is running to
+the list of allowed CORS origins. You also need to allow some headers.
+
+If you are running
+
+```yaml
+serve:
+  public:
+    cors:
+      allowed_origins:
+        - http://localhost:3000
+```
 
 ## Start From Scratch
 
