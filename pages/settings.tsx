@@ -12,12 +12,7 @@ import { AxiosError } from 'axios'
 import { ActionCard, CenterLink } from '../pkg/styled'
 import Link from 'next/link'
 import Head from 'next/head'
-import { Props as FlowProps } from '../pkg/ui/Flow'
-
-// Or if you use the open source:
-//
-// import {ory} from "../../pkg/open-source";
-import { ory } from '../pkg/cloud'
+import ory from '../pkg/sdk'
 import { Messages } from '../pkg/ui/Messages'
 
 interface Props {

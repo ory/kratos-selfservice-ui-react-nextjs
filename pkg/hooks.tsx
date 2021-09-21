@@ -1,5 +1,5 @@
 import { useState, useEffect, DependencyList } from 'react'
-import { ory } from './cloud'
+import ory from './sdk'
 import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 

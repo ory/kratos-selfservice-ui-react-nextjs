@@ -10,10 +10,7 @@ import { CardTitle } from '@ory/themes'
 import { Flow } from '../pkg/ui/Flow'
 import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
 
-// Or if you use the open source:
-//
-// import {ory} from "../../pkg/open-source";
-import { ory } from '../pkg/cloud'
+import ory from '../pkg/sdk'
 import { AxiosError } from 'axios'
 import Head from 'next/head'
 

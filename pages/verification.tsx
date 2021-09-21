@@ -12,10 +12,7 @@ import { AxiosError } from 'axios'
 import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
 import Link from 'next/link'
 
-// Or if you use the open source:
-//
-// import {ory} from "../../pkg/open-source";
-import { ory } from '../pkg/cloud'
+import ory from '../pkg/sdk'
 import Head from 'next/head'
 
 const Verification: NextPage = () => {
