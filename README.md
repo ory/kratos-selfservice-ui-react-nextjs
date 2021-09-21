@@ -38,7 +38,13 @@ and set it in your environment and start the process:
 ```
 npm i
 export ORY_SDK_URL=...
+npm run dev
 ```
+
+Next head over to [http://localhost:3000/](http://localhost:3000/) to see the
+app in action with login, registration - a working user management!
+
+#### Additional Configuration
 
 To get everything to work smoothly, we recommend setting the appropriate UI
 endpoints in your Ory Cloud Project under the "User Interface" menu item:
@@ -60,15 +66,6 @@ endpoint after you have signed up or signed in!
 We are setting these values to ensure that all flows (e.g. clicking on that
 password reset link) end up at your application. If you deploy to production,
 set these values to your production URL!
-
-Once that is done, start the NPM process:
-
-```
-npm run dev
-```
-
-Next head over to [http://localhost:3000/](http://localhost:3000/) to see the
-app in action with login, registration - a working user management!
 
 ### Open Source Ory Kratos
 
