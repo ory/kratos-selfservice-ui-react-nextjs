@@ -1,7 +1,6 @@
 {
   "name": "@ory/integration-react",
   "version": "0.0.1",
-  "prettier": "ory-prettier-styles",
   "config": {
     "prettierTarget": "**/*.{tsx,ts,json,md,js,css}"
   },
@@ -37,6 +36,7 @@
     "styled-components": "^5.3.1"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^2.0.2",
     "@types/react": "17.0.19",
     "@types/request": "^2.48.7",
     "@types/styled-components": "^5.1.13",
