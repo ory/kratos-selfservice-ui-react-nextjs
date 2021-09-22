@@ -1,15 +1,23 @@
 {
-  "name": "react-nextjs-example",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@ory/integration-react",
+  "version": "0.0.0",
   "prettier": "ory-prettier-styles",
+  "config": {
+    "prettierTarget": "**/*.{tsx,ts,json,md,js,css}"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier -w **/*.{tsx,ts,json,md,js,css}"
+    "format": "prettier --write ${npm_package_config_prettierTarget}",
+    "format:check": "prettier --check ${npm_package_config_prettierTarget}",
+    "build:lib": "rm -rf dist && rollup -c",
+    "prepublishOnly": "npm run build:lib"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
   "dependencies": {
     "@ory/client": "^0.0.1-alpha.18",
     "@ory/integrations": "^0.0.3",
@@ -22,6 +30,12 @@
     "styled-components": "^5.3.1",
     "typescript": "^4.4.2"
   },
+  "peerDependencies": {
+    "next": "11.1.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "styled-components": "^5.3.1"
+  },
   "devDependencies": {
     "@types/react": "17.0.19",
     "@types/request": "^2.48.7",
@@ -30,6 +44,9 @@
     "eslint-config-next": "11.1.2",
     "ory-prettier-styles": "^1.1.2",
     "prettier": "^2.3.2",
-    "typescript": "4.4.2"
+    "typescript": "4.4.2",
+    "rollup": "^2.56.3",
+    "rollup-plugin-dts": "^4.0.0",
+    "rollup-plugin-esbuild": "^4.5.0"
   }
 }
