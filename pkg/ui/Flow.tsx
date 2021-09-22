@@ -1,5 +1,4 @@
-import { getNodeId, isUiNodeInputAttributes, Node } from './Node'
-
+import { Node } from './Node'
 import {
   SelfServiceLoginFlow,
   SelfServiceRecoveryFlow,
@@ -14,6 +13,7 @@ import {
 } from '@ory/client'
 import { Messages } from './Messages'
 import { FormEvent, useEffect, useState } from 'react'
+import { getNodeId, isUiNodeInputAttributes } from './helpers'
 
 export type Values = Partial<
   | SubmitSelfServiceLoginFlowBody

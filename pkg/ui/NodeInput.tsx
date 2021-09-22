@@ -1,6 +1,6 @@
 import { UiNode, UiNodeInputAttributes } from '@ory/client'
-import { getLabel } from './Node'
 import { Button, Checkbox, TextInput } from '@ory/themes'
+import { getLabel } from './helpers'
 
 interface Props {
   node: UiNode
@@ -22,7 +22,8 @@ export const NodeInput = ({
   // Unfortunately, there is currently no other way than to run eval here.
   const onClick = () => {
     if (attributes.onclick) {
-      eval(attributes.onclick)
+      const run = new Function(attributes.onclick)
+      run()
     }
   }
 
