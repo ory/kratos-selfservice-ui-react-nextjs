@@ -20,14 +20,18 @@ export default function handler(
     .then(({ data: session }) => {
       if (!process.env.ORY_ACCESS_TOKEN) {
         // If the access token is not set, do not fetch the identity from the store.
-        res.status(200).json({ session, fromOryApi: 'To interact with Ory\'s Cloud API please set the ORY_ACCESS_TOKEN environment variable.' })
+        res.status(200).json({
+          session,
+          fromOryApi:
+            "To interact with Ory's Cloud API please set the ORY_ACCESS_TOKEN environment variable."
+        })
       }
 
       // If you have set up an Ory Cloud Personal Access Token, we use it to fetch the identity from Ory Cloud's API.
       return ory
         .adminGetIdentity(session.identity.id)
         .then(({ data: identity }) => {
-          res.status(200).json({ session, fromOryApi:  identity })
+          res.status(200).json({ session, fromOryApi: identity })
         })
         .catch((err: AxiosError) => {
           res.status(200).json({
