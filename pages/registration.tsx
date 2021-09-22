@@ -1,26 +1,48 @@
-import { useEffect, useState } from 'react'
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
 import {
   SelfServiceRegistrationFlow,
-  SubmitSelfServiceRecoveryFlowBody,
   SubmitSelfServiceRegistrationFlowBody
 } from '@ory/client'
 import { CardTitle } from '@ory/themes'
-import { Flow } from '../pkg/ui/Flow'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
-
-import ory from '../pkg/sdk'
 import { AxiosError } from 'axios'
+import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
+// Import render helpers
+import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
+// Import the SDK
+import ory from '../pkg/sdk'
+
+// Renders the registration page
 const Registration: NextPage = () => {
+  const router = useRouter()
+
+  // The "flow" represents a registration process and contains
+  // information about the form we need to render (e.g. username + password)
   const [flow, setFlow] = useState<SelfServiceRegistrationFlow>()
 
   // Get ?flow=... from the URL
-  const router = useRouter()
   const { flow: flowId } = router.query
 
+  // A small function to help us deal with errors.
+  const handleError = (err: AxiosError) => {
+    switch (err.response?.status) {
+      case 410:
+        // Status code 410 means the request has expired - so let's load a fresh flow!
+        return router.push('/registration')
+      case 403:
+        // Status code 403 implies some other issue (e.g. CSRF) - let's reload!
+        return router.push('/registration')
+      case 400:
+        // Status code 400 implies the user is already signed in - let's bring him home.
+        return router.push('/')
+    }
+
+    throw err
+  }
+
+  // In this effect we either initiate a new registration flow, or we fetch an existing registration flow.
   useEffect(() => {
     // If the router is not ready yet, do nothing.
     if (!router.isReady) {
@@ -35,21 +57,7 @@ const Registration: NextPage = () => {
           // We received the flow - let's use its data and render the form!
           setFlow(data)
         })
-        .catch((err: AxiosError) => {
-          switch (err.response?.status) {
-            case 410:
-              // Status code 410 means the request has expired - so let's load a fresh flow!
-              return router.push('/registration')
-            case 403:
-              // Status code 403 implies some other issue (e.g. CSRF) - let's reload!
-              return router.push('/registration')
-            case 400:
-              // Status code 400 implies the user is already signed in - let's bring him home.
-              return router.push('/')
-          }
-
-          throw err
-        })
+        .catch(handleError)
       return
     }
 
@@ -59,15 +67,7 @@ const Registration: NextPage = () => {
       .then(({ data }) => {
         setFlow(data)
       })
-      .catch((err: AxiosError) => {
-        switch (err.response?.status) {
-          case 400:
-            // Status code 400 implies the user is already signed in
-            return router.push('/')
-        }
-
-        throw err
-      })
+      .catch(handleError)
   }, [flowId, router, router.isReady])
 
   const onSubmit = (values: SubmitSelfServiceRegistrationFlowBody) =>
@@ -82,17 +82,16 @@ const Registration: NextPage = () => {
             // If we ended up here, it means we are successfully signed up!
             //
             // You can do cool stuff here, like having access to the identity which just signed up:
-            // console.log(data.identity)
+            console.log('This is the user session: ', data, data.identity)
 
             // For now however we just want to redirect home!
             return router.push('/').then(() => {})
           })
           .catch((err: AxiosError) => {
-            switch (err.response?.status) {
-              case 400:
-                // Status code 400 implies the form validation had an error
-                setFlow(err.response?.data)
-                return
+            if (err.response?.status === 400) {
+              // Status code 400 implies the form validation had an error
+              setFlow(err.response?.data)
+              return
             }
 
             throw err
