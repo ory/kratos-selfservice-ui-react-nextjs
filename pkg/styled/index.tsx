@@ -1,11 +1,11 @@
-import styled from 'styled-components'
-import cn from 'classnames'
 import {
   Card,
   LinkButton,
   typographyH2Styles,
   typographyLinkStyles
 } from '@ory/themes'
+import cn from 'classnames'
+import styled from 'styled-components'
 
 export const MarginCard = styled(Card)`
   margin-top: 70px;

@@ -1,7 +1,8 @@
 import { UiNode } from '@ory/client'
+
 import { NodeImage } from './NodeImage'
-import { NodeText } from './NodeText'
 import { NodeInput } from './NodeInput'
+import { NodeText } from './NodeText'
 import {
   isUiNodeImageAttributes,
   isUiNodeInputAttributes,

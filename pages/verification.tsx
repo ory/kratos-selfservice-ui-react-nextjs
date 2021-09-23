@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
 import {
   SelfServiceVerificationFlow,
   SubmitSelfServiceVerificationFlowBody,
   SubmitSelfServiceSettingsFlowBody
 } from '@ory/client'
 import { Card, CardTitle } from '@ory/themes'
-import { Flow } from '../pkg/ui/Flow'
 import { AxiosError } from 'axios'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
+import type { NextPage } from 'next'
+import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 import ory from '../pkg/sdk'
-import Head from 'next/head'
+import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
+import { Flow } from '../pkg/ui/Flow'
 
 const Verification: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceVerificationFlow>()
