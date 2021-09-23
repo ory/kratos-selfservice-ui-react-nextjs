@@ -1,5 +1,6 @@
 import { UiNode, UiNodeInputAttributes } from '@ory/client'
 import { Button, Checkbox, TextInput } from '@ory/themes'
+
 import { getLabel } from './helpers'
 
 interface Props {

@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react'
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
 import {
   SelfServiceLoginFlow,
   SubmitSelfServiceLoginFlowBody
 } from '@ory/client'
 import { Card, CardTitle } from '@ory/themes'
-import { Flow, Values } from '../pkg/ui/Flow'
 import { AxiosError } from 'axios'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
-import Link from 'next/link'
-import ory from '../pkg/sdk'
+import type { NextPage } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+
 import { createLogoutHandler } from '../pkg/hooks'
+import ory from '../pkg/sdk'
+import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
+import { Flow, Values } from '../pkg/ui/Flow'
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceLoginFlow>()

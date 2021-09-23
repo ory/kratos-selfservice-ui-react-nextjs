@@ -1,8 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-import ory from '../../pkg/sdk'
-import { AxiosError } from 'axios'
 import { Identity, Session } from '@ory/client'
+import { AxiosError } from 'axios'
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+import ory from '../../pkg/sdk'
 
 type Data = {
   session?: Session

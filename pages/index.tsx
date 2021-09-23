@@ -1,12 +1,13 @@
+import { Card, CardTitle, P, H2, H3, CodeBox } from '@ory/themes'
+import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Card, CardTitle, P, H2, H3, CodeBox } from '@ory/themes'
-import { useEffect, useState } from 'react'
-import ory from '../pkg/sdk'
-import { AxiosError } from 'axios'
-import { DocsButton, MarginCard } from '../pkg/styled'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+
 import { createLogoutHandler } from '../pkg/hooks'
+import ory from '../pkg/sdk'
+import { DocsButton, MarginCard } from '../pkg/styled'
 
 const Home: NextPage = () => {
   const [session, setSession] = useState<string>(

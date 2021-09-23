@@ -1,18 +1,19 @@
-import { ReactNode, useEffect, useState } from 'react'
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
 import {
   SelfServiceSettingsFlow,
   SubmitSelfServiceRegistrationFlowBody,
   SubmitSelfServiceSettingsFlowBody
 } from '@ory/client'
 import { Card, CardTitle, H3, P } from '@ory/themes'
-import { Flow, Methods } from '../pkg/ui/Flow'
 import { AxiosError } from 'axios'
-import { ActionCard, CenterLink } from '../pkg/styled'
-import Link from 'next/link'
+import type { NextPage } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { ReactNode, useEffect, useState } from 'react'
+
 import ory from '../pkg/sdk'
+import { ActionCard, CenterLink } from '../pkg/styled'
+import { Flow, Methods } from '../pkg/ui/Flow'
 import { Messages } from '../pkg/ui/Messages'
 
 interface Props {
