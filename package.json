@@ -12,7 +12,8 @@
     "format": "prettier --write ${npm_package_config_prettierTarget}",
     "format:check": "prettier --check ${npm_package_config_prettierTarget}",
     "build:lib": "rm -rf dist && rollup -c",
-    "prepublishOnly": "npm run build:lib"
+    "prepublishOnly": "npm run build:lib",
+    "test": "exit 0"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
