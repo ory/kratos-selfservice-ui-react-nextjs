@@ -1,9 +1,10 @@
-name: Release NPM Package
+name: Run Tests
 on:
   pull_request:
   push:
     branches:
       - main
+      - master
 
 jobs:
   build:
@@ -15,4 +16,5 @@ jobs:
           node-version: '14'
       - run: npm ci
       - run: npm run format:check
+      - run: npm run test
       - run: npm run build
