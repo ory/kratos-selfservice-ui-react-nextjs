@@ -105,7 +105,13 @@ export const NodeInput = ({
       state={
         node.messages.find(({ type }) => type === 'error') ? 'error' : undefined
       }
-      subtitle={node.messages.map(({ text }) => text).join('\n')}
+      subtitle={
+        <>
+          {node.messages.map(({ text, id }) => (
+            <span data-testid={`ui.node.message.${id}`}>{text}</span>
+          ))}
+        </>
+      }
     />
   )
 }
