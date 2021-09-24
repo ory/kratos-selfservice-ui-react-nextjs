@@ -101,6 +101,9 @@ const Login: NextPage = () => {
                 // Status code 400 implies the form validation had an error
                 setFlow(err.response?.data)
                 return
+              case 403:
+                // Status code 403 means CSRF cookie error so we reload the page
+                return router.push('/login')
             }
 
             throw err
