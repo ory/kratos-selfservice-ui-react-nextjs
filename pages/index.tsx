@@ -5,9 +5,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import { createLogoutHandler } from '../pkg/hooks'
+import { DocsButton, MarginCard, createLogoutHandler } from '../pkg'
 import ory from '../pkg/sdk'
-import { DocsButton, MarginCard } from '../pkg/styled'
 
 const Home: NextPage = () => {
   const [session, setSession] = useState<string>(

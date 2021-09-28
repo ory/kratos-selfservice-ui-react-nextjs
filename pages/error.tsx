@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
+import { ActionCard, CenterLink, MarginCard } from '../pkg'
 import ory from '../pkg/sdk'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
 
 const Login: NextPage = () => {
   const [error, setError] = useState<SelfServiceError | string>()

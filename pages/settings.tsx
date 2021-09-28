@@ -1,9 +1,8 @@
 import {
   SelfServiceSettingsFlow,
-  SubmitSelfServiceRegistrationFlowBody,
   SubmitSelfServiceSettingsFlowBody
 } from '@ory/client'
-import { Card, CardTitle, H3, P } from '@ory/themes'
+import { CardTitle, H3, P } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -11,10 +10,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState } from 'react'
 
+import { Flow, Methods, Messages, ActionCard, CenterLink } from '../pkg'
 import ory from '../pkg/sdk'
-import { ActionCard, CenterLink } from '../pkg/styled'
-import { Flow, Methods } from '../pkg/ui/Flow'
-import { Messages } from '../pkg/ui/Messages'
 
 interface Props {
   flow?: SelfServiceSettingsFlow
@@ -46,7 +43,7 @@ const Settings: NextPage = () => {
 
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId } = router.query
+  const { flow: flowId, return_to: returnTo } = router.query
 
   useEffect(() => {
     if (!router.isReady) {
@@ -75,9 +72,13 @@ const Settings: NextPage = () => {
     }
 
     // Otherwise we initialize it
-    ory.initializeSelfServiceSettingsFlowForBrowsers().then(({ data }) => {
-      setFlow(data)
-    })
+    ory
+      .initializeSelfServiceSettingsFlowForBrowsers(
+        returnTo ? String(returnTo) : undefined
+      )
+      .then(({ data }) => {
+        setFlow(data)
+      })
   }, [flowId, router, router.isReady])
 
   const onSubmit = (values: SubmitSelfServiceSettingsFlowBody) =>

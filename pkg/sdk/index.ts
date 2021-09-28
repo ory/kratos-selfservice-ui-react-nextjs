@@ -1,10 +1,10 @@
 import { ory } from './cloud'
 import { ory as oss } from './open-source'
 
-let exp = ory
+let exp = oss
 
-if (process.env.NEXT_PUBLIC_ORY_KRATOS_PUBLIC) {
-  exp = oss as any
+if (!process.env.NEXT_PUBLIC_ORY_KRATOS_PUBLIC) {
+  exp = ory as any
 }
 
 export default exp

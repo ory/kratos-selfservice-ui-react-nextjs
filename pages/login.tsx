@@ -10,10 +10,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import { createLogoutHandler } from '../pkg/hooks'
+import {
+  createLogoutHandler,
+  Flow,
+  ActionCard,
+  CenterLink,
+  MarginCard
+} from '../pkg'
 import ory from '../pkg/sdk'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
-import { Flow, Values } from '../pkg/ui/Flow'
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceLoginFlow>()
@@ -21,6 +25,7 @@ const Login: NextPage = () => {
   // Get ?flow=... from the URL
   const router = useRouter()
   const {
+    return_to: returnTo,
     flow: flowId,
     // Refresh means we want to refresh the session. This is needed, for example, when we want to update the password
     // of a user.
@@ -67,13 +72,17 @@ const Login: NextPage = () => {
     ory
       .initializeSelfServiceLoginFlowForBrowsers(
         Boolean(refresh),
-        aal ? String(aal) : undefined
+        aal ? String(aal) : undefined,
+        returnTo ? String(returnTo) : undefined
       )
       .then(({ data }) => {
         setFlow(data)
       })
       .catch((err: AxiosError) => {
         switch (err.response?.status) {
+          case 403:
+            // Status code 403 implies some other issue (e.g. CSRF) - let's reload!
+            return router.push('/login')
           case 400:
             // Status code 400 implies the user is already signed in
             return router.push('/')

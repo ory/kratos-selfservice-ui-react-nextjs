@@ -1,9 +1,8 @@
 import {
   SelfServiceRecoveryFlow,
-  SubmitSelfServiceLoginFlowBody,
   SubmitSelfServiceRecoveryFlowBody
 } from '@ory/client'
-import { Card, CardTitle } from '@ory/themes'
+import { CardTitle } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -11,16 +10,15 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
+import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
 import ory from '../pkg/sdk'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
-import { Flow } from '../pkg/ui/Flow'
 
 const Recovery: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceRecoveryFlow>()
 
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId } = router.query
+  const { flow: flowId, return_to: returnTo } = router.query
 
   useEffect(() => {
     if (!router.isReady) {
