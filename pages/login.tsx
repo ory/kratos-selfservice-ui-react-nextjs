@@ -126,7 +126,8 @@ const Login: NextPage = () => {
         <meta name="description" content="NextJS + React + Vercel + Ory" />
       </Head>
       <MarginCard>
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle>Sign In for All Hands</CardTitle>
+        Hello there
         <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
       {aal || refresh ? (
