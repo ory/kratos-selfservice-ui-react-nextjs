@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { Identity, Session } from '@ory/client'
+import { Identity, Session } from '@ory/kratos-client'
 import { AxiosError } from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
 

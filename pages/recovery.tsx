@@ -2,8 +2,8 @@ import {
   SelfServiceRecoveryFlow,
   SubmitSelfServiceLoginFlowBody,
   SubmitSelfServiceRecoveryFlowBody
-} from '@ory/client'
-import { Card, CardTitle } from '@ory/themes'
+} from '@ory/kratos-client'
+import { CardTitle } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'

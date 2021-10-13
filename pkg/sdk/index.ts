@@ -1,3 +1,5 @@
+import { V0alpha2Api } from '@ory/kratos-client'
+
 import { ory } from './cloud'
 import { ory as oss } from './open-source'
 
