@@ -1,6 +1,5 @@
 import {
   SelfServiceSettingsFlow,
-  SubmitSelfServiceRegistrationFlowBody,
   SubmitSelfServiceSettingsFlowBody
 } from '@ory/kratos-client'
 import { CardTitle, H3, P } from '@ory/themes'
@@ -11,10 +10,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState } from 'react'
 
+import { Flow, Methods, Messages, ActionCard, CenterLink } from '../pkg'
+import { handleFlowError } from '../pkg/errors'
 import ory from '../pkg/sdk'
-import { ActionCard, CenterLink } from '../pkg/styled'
-import { Flow, Methods } from '../pkg/ui/Flow'
-import { Messages } from '../pkg/ui/Messages'
 
 interface Props {
   flow?: SelfServiceSettingsFlow
@@ -46,10 +44,11 @@ const Settings: NextPage = () => {
 
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId } = router.query
+  const { flow: flowId, return_to: returnTo } = router.query
 
   useEffect(() => {
-    if (!router.isReady) {
+    // If the router is not ready yet, or we already have a flow, do nothing.
+    if (!router.isReady || flow) {
       return
     }
 
@@ -60,49 +59,45 @@ const Settings: NextPage = () => {
         .then(({ data }) => {
           setFlow(data)
         })
-        .catch((err: AxiosError) => {
-          switch (err.response?.status) {
-            case 410:
-            // Status code 410 means the request has expired - so let's load a fresh flow!
-            case 403:
-              // Status code 403 implies some other issue (e.g. CSRF) - let's reload!
-              return router.push('/settings')
-          }
-
-          throw err
-        })
+        .catch(handleFlowError(router, 'settings', setFlow))
       return
     }
 
     // Otherwise we initialize it
-    ory.initializeSelfServiceSettingsFlowForBrowsers().then(({ data }) => {
-      setFlow(data)
-    })
-  }, [flowId, router, router.isReady])
+    ory
+      .initializeSelfServiceSettingsFlowForBrowsers(
+        returnTo ? String(returnTo) : undefined
+      )
+      .then(({ data }) => {
+        setFlow(data)
+      })
+      .catch(handleFlowError(router, 'settings', setFlow))
+  }, [flowId, router, router.isReady, returnTo, flow])
 
   const onSubmit = (values: SubmitSelfServiceSettingsFlowBody) =>
     router
       // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
       // his data when she/he reloads the page.
       .push(`/settings?flow=${flow?.id}`, undefined, { shallow: true })
-      .then(() => {
+      .then(() =>
         ory
           .submitSelfServiceSettingsFlow(String(flow?.id), undefined, values)
           .then(({ data }) => {
             // The settings have been saved and the flow was updated. Let's show it to the user!
             setFlow(data)
           })
-          .catch((err: AxiosError) => {
-            switch (err.response?.status) {
-              case 400:
-                // Status code 400 implies the form validation had an error
-                setFlow(err.response?.data)
-                return
+          .catch(handleFlowError(router, 'settings', setFlow))
+          .catch(async (err: AxiosError) => {
+            // If the previous handler did not catch the error it's most likely a form validation error
+            if (err.response?.status === 400) {
+              // Yup, it is!
+              setFlow(err.response?.data)
+              return
             }
 
-            throw err
+            return Promise.reject(err)
           })
-      })
+      )
 
   return (
     <>
