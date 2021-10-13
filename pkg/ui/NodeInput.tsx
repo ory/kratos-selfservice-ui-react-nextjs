@@ -1,27 +1,31 @@
-import { UiNode, UiNodeInputAttributes } from '@ory/client'
+import { getNodeLabel } from '@ory/integrations/ui'
+import { UiNode, UiNodeInputAttributes } from '@ory/kratos-client'
 import { Button, Checkbox, TextInput } from '@ory/themes'
 
-import { getLabel } from './helpers'
+import { FormDispatcher, ValueSetter } from './helpers'
 
 interface Props {
   node: UiNode
   attributes: UiNodeInputAttributes
   value: any
   disabled: boolean
-  setValue: (value: string | number | boolean) => void
+  dispatchSubmit: FormDispatcher
+  setValue: ValueSetter
 }
 
-export const NodeInput = ({
+export function NodeInput<T>({
   node,
   attributes,
   value = '',
   setValue,
-  disabled
-}: Props) => {
+  disabled,
+  dispatchSubmit
+}: Props) {
   // Some attributes have dynamic JavaScript - this is for example required for WebAuthn.
-  //
-  // Unfortunately, there is currently no other way than to run eval here.
   const onClick = () => {
+    // This section is only used for WebAuthn. The script is loaded via a <script> node
+    // and the functions are available on the global window level. Unfortunately, there
+    // is currently no better way than executing eval / function here at this moment.
     if (attributes.onclick) {
       const run = new Function(attributes.onclick)
       run()
@@ -43,16 +47,12 @@ export const NodeInput = ({
       // display element which is the toggle value (true)!
       return (
         <>
-          <input
-            value={attributes.value ? 'true' : 'false'}
-            type="hidden"
-            name={attributes.name}
-          />
           <Checkbox
             name={attributes.name}
-            value="true"
+            defaultChecked={attributes.value === true}
+            onChange={(e) => setValue(e.target.checked)}
             disabled={attributes.disabled || disabled}
-            label={getLabel(node)}
+            label={getNodeLabel(node)}
             state={
               node.messages.find(({ type }) => type === 'error')
                 ? 'error'
@@ -67,24 +67,28 @@ export const NodeInput = ({
       return (
         <Button
           name={attributes.name}
-          onClick={onClick}
-          value={attributes.value || 'true'}
+          onClick={(e) => {
+            onClick()
+            setValue(attributes.value).then(() => dispatchSubmit(e))
+          }}
+          value={attributes.value || ''}
           disabled={attributes.disabled || disabled}
         >
-          {getLabel(node)}
+          {getNodeLabel(node)}
         </Button>
       )
     case 'submit':
       // Render the submit button
       return (
         <Button
-          type="submit"
           name={attributes.name}
-          onClick={onClick}
-          value={attributes.value || 'true'}
+          onClick={(e) => {
+            setValue(attributes.value).then(() => dispatchSubmit(e))
+          }}
+          value={attributes.value || ''}
           disabled={attributes.disabled || disabled}
         >
-          {getLabel(node)}
+          {getNodeLabel(node)}
         </Button>
       )
   }
@@ -107,8 +111,10 @@ export const NodeInput = ({
       }
       subtitle={
         <>
-          {node.messages.map(({ text, id }) => (
-            <span data-testid={`ui.node.message.${id}`}>{text}</span>
+          {node.messages.map(({ text, id }, k) => (
+            <span key={`${id}-${k}`} data-testid={`ui/message/${id}`}>
+              {text}
+            </span>
           ))}
         </>
       }
