@@ -10,19 +10,19 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
+import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
 import ory from '../pkg/sdk'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
-import { Flow } from '../pkg/ui/Flow'
 
 const Verification: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceVerificationFlow>()
 
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId } = router.query
+  const { flow: flowId, return_to: returnTo } = router.query
 
   useEffect(() => {
-    if (!router.isReady) {
+    // If the router is not ready yet, or we already have a flow, do nothing.
+    if (!router.isReady || flow) {
       return
     }
 
@@ -49,7 +49,9 @@ const Verification: NextPage = () => {
 
     // Otherwise we initialize it
     ory
-      .initializeSelfServiceVerificationFlowForBrowsers()
+      .initializeSelfServiceVerificationFlowForBrowsers(
+        returnTo ? String(returnTo) : undefined
+      )
       .then(({ data }) => {
         setFlow(data)
       })
@@ -62,7 +64,7 @@ const Verification: NextPage = () => {
 
         throw err
       })
-  }, [flowId, router, router.isReady])
+  }, [flowId, router, router.isReady, returnTo, flow])
 
   const onSubmit = (values: SubmitSelfServiceVerificationFlowBody) =>
     router
