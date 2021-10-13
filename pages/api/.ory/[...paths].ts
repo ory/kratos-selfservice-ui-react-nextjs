@@ -1,10 +1,10 @@
 // @ory/integrations offers a package for integrating with NextJS.
-import { nextjs } from '@ory/integrations'
+import { config, createApiHandler } from '@ory/integrations/nextjs'
 
 // We need to export the config.
-export const config = nextjs.config
+export { config }
 
 // And create the Ory Cloud API "bridge".
-export default nextjs.createApiHandler({
+export default createApiHandler({
   fallbackToPlayground: true
 })
