@@ -8,9 +8,10 @@ import {
   SubmitSelfServiceRecoveryFlowBody,
   SubmitSelfServiceRegistrationFlowBody,
   SubmitSelfServiceSettingsFlowBody,
-  SubmitSelfServiceVerificationFlowBody
-} from '@ory/client'
-import { FormEvent, useEffect, useState } from 'react'
+  SubmitSelfServiceVerificationFlowBody,
+  UiNode
+} from '@ory/kratos-client'
+import { Component, FormEvent } from 'react'
 
 import { Messages } from './Messages'
 import { Node } from './Node'

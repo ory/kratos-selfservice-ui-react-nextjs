@@ -1,7 +1,7 @@
 import {
   SelfServiceRegistrationFlow,
   SubmitSelfServiceRegistrationFlowBody
-} from '@ory/client'
+} from '@ory/kratos-client'
 import { CardTitle } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
