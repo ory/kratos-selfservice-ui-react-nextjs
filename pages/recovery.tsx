@@ -1,6 +1,5 @@
 import {
   SelfServiceRecoveryFlow,
-  SubmitSelfServiceLoginFlowBody,
   SubmitSelfServiceRecoveryFlowBody
 } from '@ory/kratos-client'
 import { CardTitle } from '@ory/themes'
@@ -11,19 +10,20 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
+import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
+import { handleFlowError } from '../pkg/errors'
 import ory from '../pkg/sdk'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
-import { Flow } from '../pkg/ui/Flow'
 
 const Recovery: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceRecoveryFlow>()
 
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId } = router.query
+  const { flow: flowId, return_to: returnTo } = router.query
 
   useEffect(() => {
-    if (!router.isReady) {
+    // If the router is not ready yet, or we already have a flow, do nothing.
+    if (!router.isReady || flow) {
       return
     }
 
@@ -34,20 +34,7 @@ const Recovery: NextPage = () => {
         .then(({ data }) => {
           setFlow(data)
         })
-        .catch((err: AxiosError) => {
-          switch (err.response?.status) {
-            case 410:
-            // Status code 410 means the request has expired - so let's load a fresh flow!
-            case 403:
-              // Status code 403 implies some other issue (e.g. CSRF) - let's reload!
-              return router.push('/recovery')
-            case 400:
-              // Status code 400 implies the user is already signed in
-              return router.push('/')
-          }
-
-          throw err
-        })
+        .catch(handleFlowError(router, 'recovery', setFlow))
       return
     }
 
@@ -57,16 +44,18 @@ const Recovery: NextPage = () => {
       .then(({ data }) => {
         setFlow(data)
       })
+      .catch(handleFlowError(router, 'recovery', setFlow))
       .catch((err: AxiosError) => {
-        switch (err.response?.status) {
-          case 400:
-            // Status code 400 implies the user is already signed in
-            return router.push('/')
+        // If the previous handler did not catch the error it's most likely a form validation error
+        if (err.response?.status === 400) {
+          // Yup, it is!
+          setFlow(err.response?.data)
+          return
         }
 
-        throw err
+        return Promise.reject(err)
       })
-  }, [flowId, router, router.isReady])
+  }, [flowId, router, router.isReady, returnTo, flow])
 
   const onSubmit = (values: SubmitSelfServiceRecoveryFlowBody) =>
     router
@@ -80,6 +69,7 @@ const Recovery: NextPage = () => {
             // Form submission was successful, show the message to the user!
             setFlow(data)
           })
+          .catch(handleFlowError(router, 'recovery', setFlow))
           .catch((err: AxiosError) => {
             switch (err.response?.status) {
               case 400:
