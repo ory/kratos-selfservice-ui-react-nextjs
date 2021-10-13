@@ -31,7 +31,10 @@ export function createLogoutHandler(deps?: DependencyList) {
 
   return () => {
     if (logoutToken) {
-      ory.submitSelfServiceLogoutFlow(logoutToken).then(() => router.push('/'))
+      ory
+        .submitSelfServiceLogoutFlow(logoutToken)
+        .then(() => router.push('/login'))
+        .then(() => router.reload())
     }
   }
 }
