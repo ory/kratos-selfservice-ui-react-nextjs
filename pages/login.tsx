@@ -10,10 +10,15 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import { createLogoutHandler } from '../pkg/hooks'
+import {
+  ActionCard,
+  CenterLink,
+  createLogoutHandler,
+  Flow,
+  MarginCard
+} from '../pkg'
+import { handleGetFlowError, handleFlowError } from '../pkg/errors'
 import ory from '../pkg/sdk'
-import { ActionCard, CenterLink, MarginCard } from '../pkg/styled'
-import { Flow, Values } from '../pkg/ui/Flow'
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceLoginFlow>()
@@ -21,6 +26,7 @@ const Login: NextPage = () => {
   // Get ?flow=... from the URL
   const router = useRouter()
   const {
+    return_to: returnTo,
     flow: flowId,
     // Refresh means we want to refresh the session. This is needed, for example, when we want to update the password
     // of a user.
@@ -35,7 +41,8 @@ const Login: NextPage = () => {
   const onLogout = createLogoutHandler([aal, refresh])
 
   useEffect(() => {
-    if (!router.isReady) {
+    // If the router is not ready yet, or we already have a flow, do nothing.
+    if (!router.isReady || flow) {
       return
     }
 
@@ -46,20 +53,7 @@ const Login: NextPage = () => {
         .then(({ data }) => {
           setFlow(data)
         })
-        .catch((err: AxiosError) => {
-          switch (err.response?.status) {
-            case 410:
-            // Status code 410 means the request has expired - so let's load a fresh flow!
-            case 403:
-              // Status code 403 implies some other issue (e.g. CSRF) - let's reload!
-              return router.push('/login')
-            case 400:
-              // Status code 400 implies the user is already signed in
-              return router.push('/')
-          }
-
-          throw err
-        })
+        .catch(handleGetFlowError(router, 'login', setFlow))
       return
     }
 
@@ -67,48 +61,44 @@ const Login: NextPage = () => {
     ory
       .initializeSelfServiceLoginFlowForBrowsers(
         Boolean(refresh),
-        aal ? String(aal) : undefined
+        aal ? String(aal) : undefined,
+        returnTo ? String(returnTo) : undefined
       )
       .then(({ data }) => {
         setFlow(data)
       })
-      .catch((err: AxiosError) => {
-        switch (err.response?.status) {
-          case 400:
-            // Status code 400 implies the user is already signed in
-            return router.push('/')
-        }
-
-        throw err
-      })
-  }, [flowId, router, router.isReady, aal, refresh])
+      .catch(handleFlowError(router, 'login', setFlow))
+  }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
   const onSubmit = (values: SubmitSelfServiceLoginFlowBody) =>
     router
       // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
       // his data when she/he reloads the page.
       .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
-      .then(() => {
+      .then(() =>
         ory
           .submitSelfServiceLoginFlow(String(flow?.id), undefined, values)
-          .then(() => {
-            // We logged in successfully! Let's bring the user home.
-            return router.push('/').then(() => {})
+          // We logged in successfully! Let's bring the user home.
+          .then((res) => {
+            if (flow?.return_to) {
+              window.location.href = flow?.return_to
+              return
+            }
+            router.push('/')
           })
+          .then(() => {})
+          .catch(handleFlowError(router, 'login', setFlow))
           .catch((err: AxiosError) => {
-            switch (err.response?.status) {
-              case 400:
-                // Status code 400 implies the form validation had an error
-                setFlow(err.response?.data)
-                return
-              case 403:
-                // Status code 403 means CSRF cookie error so we reload the page
-                return router.push('/login')
+            // If the previous handler did not catch the error it's most likely a form validation error
+            if (err.response?.status === 400) {
+              // Yup, it is!
+              setFlow(err.response?.data)
+              return
             }
 
-            throw err
+            return Promise.reject(err)
           })
-      })
+      )
 
   return (
     <>
@@ -117,12 +107,23 @@ const Login: NextPage = () => {
         <meta name="description" content="NextJS + React + Vercel + Ory" />
       </Head>
       <MarginCard>
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle>
+          {(() => {
+            if (flow?.forced) {
+              return 'Confirm Action'
+            } else if (flow?.requested_aal === 'aal2') {
+              return 'Two-Factor Authentication'
+            }
+            return 'Sign In'
+          })()}
+        </CardTitle>
         <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
       {aal || refresh ? (
         <ActionCard>
-          <CenterLink onClick={onLogout}>Log out</CenterLink>
+          <CenterLink data-testid="logout-link" onClick={onLogout}>
+            Log out
+          </CenterLink>
         </ActionCard>
       ) : (
         <>
