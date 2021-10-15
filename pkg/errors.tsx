@@ -16,13 +16,13 @@ export function handleGetFlowError<S>(
         await router.push('/')
         return
       case 'forbidden_return_to':
-        // The flow expired, let's reload a fresh flow!
+        // The flow expired, let's request a new one.
         toast.error('The return_to address is not allowed.')
         resetFlow(undefined)
         await router.push('/' + flowType)
         return
       case 'self_service_flow_expired':
-        // The flow expired, let's reload a fresh flow!
+        // The flow expired, let's request a new one.
         toast.error('Your interaction expired, please fill out the form again.')
         resetFlow(undefined)
         await router.push('/' + flowType)
@@ -41,17 +41,18 @@ export function handleGetFlowError<S>(
         await router.push('/' + flowType)
         return
       case 'browser_location_change_required':
+        // Ory Kratos asked us to point the user to this URL.
         window.location.href = err.response.data.redirect_browser_to
         return
       case 'needs_privileged_session':
-        // The requested item was intended for someone else. Let's request a new flow...
+        // We need to re-authenticate to perform this action
         window.location.href = err.response?.data.redirect_browser_to
         return
     }
 
     switch (err.response?.status) {
       case 410:
-        // The requested item was intended for someone else. Let's request a new flow...
+        // The flow expired, let's request a new one.
         resetFlow(undefined)
         await router.push('/' + flowType)
         return

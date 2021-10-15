@@ -1,7 +1,7 @@
 # Ory Kratos ReactJS / NextJS Reference UI
 
-This repository contains a reference implementation for Ory Kratos' in ReactJS
-/ NextJS. It implements all Ory Kratos flows (login, registration, account
+This repository contains a reference implementation for Ory Kratos' in ReactJS /
+NextJS. It implements all Ory Kratos flows (login, registration, account
 settings, account recovery, account verification).
 
 To learn more about using this app, how it is built, and how to customize it
