@@ -16,8 +16,7 @@ jobs:
           node-version: '16'
       - run: npm ci
       - run: npm run format:check
-      - run: npm run test
       - run: npm run build
-      - run: npm run start
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
+      - run: |
+          npm run start &
+          npm run test
