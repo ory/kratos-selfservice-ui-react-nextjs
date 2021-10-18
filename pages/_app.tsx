@@ -12,13 +12,13 @@ const GlobalStyle = createGlobalStyle((props: ThemeProps) =>
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <div data-testid="app-react">
+    <div data-testid="app-react">
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <Component {...pageProps} />
-      </div>
-      <ToastContainer />
-    </ThemeProvider>
+        <ToastContainer />
+      </ThemeProvider>
+    </div>
   )
 }
 
