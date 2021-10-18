@@ -40,7 +40,7 @@ const Login: NextPage = () => {
 
         return Promise.reject(err)
       })
-  }, [id, router, router.isReady])
+  }, [id, router, router.isReady, error])
 
   if (!error) {
     return null
