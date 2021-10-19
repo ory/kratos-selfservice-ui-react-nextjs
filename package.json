@@ -21,7 +21,7 @@
   "dependencies": {
     "@ory/client": "0.0.1-alpha.19",
     "@ory/integrations": "0.1.0",
-    "@ory/kratos-client": "0.0.0-next.04fdf92d4fc5",
+    "@ory/kratos-client": "0.0.0-next.059ed9c9cacb",
     "@ory/themes": "0.0.100",
     "classnames": "^2.3.1",
     "next": "11.1.2",
