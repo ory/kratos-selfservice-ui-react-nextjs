@@ -109,7 +109,7 @@ const Login: NextPage = () => {
       <MarginCard>
         <CardTitle>
           {(() => {
-            if (flow?.forced) {
+            if (flow?.refresh) {
               return 'Confirm Action'
             } else if (flow?.requested_aal === 'aal2') {
               return 'Two-Factor Authentication'
