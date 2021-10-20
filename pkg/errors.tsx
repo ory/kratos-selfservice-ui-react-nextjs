@@ -11,15 +11,15 @@ export function handleGetFlowError<S>(
 ) {
   return async (err: AxiosError) => {
     switch (err.response?.data.error?.id) {
-      case 'aal_needs_upgrade':
+      case 'session_aal2_required':
         // 2FA is enabled and enforced, but user did not perform 2fa yet!
-        await router.push('/login?aal=aal2')
+        window.location.href = err.response?.data.redirect_browser_to
         return
-      case 'has_session_already':
+      case 'session_already_available':
         // User is already signed in, let's redirect them home!
         await router.push('/')
         return
-      case 'forbidden_return_to':
+      case 'self_service_flow_return_to_forbidden':
         // The flow expired, let's request a new one.
         toast.error('The return_to address is not allowed.')
         resetFlow(undefined)
@@ -31,7 +31,7 @@ export function handleGetFlowError<S>(
         resetFlow(undefined)
         await router.push('/' + flowType)
         return
-      case 'csrf_violation':
+      case 'security_csrf_violation':
         // A CSRF violation occurred. Best to just refresh the flow!
         toast.error(
           'A security violation was detected, please fill out the form again.'
@@ -39,7 +39,7 @@ export function handleGetFlowError<S>(
         resetFlow(undefined)
         await router.push('/' + flowType)
         return
-      case 'intended_for_someone_else':
+      case 'security_identity_mismatch':
         // The requested item was intended for someone else. Let's request a new flow...
         resetFlow(undefined)
         await router.push('/' + flowType)
@@ -48,7 +48,7 @@ export function handleGetFlowError<S>(
         // Ory Kratos asked us to point the user to this URL.
         window.location.href = err.response.data.redirect_browser_to
         return
-      case 'needs_privileged_session':
+      case 'session_refresh_required':
         // We need to re-authenticate to perform this action
         window.location.href = err.response?.data.redirect_browser_to
         return
