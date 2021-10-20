@@ -13,7 +13,7 @@ export function handleGetFlowError<S>(
     switch (err.response?.data.error?.id) {
       case 'aal_needs_upgrade':
         // 2FA is enabled and enforced, but user did not perform 2fa yet!
-        await router.push('/login?aal=2')
+        await router.push('/login?aal=aal2')
         return
       case 'has_session_already':
         // User is already signed in, let's redirect them home!
