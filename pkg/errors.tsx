@@ -19,6 +19,10 @@ export function handleGetFlowError<S>(
         // User is already signed in, let's redirect them home!
         await router.push('/')
         return
+      case 'session_refresh_required':
+        // We need to re-authenticate to perform this action
+        window.location.href = err.response?.data.redirect_browser_to
+        return
       case 'self_service_flow_return_to_forbidden':
         // The flow expired, let's request a new one.
         toast.error('The return_to address is not allowed.')
@@ -47,10 +51,6 @@ export function handleGetFlowError<S>(
       case 'browser_location_change_required':
         // Ory Kratos asked us to point the user to this URL.
         window.location.href = err.response.data.redirect_browser_to
-        return
-      case 'session_refresh_required':
-        // We need to re-authenticate to perform this action
-        window.location.href = err.response?.data.redirect_browser_to
         return
     }
 
