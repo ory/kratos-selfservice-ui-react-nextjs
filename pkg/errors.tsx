@@ -11,6 +11,11 @@ export function handleGetFlowError<S>(
 ) {
   return async (err: AxiosError) => {
     switch (err.response?.data.error?.id) {
+      case 'aal_needs_upgrade':
+        // This implies that we are not allowed to call this without
+        // having a 2FA session, which we now request:
+        await router.push('/login?aal=aal2')
+        return
       case 'has_session_already':
         // User is already signed in, let's redirect them home!
         await router.push('/')
