@@ -133,7 +133,7 @@ const Login: NextPage = () => {
             </Link>
           </ActionCard>
           <ActionCard>
-            <Link href="/recover" passHref>
+            <Link href="/recovery" passHref>
               <CenterLink>Recover your account</CenterLink>
             </Link>
           </ActionCard>
