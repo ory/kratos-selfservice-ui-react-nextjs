@@ -19,9 +19,9 @@
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@ory/client": "0.0.1-alpha.19",
+    "@ory/client": "0.0.1-alpha.21",
     "@ory/integrations": "0.1.0",
-    "@ory/kratos-client": "0.0.0-next.059ed9c9cacb",
+    "@ory/kratos-client": "0.8.0-alpha.2",
     "@ory/themes": "0.0.100",
     "classnames": "^2.3.1",
     "next": "11.1.2",
