@@ -14,4 +14,4 @@ head over to the
 which will be released soon!
 
 The app itself you can see live at
-**[auth-login-nextjs-vercel-ory.app](https://react-nextjs-example.vercel.app)**.
+**[kratos-reference-ui-react-nextjs.vercel.app](https://kratos-reference-ui-react-nextjs.vercel.app)**.
