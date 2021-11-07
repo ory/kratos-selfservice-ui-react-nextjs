@@ -13,9 +13,7 @@ export function createLogoutHandler(deps?: DependencyList) {
     ory
       .createSelfServiceLogoutFlowUrlForBrowsers()
       .then(({ data }) => {
-        // This is a workaround until https://github.com/ory/kratos/pull/1758 lands.
-        const lo = new URL(String(data.logout_url))
-        setLogoutToken(String(lo.searchParams.get('token')))
+        setLogoutToken(data.logout_token)
       })
       .catch((err: AxiosError) => {
         switch (err.response?.status) {

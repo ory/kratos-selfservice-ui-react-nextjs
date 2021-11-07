@@ -20,8 +20,7 @@
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@ory/client": "0.0.1-alpha.21",
-    "@ory/integrations": "0.1.2",
+    "@ory/integrations": "^0.2.1",
     "@ory/kratos-client": "0.8.0-alpha.2",
     "@ory/themes": "0.0.100",
     "classnames": "^2.3.1",
@@ -43,7 +42,7 @@
     "@types/react": "17.0.19",
     "@types/request": "^2.48.7",
     "@types/styled-components": "^5.1.13",
-    "cypress": "^8.6.0",
+    "cypress": "^8.7.0",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "ory-prettier-styles": "^1.1.2",
