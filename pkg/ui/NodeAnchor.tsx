@@ -1,8 +1,6 @@
-import { UiNodeAnchorAttributes } from '@ory/client'
-import { getNodeLabel } from '@ory/integrations/ui'
-import { UiNode, UiNodeScriptAttributes } from '@ory/kratos-client'
+import { UiNodeAnchorAttributes } from '@ory/kratos-client'
+import { UiNode } from '@ory/kratos-client'
 import { Button } from '@ory/themes'
-import { HTMLAttributeReferrerPolicy, useEffect } from 'react'
 
 interface Props {
   node: UiNode
