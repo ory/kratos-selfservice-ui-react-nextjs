@@ -22,9 +22,9 @@
   "dependencies": {
     "@ory/integrations": "^0.2.1",
     "@ory/kratos-client": "0.8.0-alpha.2",
-    "@ory/themes": "0.0.100",
+    "@ory/themes": "~0.0.101",
     "classnames": "^2.3.1",
-    "next": "11.1.2",
+    "next": "12.0.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-toastify": "^8.0.3",
@@ -32,25 +32,24 @@
     "typescript": "^4.4.2"
   },
   "peerDependencies": {
-    "next": "11.1.2",
+    "next": "12.0.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "styled-components": "^5.3.1"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^2.0.2",
-    "@types/react": "17.0.19",
+    "@trivago/prettier-plugin-sort-imports": "^3.1.0",
+    "@types/react": "~17.0.19",
     "@types/request": "^2.48.7",
     "@types/styled-components": "^5.1.13",
     "cypress": "^8.7.0",
     "eslint": "7.32.0",
-    "eslint-config-next": "11.1.2",
+    "eslint-config-next": "12.0.3",
     "ory-prettier-styles": "^1.1.2",
     "prettier": "^2.3.2",
     "rollup": "^2.56.3",
     "rollup-plugin-dts": "^4.0.0",
     "rollup-plugin-esbuild": "^4.5.0",
-    "typescript": "4.4.2",
     "webpack-node-externals": "^3.0.0"
   }
 }
