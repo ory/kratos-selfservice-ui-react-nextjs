@@ -10,7 +10,7 @@ import ory from '../pkg/sdk'
 
 const Home: NextPage = () => {
   const [session, setSession] = useState<string>(
-    'No valid Ory Session was found.\nPlease sign in to receive one.'
+    'No valid Session was found.\nPlease sign in to receive one.'
   )
   const [hasSession, setHasSession] = useState<boolean>(false)
   const router = useRouter()
@@ -22,6 +22,11 @@ const Home: NextPage = () => {
       .then(({ data }) => {
         setSession(JSON.stringify(data, null, 2))
         setHasSession(true)
+
+        if (process.env.NEXT_PUBLIC_AFTER_LOGGED_IN_URL) {
+          window.location.href = process.env.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
+          return
+        }
       })
       .catch((err: AxiosError) => {
         switch (err.response?.status) {
@@ -34,8 +39,7 @@ const Home: NextPage = () => {
             // it's second factor
             return router.push('/login?aal=aal2')
           case 401:
-            // do nothing, the user is not logged in
-            return
+            return router.push('/login')
         }
 
         // Something else happened!
@@ -46,68 +50,9 @@ const Home: NextPage = () => {
   return (
     <div className={'container-fluid'}>
       <Head>
-        <title>Ory NextJS Integration Example</title>
-        <meta name="description" content="NextJS + React + Vercel + Ory" />
+        <title>Miss Moneypenny</title>
+        <meta name="description" content="" />
       </Head>
-
-      <MarginCard wide>
-        <CardTitle>Welcome to Ory!</CardTitle>
-        <P>
-          Welcome to the Ory Managed UI. This UI implements a run-of-the-mill
-          user interface for all self-service flows (login, registration,
-          recovery, verification, settings). The purpose of this UI is to help
-          you get started quickly. In the long run, you probably want to
-          implement your own custom user interface.
-        </P>
-        <div className="row">
-          <div className="col-md-4 col-xs-12">
-            <div className="box">
-              <H3>Documentation</H3>
-              <P>
-                Here are some useful documentation pieces that help you get
-                started.
-              </P>
-              <div className="row">
-                <DocsButton
-                  title="Get Started"
-                  href="https://www.ory.sh/docs/get-started"
-                  testid="get-started"
-                />
-                <DocsButton
-                  title="User Flows"
-                  href="https://www.ory.sh/docs/concepts/self-service"
-                  testid="user-flows"
-                />
-                <DocsButton
-                  title="Identities"
-                  href="https://www.ory.sh/docs/concepts/identity"
-                  testid="identities"
-                />
-                <DocsButton
-                  title="Sessions"
-                  href="https://www.ory.sh/docs/concepts/session"
-                  testid="sessions"
-                />
-                <DocsButton
-                  title="Bring Your Own UI"
-                  href="https://www.ory.sh/docs/guides/bring-your-user-interface"
-                  testid="customize-ui"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-md-8 col-xs-12">
-            <div className="box">
-              <H3>Session Information</H3>
-              <P>
-                Below you will find the decoded Ory Session if you are logged
-                in.
-              </P>
-              <CodeBox data-testid="session-content" code={session} />
-            </div>
-          </div>
-        </div>
-      </MarginCard>
 
       <Card wide>
         <H2>Other User Interface Screens</H2>
@@ -139,13 +84,13 @@ const Home: NextPage = () => {
             href="/verification"
             title="Verify Account"
           />
-          <DocsButton
+          {/* <DocsButton
             unresponsive
             testid="account-settings"
             href="/settings"
             disabled={!hasSession}
             title={'Account Settings'}
-          />
+          /> */}
           <DocsButton
             unresponsive
             testid="logout"

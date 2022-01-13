@@ -84,7 +84,13 @@ const Login: NextPage = () => {
               window.location.href = flow?.return_to
               return
             }
-            router.push('/')
+
+            if (process.env.NEXT_PUBLIC_AFTER_LOGGED_IN_URL) {
+              window.location.href = process.env.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
+              return
+            } else {
+              router.push('/')
+            }
           })
           .then(() => {})
           .catch(handleFlowError(router, 'login', setFlow))
@@ -103,8 +109,8 @@ const Login: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Sign in - Ory NextJS Integration Example</title>
-        <meta name="description" content="NextJS + React + Vercel + Ory" />
+        <title>Sign in</title>
+        <meta name="description" content="" />
       </Head>
       <MarginCard>
         <CardTitle>

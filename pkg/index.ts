@@ -3,7 +3,7 @@ import PageHome from '../pages/index'
 import PageLogin from '../pages/login'
 import PageRecovery from '../pages/recovery'
 import PageRegistration from '../pages/registration'
-import PageSettings from '../pages/settings'
+// import PageSettings from '../pages/settings'
 import PageVerification from '../pages/verification'
 
 export {
@@ -12,7 +12,7 @@ export {
   PageLogin,
   PageRecovery,
   PageRegistration,
-  PageSettings,
+  // PageSettings,
   PageVerification
 }
 

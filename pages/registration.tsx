@@ -68,7 +68,7 @@ const Registration: NextPage = () => {
             // If we ended up here, it means we are successfully signed up!
             //
             // You can do cool stuff here, like having access to the identity which just signed up:
-            console.log('This is the user session: ', data, data.identity)
+            // console.log('This is the user session: ', data, data.identity)
 
             // For now however we just want to redirect home!
             return router.push(flow?.return_to || '/').then(() => {})
@@ -89,8 +89,8 @@ const Registration: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Create account - Ory NextJS Integration Example</title>
-        <meta name="description" content="NextJS + React + Vercel + Ory" />
+        <title>Create account</title>
+        <meta name="description" content="" />
       </Head>
       <MarginCard>
         <CardTitle>Create account</CardTitle>

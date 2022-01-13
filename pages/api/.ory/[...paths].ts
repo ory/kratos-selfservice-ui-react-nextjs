@@ -6,5 +6,5 @@ export { config }
 
 // And create the Ory Cloud API "bridge".
 export default createApiHandler({
-  fallbackToPlayground: true
+  fallbackToPlayground: false
 })
