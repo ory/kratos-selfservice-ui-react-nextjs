@@ -84,7 +84,7 @@ const Login: NextPage = () => {
               window.location.href = flow?.return_to
               return
             }
-            
+
             if (process.env.NEXT_PUBLIC_AFTER_LOGGED_IN_URL) {
               window.location.href = process.env.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
               return
