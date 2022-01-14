@@ -1,0 +1,9 @@
+# currently WIP on GKE
+
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: login-dev
+spec:
+  domains:
+    - login-dev.missmp.tech

@@ -1,0 +1,16 @@
+# currently only used on GKE
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kratos-login-ingress
+  annotations:
+    FrontendConfig: fe-login-dev
+    kubernetes.io/ingress.global-static-ip-name: kratos-login-ip
+    networking.gke.io/managed-certificates: login-dev
+    kubernetes.io/ingress.class: "gce"
+spec:
+  defaultBackend:
+    service:
+      name: kratos-login
+      port:
+        number: 8080

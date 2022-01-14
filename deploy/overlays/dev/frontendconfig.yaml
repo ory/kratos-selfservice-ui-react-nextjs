@@ -1,0 +1,10 @@
+# redirect to https, currently WIP on GKE
+
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: fe-login-dev
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: PERMANENT_REDIRECT
