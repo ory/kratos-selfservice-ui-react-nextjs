@@ -6,3 +6,4 @@ resources:
   - managedcertificate.yaml
   - ingress.yaml
   - frontendconfig.yaml
+  - deployment.yaml
