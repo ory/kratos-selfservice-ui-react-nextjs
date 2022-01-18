@@ -29,6 +29,8 @@ spec:
               value: https://auth-dev.missmp.tech/
             - name: NEXT_PUBLIC_AFTER_LOGGED_IN_URL
               value: https://www.missmp.tech/
+            - name: NEXT_PUBLIC_FORCE_COOKIE_DOMAIN
+              value: missmp.tech
           readinessProbe:
             tcpSocket:
               port: 8080
