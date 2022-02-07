@@ -1,0 +1,27 @@
+@font-face {
+    font-family: gotham-book;
+    src: url(Gotham-Book.otf);
+    font-weight: bold;
+}
+
+h1, h2, h3, a, div {
+    color: #205A6E !important;
+    font-family: gotham-book !important;
+}
+
+.hmNtXl .button {
+    background-color: #205A6E !important;
+    border-radius: 4px !important;
+    margin-bottom: 30px !important;
+}
+
+
+/* #logo{
+    width: 48px;
+    height: 48px;
+    position: absolute !important;
+    top: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+} */
