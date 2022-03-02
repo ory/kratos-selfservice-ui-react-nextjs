@@ -26,11 +26,11 @@ spec:
             - name: PORT
               value: "8080"
             - name: ORY_SDK_URL
-              value: https://auth.missmp.tech/
+              value: https://auth.dev.missmp.tech/
             - name: NEXT_PUBLIC_AFTER_LOGGED_IN_URL
-              value: https://app.missmp.tech/
+              value: https://app.dev.missmp.tech/
             - name: NEXT_PUBLIC_FORCE_COOKIE_DOMAIN
-              value: missmp.tech
+              value: dev.missmp.tech
           readinessProbe:
             tcpSocket:
               port: 8080

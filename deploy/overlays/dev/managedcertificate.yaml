@@ -7,3 +7,4 @@ metadata:
 spec:
   domains:
     - login-dev.missmp.tech
+    - login.dev.missmp.tech
