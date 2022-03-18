@@ -40,7 +40,8 @@ jobs:
           git clone --depth 1 --branch master https://github.com/ory/kratos.git ../kratos
           cd ../kratos
           git checkout master
-          docker-compose -f quickstart.yml -f contrib/quickstart/kratos/cloud/quickstart.yml up --build --force-recreate -d
+          make docker
+          docker-compose -f quickstart.yml -f quickstart-latest.yml -f contrib/quickstart/kratos/cloud/quickstart.yml up --build --force-recreate -d
       - run: |
           npm run start &
           npm run test
