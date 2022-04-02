@@ -20,8 +20,8 @@
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@ory/integrations": "^0.2.2",
-    "@ory/kratos-client": "0.8.0-alpha.2",
+    "@ory/integrations": "0.2.5",
+    "@ory/client": "0.0.1-alpha.152",
     "@ory/themes": "~0.0.101",
     "classnames": "^2.3.1",
     "next": "12.0.3",
