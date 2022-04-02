@@ -5,7 +5,7 @@ import {
   isUiNodeScriptAttributes,
   isUiNodeTextAttributes
 } from '@ory/integrations/ui'
-import { UiNode } from '@ory/kratos-client'
+import { UiNode } from '@ory/client'
 
 import { NodeAnchor } from './NodeAnchor'
 import { NodeImage } from './NodeImage'

@@ -1,4 +1,4 @@
-import { UiNode, UiNodeImageAttributes } from '@ory/kratos-client'
+import { UiNode, UiNodeImageAttributes } from '@ory/client'
 
 interface Props {
   node: UiNode

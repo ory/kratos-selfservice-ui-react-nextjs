@@ -1,4 +1,4 @@
-import { UiNode, UiNodeInputAttributes } from '@ory/kratos-client'
+import { UiNode, UiNodeInputAttributes } from '@ory/client'
 import { FormEvent } from 'react'
 
 export type ValueSetter = (
