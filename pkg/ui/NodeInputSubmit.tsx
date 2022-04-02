@@ -1,5 +1,5 @@
-import { getNodeLabel } from '@ory/integrations/ui'
 import { UiNode, UiNodeInputAttributes } from '@ory/client'
+import { getNodeLabel } from '@ory/integrations/ui'
 import { Button, Checkbox, TextInput } from '@ory/themes'
 
 import { FormDispatcher, NodeInputProps, ValueSetter } from './helpers'

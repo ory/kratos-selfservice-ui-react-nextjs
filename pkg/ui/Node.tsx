@@ -1,3 +1,4 @@
+import { UiNode } from '@ory/client'
 import {
   isUiNodeAnchorAttributes,
   isUiNodeImageAttributes,
@@ -5,7 +6,6 @@ import {
   isUiNodeScriptAttributes,
   isUiNodeTextAttributes
 } from '@ory/integrations/ui'
-import { UiNode } from '@ory/client'
 
 import { NodeAnchor } from './NodeAnchor'
 import { NodeImage } from './NodeImage'
