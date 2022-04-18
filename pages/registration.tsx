@@ -6,6 +6,7 @@ import { CardTitle } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import { useRouter, NextRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -93,7 +94,17 @@ const Registration: NextPage = () => {
         <meta name="description" content="" />
       </Head>
       <MarginCard>
-        <CardTitle>Create account</CardTitle>
+        <CardTitle>
+          <div>
+            <Image
+              alt="missmp"
+              src="/../public/missmp-logo.png"
+              width={80}
+              height={80}
+            />
+          </div>
+          Create account
+        </CardTitle>
         <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
       <ActionCard>

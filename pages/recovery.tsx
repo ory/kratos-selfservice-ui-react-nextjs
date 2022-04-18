@@ -6,6 +6,7 @@ import { CardTitle } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -89,7 +90,17 @@ const Recovery: NextPage = () => {
         <meta name="description" content="" />
       </Head>
       <MarginCard>
-        <CardTitle>Recover your account</CardTitle>
+        <CardTitle>
+          <div>
+            <Image
+              alt="missmp"
+              src="/../public/missmp-logo.png"
+              width={80}
+              height={80}
+            />
+          </div>
+          Recover your account
+        </CardTitle>
         <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
       <ActionCard>
