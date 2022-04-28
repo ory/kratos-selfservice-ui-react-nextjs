@@ -1,3 +1,4 @@
+import logo from '../public/missmp-logo.png'
 import {
   SelfServiceRecoveryFlow,
   SubmitSelfServiceRecoveryFlowBody
@@ -92,12 +93,7 @@ const Recovery: NextPage = () => {
       <MarginCard>
         <CardTitle>
           <div>
-            <Image
-              alt="missmp"
-              src="/../public/missmp-logo.png"
-              width={80}
-              height={80}
-            />
+            <Image alt="missmp" src={logo} width={80} height={80} />
           </div>
           Recover your account
         </CardTitle>

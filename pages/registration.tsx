@@ -1,3 +1,4 @@
+import logo from '../public/missmp-logo.png'
 import {
   SelfServiceRegistrationFlow,
   SubmitSelfServiceRegistrationFlowBody
@@ -96,12 +97,7 @@ const Registration: NextPage = () => {
       <MarginCard>
         <CardTitle>
           <div>
-            <Image
-              alt="missmp"
-              src="/../public/missmp-logo.png"
-              width={80}
-              height={80}
-            />
+            <Image alt="missmp" src={logo} width={80} height={80} />
           </div>
           Create account
         </CardTitle>

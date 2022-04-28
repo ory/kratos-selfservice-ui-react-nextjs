@@ -1,3 +1,4 @@
+import logo from '../public/missmp-logo.png'
 import {
   SelfServiceLoginFlow,
   SubmitSelfServiceLoginFlowBody
@@ -116,12 +117,7 @@ const Login: NextPage = () => {
       <MarginCard>
         <CardTitle>
           <div>
-            <Image
-              alt="missmp"
-              src="/../public/missmp-logo.png"
-              width={80}
-              height={80}
-            />
+            <Image alt="missmp" src={logo} width={80} height={80} />
           </div>
           {/* <p>
             {(() => {
