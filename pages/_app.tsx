@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle((props: ThemeProps) =>
 )
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const primaryColor = '#1e5a6e'
   const customStyles = {
     blue30: '#9DC2FF',
     blue60: '#2979FF',
@@ -29,9 +30,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     grey60: '#5A5B6A',
     grey70: '#4A4B57',
     grey100: '#19191D',
-    primary30: '#219487',
-    primary60: '#219487',
-    primary70: '#219487',
+    primary30: primaryColor,
+    primary60: primaryColor,
+    primary70: primaryColor,
     primaryAccent: '#FF80FF',
     red30: '#FAA9A3',
     red60: '#F44336',
