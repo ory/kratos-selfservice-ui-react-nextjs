@@ -1,3 +1,4 @@
+import logo from '../public/missmp-logo.png'
 import {
   SelfServiceLoginFlow,
   SubmitSelfServiceLoginFlowBody
@@ -6,6 +7,7 @@ import { CardTitle } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -114,14 +116,19 @@ const Login: NextPage = () => {
       </Head>
       <MarginCard>
         <CardTitle>
-          {(() => {
-            if (flow?.refresh) {
-              return 'Confirm Action'
-            } else if (flow?.requested_aal === 'aal2') {
-              return 'Two-Factor Authentication'
-            }
-            return 'Sign In'
-          })()}
+          <div>
+            <Image alt="missmp" src={logo} width={80} height={80} />
+          </div>
+          {/* <p>
+            {(() => {
+              if (flow?.refresh) {
+                return 'Confirm Action'
+              } else if (flow?.requested_aal === 'aal2') {
+                return 'Two-Factor Authentication'
+              }
+              return 'Sign In'
+            })()}
+          </p> */}
         </CardTitle>
         <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
