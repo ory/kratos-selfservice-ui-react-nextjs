@@ -15,10 +15,12 @@ import {
   CenterLink,
   createLogoutHandler,
   Flow,
-  MarginCard
+  MarginCard,
+  OryGetOrInitializeFlow
 } from '../pkg'
-import { handleGetFlowError, handleFlowError } from '../pkg/errors'
+import { handleFlowError } from '../pkg/errors'
 import ory from '../pkg/sdk'
+import { OryPageQuery } from '../pkg/types'
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceLoginFlow>()
@@ -26,15 +28,13 @@ const Login: NextPage = () => {
   // Get ?flow=... from the URL
   const router = useRouter()
   const {
-    return_to: returnTo,
-    flow: flowId,
     // Refresh means we want to refresh the session. This is needed, for example, when we want to update the password
     // of a user.
     refresh,
     // AAL = Authorization Assurance Level. This implies that we want to upgrade the AAL, meaning that we want
     // to perform two-factor authentication/verification.
     aal
-  } = router.query
+  } = router.query as OryPageQuery
 
   // This might be confusing, but we want to show the user an option
   // to sign out if they are performing two-factor authentication!
@@ -46,29 +46,10 @@ const Login: NextPage = () => {
       return
     }
 
-    // If ?flow=.. was in the URL, we fetch it
-    if (flowId) {
-      ory
-        .getSelfServiceLoginFlow(String(flowId))
-        .then(({ data }) => {
-          setFlow(data)
-        })
-        .catch(handleGetFlowError(router, 'login', setFlow))
-      return
-    }
-
-    // Otherwise we initialize it
-    ory
-      .initializeSelfServiceLoginFlowForBrowsers(
-        Boolean(refresh),
-        aal ? String(aal) : undefined,
-        returnTo ? String(returnTo) : undefined
-      )
-      .then(({ data }) => {
-        setFlow(data)
-      })
-      .catch(handleFlowError(router, 'login', setFlow))
-  }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
+    OryGetOrInitializeFlow<SelfServiceLoginFlow>('login', router, setFlow).then(
+      setFlow
+    )
+  }, [router, router.isReady, router.query, flow])
 
   const onSubmit = (values: SubmitSelfServiceLoginFlowBody) =>
     router
@@ -86,7 +67,6 @@ const Login: NextPage = () => {
             }
             router.push('/')
           })
-          .then(() => {})
           .catch(handleFlowError(router, 'login', setFlow))
           .catch((err: AxiosError) => {
             // If the previous handler did not catch the error it's most likely a form validation error

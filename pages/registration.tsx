@@ -10,7 +10,13 @@ import { useRouter, NextRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 // Import render helpers
-import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
+import {
+  Flow,
+  ActionCard,
+  CenterLink,
+  MarginCard,
+  OryGetOrInitializeFlow
+} from '../pkg'
 import { handleFlowError } from '../pkg/errors'
 // Import the SDK
 import ory from '../pkg/sdk'
@@ -23,9 +29,6 @@ const Registration: NextPage = () => {
   // information about the form we need to render (e.g. username + password)
   const [flow, setFlow] = useState<SelfServiceRegistrationFlow>()
 
-  // Get ?flow=... from the URL
-  const { flow: flowId, return_to: returnTo } = router.query
-
   // In this effect we either initiate a new registration flow, or we fetch an existing registration flow.
   useEffect(() => {
     // If the router is not ready yet, or we already have a flow, do nothing.
@@ -33,28 +36,12 @@ const Registration: NextPage = () => {
       return
     }
 
-    // If ?flow=.. was in the URL, we fetch it
-    if (flowId) {
-      ory
-        .getSelfServiceRegistrationFlow(String(flowId))
-        .then(({ data }) => {
-          // We received the flow - let's use its data and render the form!
-          setFlow(data)
-        })
-        .catch(handleFlowError(router, 'registration', setFlow))
-      return
-    }
-
-    // Otherwise we initialize it
-    ory
-      .initializeSelfServiceRegistrationFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined
-      )
-      .then(({ data }) => {
-        setFlow(data)
-      })
-      .catch(handleFlowError(router, 'registration', setFlow))
-  }, [flowId, router, router.isReady, returnTo, flow])
+    OryGetOrInitializeFlow<SelfServiceRegistrationFlow>(
+      'registration',
+      router,
+      setFlow
+    ).then(setFlow)
+  }, [router, router.isReady, router.query, flow])
 
   const onSubmit = (values: SubmitSelfServiceRegistrationFlowBody) =>
     router

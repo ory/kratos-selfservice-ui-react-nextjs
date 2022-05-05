@@ -10,7 +10,13 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
+import {
+  Flow,
+  ActionCard,
+  CenterLink,
+  MarginCard,
+  OryGetOrInitializeFlow
+} from '../pkg'
 import { handleFlowError } from '../pkg/errors'
 import ory from '../pkg/sdk'
 
@@ -19,7 +25,6 @@ const Recovery: NextPage = () => {
 
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId, return_to: returnTo } = router.query
 
   useEffect(() => {
     // If the router is not ready yet, or we already have a flow, do nothing.
@@ -27,24 +32,8 @@ const Recovery: NextPage = () => {
       return
     }
 
-    // If ?flow=.. was in the URL, we fetch it
-    if (flowId) {
-      ory
-        .getSelfServiceRecoveryFlow(String(flowId))
-        .then(({ data }) => {
-          setFlow(data)
-        })
-        .catch(handleFlowError(router, 'recovery', setFlow))
-      return
-    }
-
-    // Otherwise we initialize it
-    ory
-      .initializeSelfServiceRecoveryFlowForBrowsers()
-      .then(({ data }) => {
-        setFlow(data)
-      })
-      .catch(handleFlowError(router, 'recovery', setFlow))
+    OryGetOrInitializeFlow<SelfServiceRecoveryFlow>('recovery', router, setFlow)
+      .then(setFlow)
       .catch((err: AxiosError) => {
         // If the previous handler did not catch the error it's most likely a form validation error
         if (err.response?.status === 400) {
@@ -55,7 +44,7 @@ const Recovery: NextPage = () => {
 
         return Promise.reject(err)
       })
-  }, [flowId, router, router.isReady, returnTo, flow])
+  }, [router, router.isReady, router.query, flow])
 
   const onSubmit = (values: SubmitSelfServiceRecoveryFlowBody) =>
     router

@@ -10,7 +10,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState } from 'react'
 
-import { Flow, Methods, Messages, ActionCard, CenterLink } from '../pkg'
+import {
+  Flow,
+  Methods,
+  Messages,
+  ActionCard,
+  CenterLink,
+  OryGetOrInitializeFlow
+} from '../pkg'
 import { handleFlowError } from '../pkg/errors'
 import ory from '../pkg/sdk'
 
@@ -44,7 +51,6 @@ const Settings: NextPage = () => {
 
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId, return_to: returnTo } = router.query
 
   useEffect(() => {
     // If the router is not ready yet, or we already have a flow, do nothing.
@@ -52,27 +58,12 @@ const Settings: NextPage = () => {
       return
     }
 
-    // If ?flow=.. was in the URL, we fetch it
-    if (flowId) {
-      ory
-        .getSelfServiceSettingsFlow(String(flowId))
-        .then(({ data }) => {
-          setFlow(data)
-        })
-        .catch(handleFlowError(router, 'settings', setFlow))
-      return
-    }
-
-    // Otherwise we initialize it
-    ory
-      .initializeSelfServiceSettingsFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined
-      )
-      .then(({ data }) => {
-        setFlow(data)
-      })
-      .catch(handleFlowError(router, 'settings', setFlow))
-  }, [flowId, router, router.isReady, returnTo, flow])
+    OryGetOrInitializeFlow<SelfServiceSettingsFlow>(
+      'settings',
+      router,
+      setFlow
+    ).then(setFlow)
+  }, [router, router.isReady, router.query, flow])
 
   const onSubmit = (values: SubmitSelfServiceSettingsFlowBody) =>
     router
