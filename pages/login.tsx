@@ -12,6 +12,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
+import getConfig from 'next/config'
+const {  publicRuntimeConfig } = getConfig()
+
 import {
   ActionCard,
   CenterLink,
@@ -87,8 +90,8 @@ const Login: NextPage = () => {
               return
             }
 
-            if (process.env.NEXT_PUBLIC_AFTER_LOGGED_IN_URL) {
-              window.location.href = process.env.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
+            if (publicRuntimeConfig.NEXT_PUBLIC_AFTER_LOGGED_IN_URL) {
+              window.location.href = publicRuntimeConfig.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
               return
             } else {
               router.push('/')
@@ -154,6 +157,11 @@ const Login: NextPage = () => {
       )}
     </>
   )
+}
+
+// Prevents static rendering so that env vars can be included
+Login.getInitialProps = async ({ req }) => {
+  return {  }
 }
 
 export default Login

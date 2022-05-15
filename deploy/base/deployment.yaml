@@ -22,16 +22,15 @@ spec:
           image: eu.gcr.io/mmpt-233505/kratos-login
           ports:
             - containerPort: 8080
-          env:
-            - name: PORT
-              value: "8080"
-            - name: ORY_SDK_URL
-              value: https://auth.missmp.tech/
-            - name: NEXT_PUBLIC_AFTER_LOGGED_IN_URL
-              value: https://app.missmp.tech/
-            - name: NEXT_PUBLIC_FORCE_COOKIE_DOMAIN
-              value: missmp.tech
           readinessProbe:
             tcpSocket:
               port: 8080
             initialDelaySeconds: 5
+          volumeMounts:
+            - mountPath: /app/.env.local
+              subPath: .env.local
+              name: secrets
+      volumes:
+        - name: secrets
+          secret:
+            secretName: kratos-login-secrets

@@ -10,11 +10,17 @@ build:
       docker:
         dockerfile: Dockerfile
 profiles:
-  - name: dev
+  - name: local
     activation:
       - command: dev
       - command: run
       - command: deploy
+    deploy:
+      kubeContext: docker-desktop
+      kustomize:
+        paths:
+          - deploy/overlays/local
+  - name: dev
     deploy:
       kubeContext: gke_mmpt-233505_asia-southeast1-a_gke-test
       kustomize:
