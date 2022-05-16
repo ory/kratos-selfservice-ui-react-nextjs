@@ -1,3 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kratos-login
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+        - name: gcr-json-key
+
+---
 apiVersion: v1
 kind: Service
 metadata:
