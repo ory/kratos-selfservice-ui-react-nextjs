@@ -41,7 +41,7 @@ const Home: NextPage = () => {
         // Something else happened!
         return Promise.reject(err)
       })
-  })
+  }, [])
 
   return (
     <div className={'container-fluid'}>
