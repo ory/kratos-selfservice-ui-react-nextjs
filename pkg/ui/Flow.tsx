@@ -1,5 +1,3 @@
-import { getNodeId } from '@ory/integrations/ui'
-import { isUiNodeInputAttributes } from '@ory/integrations/ui'
 import {
   SelfServiceLoginFlow,
   SelfServiceRecoveryFlow,
@@ -13,6 +11,8 @@ import {
   SubmitSelfServiceVerificationFlowBody,
   UiNode
 } from '@ory/client'
+import { getNodeId } from '@ory/integrations/ui'
+import { isUiNodeInputAttributes } from '@ory/integrations/ui'
 import { Component, FormEvent } from 'react'
 
 import { Messages } from './Messages'
