@@ -1,5 +1,5 @@
-import { UiNodeAnchorAttributes } from '@ory/kratos-client'
-import { UiNode } from '@ory/kratos-client'
+import { UiNodeAnchorAttributes } from '@ory/client'
+import { UiNode } from '@ory/client'
 import { Button } from '@ory/themes'
 
 interface Props {

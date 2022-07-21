@@ -1,7 +1,7 @@
 import {
   SelfServiceSettingsFlow,
   SubmitSelfServiceSettingsFlowBody
-} from '@ory/kratos-client'
+} from '@ory/client'
 import { CardTitle, H3, P } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
