@@ -1,4 +1,4 @@
-import { SelfServiceError } from '@ory/kratos-client'
+import { SelfServiceError } from '@ory/client'
 import { CardTitle, CodeBox } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
