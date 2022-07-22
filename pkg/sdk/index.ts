@@ -3,6 +3,6 @@ import { Configuration, V0alpha2Api } from '@ory/kratos-client'
 
 export default new V0alpha2Api(
   new Configuration({
-    basePath: 'https://auth.missmp.tech/'
+    basePath: 'https://auth.missmp.tech'
   })
 )
