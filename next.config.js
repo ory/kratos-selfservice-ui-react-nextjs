@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  basePath: '/ui',
   reactStrictMode: true,
   publicRuntimeConfig: {
     // Will be available on both server and client
