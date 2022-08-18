@@ -6,14 +6,12 @@ import {
 import { CardTitle } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
+import getConfig from 'next/config'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-
-import getConfig from 'next/config'
-const {  publicRuntimeConfig } = getConfig()
 
 import {
   ActionCard,
@@ -24,6 +22,8 @@ import {
 } from '../pkg'
 import { handleGetFlowError, handleFlowError } from '../pkg/errors'
 import ory from '../pkg/sdk'
+
+const { publicRuntimeConfig } = getConfig()
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceLoginFlow>()
@@ -91,7 +91,8 @@ const Login: NextPage = () => {
             }
 
             if (publicRuntimeConfig.NEXT_PUBLIC_AFTER_LOGGED_IN_URL) {
-              window.location.href = publicRuntimeConfig.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
+              window.location.href =
+                publicRuntimeConfig.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
               return
             } else {
               router.push('/')
@@ -161,7 +162,7 @@ const Login: NextPage = () => {
 
 // Prevents static rendering so that env vars can be included
 Login.getInitialProps = async ({ req }) => {
-  return {  }
+  return {}
 }
 
 export default Login

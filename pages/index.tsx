@@ -1,6 +1,7 @@
 import { Card, CardTitle, P, H2, H3, CodeBox } from '@ory/themes'
 import { AxiosError } from 'axios'
 import type { NextPage } from 'next'
+import getConfig from 'next/config'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -8,8 +9,7 @@ import { useEffect, useState } from 'react'
 import { DocsButton, MarginCard, createLogoutHandler } from '../pkg'
 import ory from '../pkg/sdk'
 
-import getConfig from 'next/config'
-const {  publicRuntimeConfig } = getConfig()
+const { publicRuntimeConfig } = getConfig()
 
 const Home: NextPage = () => {
   const [session, setSession] = useState<string>(
@@ -27,7 +27,8 @@ const Home: NextPage = () => {
         setHasSession(true)
 
         if (publicRuntimeConfig.NEXT_PUBLIC_AFTER_LOGGED_IN_URL) {
-          window.location.href = publicRuntimeConfig.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
+          window.location.href =
+            publicRuntimeConfig.NEXT_PUBLIC_AFTER_LOGGED_IN_URL
           return
         }
       })
@@ -109,7 +110,7 @@ const Home: NextPage = () => {
 
 // Prevents static rendering so that env vars can be included
 Home.getInitialProps = async ({ req }) => {
-  return {  }
+  return {}
 }
 
 export default Home
