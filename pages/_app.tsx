@@ -11,8 +11,8 @@ import { createGlobalStyle } from 'styled-components'
 const GlobalStyle = createGlobalStyle((props: ThemeProps) =>
   globalStyles(props)
 )
-const CloseButton = ({ closeToast }) => (
-  <i className="material-icons" onClick={closeToast}>
+const CloseButton = (props: any) => (
+  <i className="material-icons" onClick={props.closeToast}>
     <Image src={xMark} alt="x-mark" />
   </i>
 )
