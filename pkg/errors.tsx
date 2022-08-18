@@ -1,7 +1,9 @@
 import { AxiosError } from 'axios'
+import Image from 'next/image'
 import { NextRouter } from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
-import { toast } from 'react-toastify'
+
+import showNotification, { NotificationType } from './ui/Toastify'
 
 // A small function to help us deal with errors coming from fetching a flow.
 export function handleGetFlowError<S>(
@@ -25,21 +27,29 @@ export function handleGetFlowError<S>(
         return
       case 'self_service_flow_return_to_forbidden':
         // The flow expired, let's request a new one.
-        toast.error('The return_to address is not allowed.')
+        showNotification({
+          content: 'The return_to address is not allowed',
+          type: NotificationType.ERROR
+        })
         resetFlow(undefined)
         await router.push('/' + flowType)
         return
       case 'self_service_flow_expired':
         // The flow expired, let's request a new one.
-        toast.error('Your interaction expired, please fill out the form again.')
+        showNotification({
+          content: 'Your interaction expired, please fill out the form again',
+          type: NotificationType.ERROR
+        })
         resetFlow(undefined)
         await router.push('/' + flowType)
         return
       case 'security_csrf_violation':
         // A CSRF violation occurred. Best to just refresh the flow!
-        toast.error(
-          'A security violation was detected, please fill out the form again.'
-        )
+        showNotification({
+          content:
+            'A security violation was detected, please fill out the form again',
+          type: NotificationType.ERROR
+        })
         resetFlow(undefined)
         await router.push('/' + flowType)
         return
