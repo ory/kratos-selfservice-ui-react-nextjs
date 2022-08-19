@@ -1,13 +1,20 @@
+import xMark from '../public/noti-icons/x-mark.svg'
 import '../styles/globals.css'
 import { globalStyles, ThemeProps } from '@ory/themes'
 import type { AppProps } from 'next/app'
-import { ToastContainer } from 'react-toastify'
+import Image from 'next/image'
+import { ToastContainer, Slide } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ThemeProvider } from 'styled-components'
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle((props: ThemeProps) =>
   globalStyles(props)
+)
+const CloseButton = (props: any) => (
+  <i className="material-icons" onClick={props.closeToast}>
+    <Image src={xMark} alt="x-mark" />
+  </i>
 )
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -46,7 +53,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={customStyles}>
         <GlobalStyle />
         <Component {...pageProps} />
-        <ToastContainer />
+        <ToastContainer
+          closeButton={CloseButton}
+          autoClose={3000}
+          hideProgressBar={true}
+          transition={Slide}
+        />
       </ThemeProvider>
     </div>
   )

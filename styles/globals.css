@@ -1,1 +1,29 @@
 @import './flexboxgrid.css';
+
+/* TOASTIFY */
+.Toastify__toast-container {
+  width: fit-content !important;
+}
+.Toastify__toast-theme--light.Toastify__toast--success {
+  background-color: #deedcc;
+  color: #618c40;
+}
+.Toastify__toast-theme--light.Toastify__toast--error {
+  background-color: #ffe3e3;
+  color: #e03131;
+}
+.Toastify__toast-theme--light.Toastify__toast--warning {
+  background-color: #fff3bf;
+  color: #f08c00;
+}
+.Toastify__toast-theme--light.Toastify__toast--info {
+  background-color: #b5dbea;
+  color: #194a5a;
+}
+.material-icons {
+  align-self: center;
+  margin: 2px 9px 0;
+}
+.Toastify__toast-icon {
+  width: 30px !important;
+}
