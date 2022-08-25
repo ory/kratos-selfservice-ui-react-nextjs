@@ -77,7 +77,7 @@ const Login: NextPage = () => {
       .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
       .then(() =>
         ory
-          .submitSelfServiceLoginFlow(String(flow?.id), undefined, values)
+          .submitSelfServiceLoginFlow(String(flow?.id), values)
           // We logged in successfully! Let's bring the user home.
           .then((res) => {
             if (flow?.return_to) {
