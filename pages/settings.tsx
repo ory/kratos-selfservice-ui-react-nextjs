@@ -1,18 +1,18 @@
 import {
   SelfServiceSettingsFlow,
-  SubmitSelfServiceSettingsFlowBody
-} from '@ory/client'
-import { CardTitle, H3, P } from '@ory/themes'
-import { AxiosError } from 'axios'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { ReactNode, useEffect, useState } from 'react'
+  SubmitSelfServiceSettingsFlowBody,
+} from "@ory/client"
+import { CardTitle, H3, P } from "@ory/themes"
+import { AxiosError } from "axios"
+import type { NextPage } from "next"
+import Head from "next/head"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { ReactNode, useEffect, useState } from "react"
 
-import { Flow, Methods, Messages, ActionCard, CenterLink } from '../pkg'
-import { handleFlowError } from '../pkg/errors'
-import ory from '../pkg/sdk'
+import { Flow, Methods, Messages, ActionCard, CenterLink } from "../pkg"
+import { handleFlowError } from "../pkg/errors"
+import ory from "../pkg/sdk"
 
 interface Props {
   flow?: SelfServiceSettingsFlow
@@ -22,7 +22,7 @@ interface Props {
 function SettingsCard({
   flow,
   only,
-  children
+  children,
 }: Props & { children: ReactNode }) {
   if (!flow) {
     return null
@@ -59,19 +59,19 @@ const Settings: NextPage = () => {
         .then(({ data }) => {
           setFlow(data)
         })
-        .catch(handleFlowError(router, 'settings', setFlow))
+        .catch(handleFlowError(router, "settings", setFlow))
       return
     }
 
     // Otherwise we initialize it
     ory
       .initializeSelfServiceSettingsFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined
+        returnTo ? String(returnTo) : undefined,
       )
       .then(({ data }) => {
         setFlow(data)
       })
-      .catch(handleFlowError(router, 'settings', setFlow))
+      .catch(handleFlowError(router, "settings", setFlow))
   }, [flowId, router, router.isReady, returnTo, flow])
 
   const onSubmit = (values: SubmitSelfServiceSettingsFlowBody) =>
@@ -81,12 +81,12 @@ const Settings: NextPage = () => {
       .push(`/settings?flow=${flow?.id}`, undefined, { shallow: true })
       .then(() =>
         ory
-          .submitSelfServiceSettingsFlow(String(flow?.id), undefined, values)
+          .submitSelfServiceSettingsFlow(String(flow?.id), values, undefined)
           .then(({ data }) => {
             // The settings have been saved and the flow was updated. Let's show it to the user!
             setFlow(data)
           })
-          .catch(handleFlowError(router, 'settings', setFlow))
+          .catch(handleFlowError(router, "settings", setFlow))
           .catch(async (err: AxiosError) => {
             // If the previous handler did not catch the error it's most likely a form validation error
             if (err.response?.status === 400) {
@@ -96,7 +96,7 @@ const Settings: NextPage = () => {
             }
 
             return Promise.reject(err)
-          })
+          }),
       )
 
   return (
@@ -157,10 +157,10 @@ const Settings: NextPage = () => {
         <H3>Manage 2FA TOTP Authenticator App</H3>
         <P>
           Add a TOTP Authenticator App to your account to improve your account
-          security. Popular Authenticator Apps are{' '}
+          security. Popular Authenticator Apps are{" "}
           <a href="https://www.lastpass.com" rel="noreferrer" target="_blank">
             LastPass
-          </a>{' '}
+          </a>{" "}
           and Google Authenticator (
           <a
             href="https://apps.apple.com/us/app/google-authenticator/id388497605"
@@ -169,7 +169,7 @@ const Settings: NextPage = () => {
           >
             iOS
           </a>
-          ,{' '}
+          ,{" "}
           <a
             href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US"
             target="_blank"

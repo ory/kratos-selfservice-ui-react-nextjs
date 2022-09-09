@@ -1,24 +1,24 @@
 import {
   SelfServiceLoginFlow,
-  SubmitSelfServiceLoginFlowBody
-} from '@ory/client'
-import { CardTitle } from '@ory/themes'
-import { AxiosError } from 'axios'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+  SubmitSelfServiceLoginFlowBody,
+} from "@ory/client"
+import { CardTitle } from "@ory/themes"
+import { AxiosError } from "axios"
+import type { NextPage } from "next"
+import Head from "next/head"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 
 import {
   ActionCard,
   CenterLink,
   createLogoutHandler,
   Flow,
-  MarginCard
-} from '../pkg'
-import { handleGetFlowError, handleFlowError } from '../pkg/errors'
-import ory from '../pkg/sdk'
+  MarginCard,
+} from "../pkg"
+import { handleGetFlowError, handleFlowError } from "../pkg/errors"
+import ory from "../pkg/sdk"
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceLoginFlow>()
@@ -33,7 +33,7 @@ const Login: NextPage = () => {
     refresh,
     // AAL = Authorization Assurance Level. This implies that we want to upgrade the AAL, meaning that we want
     // to perform two-factor authentication/verification.
-    aal
+    aal,
   } = router.query
 
   // This might be confusing, but we want to show the user an option
@@ -53,7 +53,7 @@ const Login: NextPage = () => {
         .then(({ data }) => {
           setFlow(data)
         })
-        .catch(handleGetFlowError(router, 'login', setFlow))
+        .catch(handleGetFlowError(router, "login", setFlow))
       return
     }
 
@@ -62,12 +62,12 @@ const Login: NextPage = () => {
       .initializeSelfServiceLoginFlowForBrowsers(
         Boolean(refresh),
         aal ? String(aal) : undefined,
-        returnTo ? String(returnTo) : undefined
+        returnTo ? String(returnTo) : undefined,
       )
       .then(({ data }) => {
         setFlow(data)
       })
-      .catch(handleFlowError(router, 'login', setFlow))
+      .catch(handleFlowError(router, "login", setFlow))
   }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
   const onSubmit = (values: SubmitSelfServiceLoginFlowBody) =>
@@ -77,17 +77,17 @@ const Login: NextPage = () => {
       .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
       .then(() =>
         ory
-          .submitSelfServiceLoginFlow(String(flow?.id), undefined, values)
+          .submitSelfServiceLoginFlow(String(flow?.id), values, undefined)
           // We logged in successfully! Let's bring the user home.
           .then((res) => {
             if (flow?.return_to) {
               window.location.href = flow?.return_to
               return
             }
-            router.push('/')
+            router.push("/")
           })
           .then(() => {})
-          .catch(handleFlowError(router, 'login', setFlow))
+          .catch(handleFlowError(router, "login", setFlow))
           .catch((err: AxiosError) => {
             // If the previous handler did not catch the error it's most likely a form validation error
             if (err.response?.status === 400) {
@@ -97,7 +97,7 @@ const Login: NextPage = () => {
             }
 
             return Promise.reject(err)
-          })
+          }),
       )
 
   return (
@@ -110,11 +110,11 @@ const Login: NextPage = () => {
         <CardTitle>
           {(() => {
             if (flow?.refresh) {
-              return 'Confirm Action'
-            } else if (flow?.requested_aal === 'aal2') {
-              return 'Two-Factor Authentication'
+              return "Confirm Action"
+            } else if (flow?.requested_aal === "aal2") {
+              return "Two-Factor Authentication"
             }
-            return 'Sign In'
+            return "Sign In"
           })()}
         </CardTitle>
         <Flow onSubmit={onSubmit} flow={flow} />
