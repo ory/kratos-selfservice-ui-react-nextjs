@@ -1,5 +1,5 @@
-import { UiNode, UiNodeScriptAttributes } from '@ory/client'
-import { HTMLAttributeReferrerPolicy, useEffect } from 'react'
+import { UiNode, UiNodeScriptAttributes } from "@ory/client"
+import { HTMLAttributeReferrerPolicy, useEffect } from "react"
 
 interface Props {
   node: UiNode
@@ -8,10 +8,10 @@ interface Props {
 
 export const NodeScript = ({ attributes }: Props) => {
   useEffect(() => {
-    const script = document.createElement('script')
+    const script = document.createElement("script")
 
     script.async = true
-    script.setAttribute('data-testid', `node/script/${attributes.id}`)
+    script.setAttribute("data-testid", `node/script/${attributes.id}`)
     script.src = attributes.src
     script.async = attributes.async
     script.crossOrigin = attributes.crossorigin

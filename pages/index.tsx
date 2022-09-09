@@ -1,16 +1,16 @@
-import { Card, CardTitle, P, H2, H3, CodeBox } from '@ory/themes'
-import { AxiosError } from 'axios'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { Card, CardTitle, P, H2, H3, CodeBox } from "@ory/themes"
+import { AxiosError } from "axios"
+import type { NextPage } from "next"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 
-import { DocsButton, MarginCard, createLogoutHandler } from '../pkg'
-import ory from '../pkg/sdk'
+import { DocsButton, MarginCard, createLogoutHandler } from "../pkg"
+import ory from "../pkg/sdk"
 
 const Home: NextPage = () => {
   const [session, setSession] = useState<string>(
-    'No valid Ory Session was found.\nPlease sign in to receive one.'
+    "No valid Ory Session was found.\nPlease sign in to receive one.",
   )
   const [hasSession, setHasSession] = useState<boolean>(false)
   const router = useRouter()
@@ -32,7 +32,7 @@ const Home: NextPage = () => {
             // This status code is returned when we are trying to
             // validate a session which has not yet completed
             // it's second factor
-            return router.push('/login?aal=aal2')
+            return router.push("/login?aal=aal2")
           case 401:
             // do nothing, the user is not logged in
             return
@@ -44,7 +44,7 @@ const Home: NextPage = () => {
   }, [])
 
   return (
-    <div className={'container-fluid'}>
+    <div className={"container-fluid"}>
       <Head>
         <title>Ory NextJS Integration Example</title>
         <meta name="description" content="NextJS + React + Vercel + Ory" />
@@ -111,20 +111,20 @@ const Home: NextPage = () => {
 
       <Card wide>
         <H2>Other User Interface Screens</H2>
-        <div className={'row'}>
+        <div className={"row"}>
           <DocsButton
             unresponsive
             testid="login"
             href="/login"
             disabled={hasSession}
-            title={'Login'}
+            title={"Login"}
           />
           <DocsButton
             unresponsive
             testid="sign-up"
             href="/registration"
             disabled={hasSession}
-            title={'Sign Up'}
+            title={"Sign Up"}
           />
           <DocsButton
             unresponsive
@@ -144,14 +144,14 @@ const Home: NextPage = () => {
             testid="account-settings"
             href="/settings"
             disabled={!hasSession}
-            title={'Account Settings'}
+            title={"Account Settings"}
           />
           <DocsButton
             unresponsive
             testid="logout"
             onClick={onLogout}
             disabled={!hasSession}
-            title={'Logout'}
+            title={"Logout"}
           />
         </div>
       </Card>

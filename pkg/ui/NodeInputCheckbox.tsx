@@ -1,13 +1,13 @@
-import { getNodeLabel } from '@ory/integrations/ui'
-import { Checkbox } from '@ory/themes'
+import { getNodeLabel } from "@ory/integrations/ui"
+import { Checkbox } from "@ory/themes"
 
-import { NodeInputProps } from './helpers'
+import { NodeInputProps } from "./helpers"
 
 export function NodeInputCheckbox<T>({
   node,
   attributes,
   setValue,
-  disabled
+  disabled,
 }: NodeInputProps) {
   // Render a checkbox.s
   return (
@@ -19,11 +19,11 @@ export function NodeInputCheckbox<T>({
         disabled={attributes.disabled || disabled}
         label={getNodeLabel(node)}
         state={
-          node.messages.find(({ type }) => type === 'error')
-            ? 'error'
+          node.messages.find(({ type }) => type === "error")
+            ? "error"
             : undefined
         }
-        subtitle={node.messages.map(({ text }) => text).join('\n')}
+        subtitle={node.messages.map(({ text }) => text).join("\n")}
       />
     </>
   )

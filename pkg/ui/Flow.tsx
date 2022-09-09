@@ -9,14 +9,14 @@ import {
   SubmitSelfServiceRegistrationFlowBody,
   SubmitSelfServiceSettingsFlowBody,
   SubmitSelfServiceVerificationFlowBody,
-  UiNode
-} from '@ory/client'
-import { getNodeId } from '@ory/integrations/ui'
-import { isUiNodeInputAttributes } from '@ory/integrations/ui'
-import { Component, FormEvent } from 'react'
+  UiNode,
+} from "@ory/client"
+import { getNodeId } from "@ory/integrations/ui"
+import { isUiNodeInputAttributes } from "@ory/integrations/ui"
+import { Component, FormEvent } from "react"
 
-import { Messages } from './Messages'
-import { Node } from './Node'
+import { Messages } from "./Messages"
+import { Node } from "./Node"
 
 export type Values = Partial<
   | SubmitSelfServiceLoginFlowBody
@@ -27,13 +27,13 @@ export type Values = Partial<
 >
 
 export type Methods =
-  | 'oidc'
-  | 'password'
-  | 'profile'
-  | 'totp'
-  | 'webauthn'
-  | 'link'
-  | 'lookup_secret'
+  | "oidc"
+  | "password"
+  | "profile"
+  | "totp"
+  | "webauthn"
+  | "link"
+  | "lookup_secret"
 
 export type Props<T> = {
   // The flow
@@ -65,7 +65,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
     super(props)
     this.state = {
       values: emptyState(),
-      isLoading: false
+      isLoading: false,
     }
   }
 
@@ -87,8 +87,8 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
       // This only makes sense for text nodes
       if (isUiNodeInputAttributes(node.attributes)) {
         if (
-          node.attributes.type === 'button' ||
-          node.attributes.type === 'submit'
+          node.attributes.type === "button" ||
+          node.attributes.type === "submit"
         ) {
           // In order to mimic real HTML forms, we need to skip setting the value
           // for buttons as the button value will (in normal HTML forms) only trigger
@@ -112,7 +112,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
       if (!only) {
         return true
       }
-      return group === 'default' || group === only
+      return group === "default" || group === only
     })
   }
 
@@ -129,7 +129,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
 
     this.setState((state) => ({
       ...state,
-      isLoading: true
+      isLoading: true,
     }))
 
     return this.props.onSubmit(this.state.values).finally(() => {
@@ -137,7 +137,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
       // Done submitting - update loading status
       this.setState((state) => ({
         ...state,
-        isLoading: false
+        isLoading: false,
       }))
     })
   }
@@ -180,10 +180,10 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
                       ...state,
                       values: {
                         ...state.values,
-                        [getNodeId(node)]: value
-                      }
+                        [getNodeId(node)]: value,
+                      },
                     }),
-                    resolve
+                    resolve,
                   )
                 })
               }

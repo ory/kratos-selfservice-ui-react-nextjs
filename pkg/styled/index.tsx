@@ -2,10 +2,10 @@ import {
   Card,
   LinkButton,
   typographyH2Styles,
-  typographyLinkStyles
-} from '@ory/themes'
-import cn from 'classnames'
-import styled from 'styled-components'
+  typographyLinkStyles,
+} from "@ory/themes"
+import cn from "classnames"
+import styled from "styled-components"
 
 export const MarginCard = styled(Card)`
   margin-top: 70px;
@@ -56,9 +56,9 @@ export const DocsButton = ({
   onClick,
   testid,
   disabled,
-  unresponsive
+  unresponsive,
 }: DocsButtonProps) => (
-  <div className={cn('col-xs-4', { 'col-md-12': !unresponsive })}>
+  <div className={cn("col-xs-4", { "col-md-12": !unresponsive })}>
     <div className="box">
       <TextLeftButton
         onClick={onClick}

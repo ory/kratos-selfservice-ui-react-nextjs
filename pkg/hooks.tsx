@@ -1,12 +1,12 @@
-import { AxiosError } from 'axios'
-import { useRouter } from 'next/router'
-import { useState, useEffect, DependencyList } from 'react'
+import { AxiosError } from "axios"
+import { useRouter } from "next/router"
+import { useState, useEffect, DependencyList } from "react"
 
-import ory from './sdk'
+import ory from "./sdk"
 
 // Returns a function which will log the user out
 export function createLogoutHandler(deps?: DependencyList) {
-  const [logoutToken, setLogoutToken] = useState<string>('')
+  const [logoutToken, setLogoutToken] = useState<string>("")
   const router = useRouter()
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function createLogoutHandler(deps?: DependencyList) {
     if (logoutToken) {
       ory
         .submitSelfServiceLogoutFlow(logoutToken)
-        .then(() => router.push('/login'))
+        .then(() => router.push("/login"))
         .then(() => router.reload())
     }
   }

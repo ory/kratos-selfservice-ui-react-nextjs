@@ -1,19 +1,19 @@
 import {
   SelfServiceRegistrationFlow,
-  SubmitSelfServiceRegistrationFlowBody
-} from '@ory/client'
-import { CardTitle } from '@ory/themes'
-import { AxiosError } from 'axios'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import { useRouter, NextRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+  SubmitSelfServiceRegistrationFlowBody,
+} from "@ory/client"
+import { CardTitle } from "@ory/themes"
+import { AxiosError } from "axios"
+import type { NextPage } from "next"
+import Head from "next/head"
+import { useRouter, NextRouter } from "next/router"
+import { useEffect, useState } from "react"
 
 // Import render helpers
-import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
-import { handleFlowError } from '../pkg/errors'
+import { Flow, ActionCard, CenterLink, MarginCard } from "../pkg"
+import { handleFlowError } from "../pkg/errors"
 // Import the SDK
-import ory from '../pkg/sdk'
+import ory from "../pkg/sdk"
 
 // Renders the registration page
 const Registration: NextPage = () => {
@@ -41,19 +41,19 @@ const Registration: NextPage = () => {
           // We received the flow - let's use its data and render the form!
           setFlow(data)
         })
-        .catch(handleFlowError(router, 'registration', setFlow))
+        .catch(handleFlowError(router, "registration", setFlow))
       return
     }
 
     // Otherwise we initialize it
     ory
       .initializeSelfServiceRegistrationFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined
+        returnTo ? String(returnTo) : undefined,
       )
       .then(({ data }) => {
         setFlow(data)
       })
-      .catch(handleFlowError(router, 'registration', setFlow))
+      .catch(handleFlowError(router, "registration", setFlow))
   }, [flowId, router, router.isReady, returnTo, flow])
 
   const onSubmit = (values: SubmitSelfServiceRegistrationFlowBody) =>
@@ -68,12 +68,12 @@ const Registration: NextPage = () => {
             // If we ended up here, it means we are successfully signed up!
             //
             // You can do cool stuff here, like having access to the identity which just signed up:
-            console.log('This is the user session: ', data, data.identity)
+            console.log("This is the user session: ", data, data.identity)
 
             // For now however we just want to redirect home!
-            return router.push(flow?.return_to || '/').then(() => {})
+            return router.push(flow?.return_to || "/").then(() => {})
           })
-          .catch(handleFlowError(router, 'registration', setFlow))
+          .catch(handleFlowError(router, "registration", setFlow))
           .catch((err: AxiosError) => {
             // If the previous handler did not catch the error it's most likely a form validation error
             if (err.response?.status === 400) {
@@ -83,7 +83,7 @@ const Registration: NextPage = () => {
             }
 
             return Promise.reject(err)
-          })
+          }),
       )
 
   return (

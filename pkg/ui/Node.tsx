@@ -1,18 +1,18 @@
-import { UiNode } from '@ory/client'
+import { UiNode } from "@ory/client"
 import {
   isUiNodeAnchorAttributes,
   isUiNodeImageAttributes,
   isUiNodeInputAttributes,
   isUiNodeScriptAttributes,
-  isUiNodeTextAttributes
-} from '@ory/integrations/ui'
+  isUiNodeTextAttributes,
+} from "@ory/integrations/ui"
 
-import { NodeAnchor } from './NodeAnchor'
-import { NodeImage } from './NodeImage'
-import { NodeInput } from './NodeInput'
-import { NodeScript } from './NodeScript'
-import { NodeText } from './NodeText'
-import { FormDispatcher, ValueSetter } from './helpers'
+import { NodeAnchor } from "./NodeAnchor"
+import { NodeImage } from "./NodeImage"
+import { NodeInput } from "./NodeInput"
+import { NodeScript } from "./NodeScript"
+import { NodeText } from "./NodeText"
+import { FormDispatcher, ValueSetter } from "./helpers"
 
 interface Props {
   node: UiNode
@@ -27,7 +27,7 @@ export const Node = ({
   value,
   setValue,
   disabled,
-  dispatchSubmit
+  dispatchSubmit,
 }: Props) => {
   if (isUiNodeImageAttributes(node.attributes)) {
     return <NodeImage node={node} attributes={node.attributes} />
