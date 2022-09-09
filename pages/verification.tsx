@@ -1,17 +1,17 @@
 import {
   SelfServiceVerificationFlow,
-  SubmitSelfServiceVerificationFlowBody
-} from '@ory/client'
-import { Card, CardTitle } from '@ory/themes'
-import { AxiosError } from 'axios'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+  SubmitSelfServiceVerificationFlowBody,
+} from "@ory/client"
+import { Card, CardTitle } from "@ory/themes"
+import { AxiosError } from "axios"
+import type { NextPage } from "next"
+import Head from "next/head"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 
-import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
-import ory from '../pkg/sdk'
+import { Flow, ActionCard, CenterLink, MarginCard } from "../pkg"
+import ory from "../pkg/sdk"
 
 const Verification: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceVerificationFlow>()
@@ -39,7 +39,7 @@ const Verification: NextPage = () => {
             // Status code 410 means the request has expired - so let's load a fresh flow!
             case 403:
               // Status code 403 implies some other issue (e.g. CSRF) - let's reload!
-              return router.push('/verification')
+              return router.push("/verification")
           }
 
           throw err
@@ -50,7 +50,7 @@ const Verification: NextPage = () => {
     // Otherwise we initialize it
     ory
       .initializeSelfServiceVerificationFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined
+        returnTo ? String(returnTo) : undefined,
       )
       .then(({ data }) => {
         setFlow(data)
@@ -59,7 +59,7 @@ const Verification: NextPage = () => {
         switch (err.response?.status) {
           case 400:
             // Status code 400 implies the user is already signed in
-            return router.push('/')
+            return router.push("/")
         }
 
         throw err
@@ -75,8 +75,8 @@ const Verification: NextPage = () => {
         ory
           .submitSelfServiceVerificationFlow(
             String(flow?.id),
+            values,
             undefined,
-            values
           )
           .then(({ data }) => {
             // Form submission was successful, show the message to the user!
@@ -91,7 +91,7 @@ const Verification: NextPage = () => {
             }
 
             throw err
-          })
+          }),
       )
 
   return (

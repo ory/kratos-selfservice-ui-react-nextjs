@@ -1,18 +1,18 @@
 import {
   SelfServiceRecoveryFlow,
-  SubmitSelfServiceRecoveryFlowBody
-} from '@ory/client'
-import { CardTitle } from '@ory/themes'
-import { AxiosError } from 'axios'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+  SubmitSelfServiceRecoveryFlowBody,
+} from "@ory/client"
+import { CardTitle } from "@ory/themes"
+import { AxiosError } from "axios"
+import type { NextPage } from "next"
+import Head from "next/head"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 
-import { Flow, ActionCard, CenterLink, MarginCard } from '../pkg'
-import { handleFlowError } from '../pkg/errors'
-import ory from '../pkg/sdk'
+import { Flow, ActionCard, CenterLink, MarginCard } from "../pkg"
+import { handleFlowError } from "../pkg/errors"
+import ory from "../pkg/sdk"
 
 const Recovery: NextPage = () => {
   const [flow, setFlow] = useState<SelfServiceRecoveryFlow>()
@@ -34,7 +34,7 @@ const Recovery: NextPage = () => {
         .then(({ data }) => {
           setFlow(data)
         })
-        .catch(handleFlowError(router, 'recovery', setFlow))
+        .catch(handleFlowError(router, "recovery", setFlow))
       return
     }
 
@@ -44,7 +44,7 @@ const Recovery: NextPage = () => {
       .then(({ data }) => {
         setFlow(data)
       })
-      .catch(handleFlowError(router, 'recovery', setFlow))
+      .catch(handleFlowError(router, "recovery", setFlow))
       .catch((err: AxiosError) => {
         // If the previous handler did not catch the error it's most likely a form validation error
         if (err.response?.status === 400) {
@@ -64,12 +64,12 @@ const Recovery: NextPage = () => {
       .push(`/recovery?flow=${flow?.id}`, undefined, { shallow: true })
       .then(() =>
         ory
-          .submitSelfServiceRecoveryFlow(String(flow?.id), undefined, values)
+          .submitSelfServiceRecoveryFlow(String(flow?.id), values, undefined)
           .then(({ data }) => {
             // Form submission was successful, show the message to the user!
             setFlow(data)
           })
-          .catch(handleFlowError(router, 'recovery', setFlow))
+          .catch(handleFlowError(router, "recovery", setFlow))
           .catch((err: AxiosError) => {
             switch (err.response?.status) {
               case 400:
@@ -79,7 +79,7 @@ const Recovery: NextPage = () => {
             }
 
             throw err
-          })
+          }),
       )
 
   return (
