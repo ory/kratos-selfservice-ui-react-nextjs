@@ -1,15 +1,15 @@
-import { UiNode, UiNodeInputAttributes } from '@ory/client'
-import { getNodeLabel } from '@ory/integrations/ui'
-import { Button, Checkbox, TextInput } from '@ory/themes'
+import { UiNode, UiNodeInputAttributes } from "@ory/client"
+import { getNodeLabel } from "@ory/integrations/ui"
+import { Button, Checkbox, TextInput } from "@ory/themes"
 
-import { FormDispatcher, NodeInputProps, ValueSetter } from './helpers'
+import { FormDispatcher, NodeInputProps, ValueSetter } from "./helpers"
 
 export function NodeInputSubmit<T>({
   node,
   attributes,
   setValue,
   disabled,
-  dispatchSubmit
+  dispatchSubmit,
 }: NodeInputProps) {
   return (
     <>
@@ -19,7 +19,7 @@ export function NodeInputSubmit<T>({
           // On click, we set this value, and once set, dispatch the submission!
           setValue(attributes.value).then(() => dispatchSubmit(e))
         }}
-        value={attributes.value || ''}
+        value={attributes.value || ""}
         disabled={attributes.disabled || disabled}
       >
         {getNodeLabel(node)}

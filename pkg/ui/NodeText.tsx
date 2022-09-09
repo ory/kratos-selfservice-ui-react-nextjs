@@ -1,7 +1,7 @@
-import { UiNode, UiNodeTextAttributes } from '@ory/client'
-import { UiText } from '@ory/client'
-import { CodeBox, P } from '@ory/themes'
-import styled from 'styled-components'
+import { UiNode, UiNodeTextAttributes } from "@ory/client"
+import { UiText } from "@ory/client"
+import { CodeBox, P } from "@ory/themes"
+import styled from "styled-components"
 
 interface Props {
   node: UiNode
@@ -24,9 +24,9 @@ const Content = ({ node, attributes }: Props) => {
             className="col-xs-3"
           >
             {/* Used lookup_secret has ID 1050014 */}
-            <code>{text.id === 1050014 ? 'Used' : text.text}</code>
+            <code>{text.id === 1050014 ? "Used" : text.text}</code>
           </div>
-        )
+        ),
       )
       return (
         <div

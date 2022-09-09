@@ -1,16 +1,16 @@
-import { UiNode, UiNodeInputAttributes } from '@ory/client'
-import { getNodeLabel } from '@ory/integrations/ui'
-import { Button, Checkbox, TextInput } from '@ory/themes'
-import { FormEvent } from 'react'
+import { UiNode, UiNodeInputAttributes } from "@ory/client"
+import { getNodeLabel } from "@ory/integrations/ui"
+import { Button, Checkbox, TextInput } from "@ory/themes"
+import { FormEvent } from "react"
 
-import { FormDispatcher, NodeInputProps, ValueSetter } from './helpers'
+import { FormDispatcher, NodeInputProps, ValueSetter } from "./helpers"
 
 export function NodeInputButton<T>({
   node,
   attributes,
   setValue,
   disabled,
-  dispatchSubmit
+  dispatchSubmit,
 }: NodeInputProps) {
   // Some attributes have dynamic JavaScript - this is for example required for WebAuthn.
   const onClick = (e: MouseEvent | FormEvent) => {
@@ -37,7 +37,7 @@ export function NodeInputButton<T>({
         onClick={(e) => {
           onClick(e)
         }}
-        value={attributes.value || ''}
+        value={attributes.value || ""}
         disabled={attributes.disabled || disabled}
       >
         {getNodeLabel(node)}

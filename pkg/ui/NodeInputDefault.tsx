@@ -1,14 +1,14 @@
-import { getNodeLabel } from '@ory/integrations/ui'
-import { Button, TextInput } from '@ory/themes'
+import { getNodeLabel } from "@ory/integrations/ui"
+import { Button, TextInput } from "@ory/themes"
 
-import { NodeInputButton } from './NodeInputButton'
-import { NodeInputCheckbox } from './NodeInputCheckbox'
-import { NodeInputHidden } from './NodeInputHidden'
-import { NodeInputSubmit } from './NodeInputSubmit'
-import { NodeInputProps } from './helpers'
+import { NodeInputButton } from "./NodeInputButton"
+import { NodeInputCheckbox } from "./NodeInputCheckbox"
+import { NodeInputHidden } from "./NodeInputHidden"
+import { NodeInputSubmit } from "./NodeInputSubmit"
+import { NodeInputProps } from "./helpers"
 
 export function NodeInputDefault<T>(props: NodeInputProps) {
-  const { node, attributes, value = '', setValue, disabled } = props
+  const { node, attributes, value = "", setValue, disabled } = props
 
   // Some attributes have dynamic JavaScript - this is for example required for WebAuthn.
   const onClick = () => {
@@ -35,7 +35,7 @@ export function NodeInputDefault<T>(props: NodeInputProps) {
       disabled={attributes.disabled || disabled}
       help={node.messages.length > 0}
       state={
-        node.messages.find(({ type }) => type === 'error') ? 'error' : undefined
+        node.messages.find(({ type }) => type === "error") ? "error" : undefined
       }
       subtitle={
         <>

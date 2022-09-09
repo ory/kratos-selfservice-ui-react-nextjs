@@ -1,13 +1,13 @@
-import { SelfServiceError } from '@ory/client'
-import { CardTitle, CodeBox } from '@ory/themes'
-import { AxiosError } from 'axios'
-import type { NextPage } from 'next'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { SelfServiceError } from "@ory/client"
+import { CardTitle, CodeBox } from "@ory/themes"
+import { AxiosError } from "axios"
+import type { NextPage } from "next"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 
-import { ActionCard, CenterLink, MarginCard } from '../pkg'
-import ory from '../pkg/sdk'
+import { ActionCard, CenterLink, MarginCard } from "../pkg"
+import ory from "../pkg/sdk"
 
 const Login: NextPage = () => {
   const [error, setError] = useState<SelfServiceError | string>()
@@ -35,7 +35,7 @@ const Login: NextPage = () => {
           // The error id could not be fetched due to e.g. a CSRF issue. Let's just redirect home!
           case 410:
             // The error id expired. Let's just redirect home!
-            return router.push('/')
+            return router.push("/")
         }
 
         return Promise.reject(err)
