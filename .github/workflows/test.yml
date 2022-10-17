@@ -10,7 +10,7 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  test-cloud:
+  production:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,7 +26,23 @@ jobs:
         env:
           ORY_KRATOS_URL: https://playground.projects.oryapis.com/
 
-  test-self:
+  staging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run build
+      - run: |
+          npm run start &
+          npm run test
+        env:
+          ORY_KRATOS_URL: https://blissful-greider-9hmtg26xai.projects.staging.oryapis.dev/
+
+  self-hosted:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
