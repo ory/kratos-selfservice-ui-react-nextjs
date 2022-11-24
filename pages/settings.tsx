@@ -111,7 +111,7 @@ const Settings: NextPage = () => {
       <CardTitle style={{ marginTop: 80 }}>
         Profile Management and Security Settings
       </CardTitle>
-      <SettingsCard only="profile" flow={flow}>
+      {/* <SettingsCard only="profile" flow={flow}>
         <H3>Profile Settings</H3>
         <Messages messages={flow?.ui.messages} />
         <Flow
@@ -120,7 +120,7 @@ const Settings: NextPage = () => {
           only="profile"
           flow={flow}
         />
-      </SettingsCard>
+      </SettingsCard> */}
       <SettingsCard only="password" flow={flow}>
         <H3>Change Password</H3>
 
