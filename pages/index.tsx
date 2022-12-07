@@ -5,7 +5,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
-import { DocsButton, MarginCard, createLogoutHandler } from "../pkg"
+import { DocsButton, MarginCard, LogoutLink } from "../pkg"
 import ory from "../pkg/sdk"
 
 const Home: NextPage = () => {
@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   )
   const [hasSession, setHasSession] = useState<boolean>(false)
   const router = useRouter()
-  const onLogout = createLogoutHandler()
+  const onLogout = LogoutLink()
 
   useEffect(() => {
     ory
@@ -31,7 +31,7 @@ const Home: NextPage = () => {
           case 422:
             // This status code is returned when we are trying to
             // validate a session which has not yet completed
-            // it's second factor
+            // its second factor
             return router.push("/login?aal=aal2")
           case 401:
             // do nothing, the user is not logged in
@@ -41,7 +41,7 @@ const Home: NextPage = () => {
         // Something else happened!
         return Promise.reject(err)
       })
-  }, [])
+  }, [router])
 
   return (
     <div className={"container-fluid"}>

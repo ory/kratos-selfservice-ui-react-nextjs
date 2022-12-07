@@ -1,10 +1,5 @@
-import { getNodeLabel } from "@ory/integrations/ui"
-import { Button, TextInput } from "@ory/themes"
+import { TextInput } from "@ory/themes"
 
-import { NodeInputButton } from "./NodeInputButton"
-import { NodeInputCheckbox } from "./NodeInputCheckbox"
-import { NodeInputHidden } from "./NodeInputHidden"
-import { NodeInputSubmit } from "./NodeInputSubmit"
 import { NodeInputProps } from "./helpers"
 
 export function NodeInputDefault<T>(props: NodeInputProps) {

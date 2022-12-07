@@ -1,7 +1,4 @@
-import {
-  SelfServiceRecoveryFlow,
-  SubmitSelfServiceRecoveryFlowBody,
-} from "@ory/client"
+import { RecoveryFlow, UpdateRecoveryFlowBody } from "@ory/client"
 import { CardTitle } from "@ory/themes"
 import { AxiosError } from "axios"
 import type { NextPage } from "next"
@@ -15,7 +12,7 @@ import { handleFlowError } from "../pkg/errors"
 import ory from "../pkg/sdk"
 
 const Recovery: NextPage = () => {
-  const [flow, setFlow] = useState<SelfServiceRecoveryFlow>()
+  const [flow, setFlow] = useState<RecoveryFlow>()
 
   // Get ?flow=... from the URL
   const router = useRouter()
@@ -30,7 +27,7 @@ const Recovery: NextPage = () => {
     // If ?flow=.. was in the URL, we fetch it
     if (flowId) {
       ory
-        .getSelfServiceRecoveryFlow(String(flowId))
+        .getRecoveryFlow({ id: String(flowId) })
         .then(({ data }) => {
           setFlow(data)
         })
@@ -40,7 +37,7 @@ const Recovery: NextPage = () => {
 
     // Otherwise we initialize it
     ory
-      .initializeSelfServiceRecoveryFlowForBrowsers()
+      .createBrowserRecoveryFlow()
       .then(({ data }) => {
         setFlow(data)
       })
@@ -57,14 +54,17 @@ const Recovery: NextPage = () => {
       })
   }, [flowId, router, router.isReady, returnTo, flow])
 
-  const onSubmit = (values: SubmitSelfServiceRecoveryFlowBody) =>
+  const onSubmit = (values: UpdateRecoveryFlowBody) =>
     router
       // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
       // his data when she/he reloads the page.
       .push(`/recovery?flow=${flow?.id}`, undefined, { shallow: true })
       .then(() =>
         ory
-          .submitSelfServiceRecoveryFlow(String(flow?.id), values, undefined)
+          .updateRecoveryFlow({
+            flow: String(flow?.id),
+            updateRecoveryFlowBody: values,
+          })
           .then(({ data }) => {
             // Form submission was successful, show the message to the user!
             setFlow(data)
