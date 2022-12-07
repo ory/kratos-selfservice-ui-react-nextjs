@@ -1,7 +1,4 @@
-import {
-  SelfServiceSettingsFlow,
-  SubmitSelfServiceSettingsFlowBody,
-} from "@ory/client"
+import { SettingsFlow, UpdateSettingsFlowBody } from "@ory/client"
 import { CardTitle, H3, P } from "@ory/themes"
 import { AxiosError } from "axios"
 import type { NextPage } from "next"
@@ -15,7 +12,7 @@ import { handleFlowError } from "../pkg/errors"
 import ory from "../pkg/sdk"
 
 interface Props {
-  flow?: SelfServiceSettingsFlow
+  flow?: SettingsFlow
   only?: Methods
 }
 
@@ -40,7 +37,7 @@ function SettingsCard({
 }
 
 const Settings: NextPage = () => {
-  const [flow, setFlow] = useState<SelfServiceSettingsFlow>()
+  const [flow, setFlow] = useState<SettingsFlow>()
 
   // Get ?flow=... from the URL
   const router = useRouter()
@@ -55,7 +52,7 @@ const Settings: NextPage = () => {
     // If ?flow=.. was in the URL, we fetch it
     if (flowId) {
       ory
-        .getSelfServiceSettingsFlow(String(flowId))
+        .getSettingsFlow({ id: String(flowId) })
         .then(({ data }) => {
           setFlow(data)
         })
@@ -65,23 +62,26 @@ const Settings: NextPage = () => {
 
     // Otherwise we initialize it
     ory
-      .initializeSelfServiceSettingsFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined,
-      )
+      .createBrowserSettingsFlow({
+        returnTo: returnTo ? String(returnTo) : undefined,
+      })
       .then(({ data }) => {
         setFlow(data)
       })
       .catch(handleFlowError(router, "settings", setFlow))
   }, [flowId, router, router.isReady, returnTo, flow])
 
-  const onSubmit = (values: SubmitSelfServiceSettingsFlowBody) =>
+  const onSubmit = (values: UpdateSettingsFlowBody) =>
     router
       // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
       // his data when she/he reloads the page.
       .push(`/settings?flow=${flow?.id}`, undefined, { shallow: true })
       .then(() =>
         ory
-          .submitSelfServiceSettingsFlow(String(flow?.id), values, undefined)
+          .updateSettingsFlow({
+            flow: String(flow?.id),
+            updateSettingsFlowBody: values,
+          })
           .then(({ data }) => {
             // The settings have been saved and the flow was updated. Let's show it to the user!
             setFlow(data)

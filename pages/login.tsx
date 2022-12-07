@@ -1,7 +1,4 @@
-import {
-  SelfServiceLoginFlow,
-  SubmitSelfServiceLoginFlowBody,
-} from "@ory/client"
+import { LoginFlow, UpdateLoginFlowBody } from "@ory/client"
 import { CardTitle } from "@ory/themes"
 import { AxiosError } from "axios"
 import type { NextPage } from "next"
@@ -10,18 +7,12 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
-import {
-  ActionCard,
-  CenterLink,
-  createLogoutHandler,
-  Flow,
-  MarginCard,
-} from "../pkg"
+import { ActionCard, CenterLink, LogoutLink, Flow, MarginCard } from "../pkg"
 import { handleGetFlowError, handleFlowError } from "../pkg/errors"
 import ory from "../pkg/sdk"
 
 const Login: NextPage = () => {
-  const [flow, setFlow] = useState<SelfServiceLoginFlow>()
+  const [flow, setFlow] = useState<LoginFlow>()
 
   // Get ?flow=... from the URL
   const router = useRouter()
@@ -38,7 +29,7 @@ const Login: NextPage = () => {
 
   // This might be confusing, but we want to show the user an option
   // to sign out if they are performing two-factor authentication!
-  const onLogout = createLogoutHandler([aal, refresh])
+  const onLogout = LogoutLink([aal, refresh])
 
   useEffect(() => {
     // If the router is not ready yet, or we already have a flow, do nothing.
@@ -49,7 +40,7 @@ const Login: NextPage = () => {
     // If ?flow=.. was in the URL, we fetch it
     if (flowId) {
       ory
-        .getSelfServiceLoginFlow(String(flowId))
+        .getLoginFlow({ id: String(flowId) })
         .then(({ data }) => {
           setFlow(data)
         })
@@ -59,27 +50,30 @@ const Login: NextPage = () => {
 
     // Otherwise we initialize it
     ory
-      .initializeSelfServiceLoginFlowForBrowsers(
-        Boolean(refresh),
-        aal ? String(aal) : undefined,
-        returnTo ? String(returnTo) : undefined,
-      )
+      .createBrowserLoginFlow({
+        refresh: Boolean(refresh),
+        aal: aal ? String(aal) : undefined,
+        returnTo: returnTo ? String(returnTo) : undefined,
+      })
       .then(({ data }) => {
         setFlow(data)
       })
       .catch(handleFlowError(router, "login", setFlow))
   }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
-  const onSubmit = (values: SubmitSelfServiceLoginFlowBody) =>
+  const onSubmit = (values: UpdateLoginFlowBody) =>
     router
       // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
       // his data when she/he reloads the page.
       .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
       .then(() =>
         ory
-          .submitSelfServiceLoginFlow(String(flow?.id), values, undefined)
+          .updateLoginFlow({
+            flow: String(flow?.id),
+            updateLoginFlowBody: values,
+          })
           // We logged in successfully! Let's bring the user home.
-          .then((res) => {
+          .then(() => {
             if (flow?.return_to) {
               window.location.href = flow?.return_to
               return

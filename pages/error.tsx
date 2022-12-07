@@ -1,4 +1,4 @@
-import { SelfServiceError } from "@ory/client"
+import { FlowError } from "@ory/client"
 import { CardTitle, CodeBox } from "@ory/themes"
 import { AxiosError } from "axios"
 import type { NextPage } from "next"
@@ -10,7 +10,7 @@ import { ActionCard, CenterLink, MarginCard } from "../pkg"
 import ory from "../pkg/sdk"
 
 const Login: NextPage = () => {
-  const [error, setError] = useState<SelfServiceError | string>()
+  const [error, setError] = useState<FlowError | string>()
 
   // Get ?id=... from the URL
   const router = useRouter()
@@ -23,7 +23,7 @@ const Login: NextPage = () => {
     }
 
     ory
-      .getSelfServiceError(String(id))
+      .getFlowError({ id: String(id) })
       .then(({ data }) => {
         setError(data)
       })

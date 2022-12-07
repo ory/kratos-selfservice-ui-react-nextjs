@@ -1,8 +1,5 @@
-import {
-  SelfServiceVerificationFlow,
-  SubmitSelfServiceVerificationFlowBody,
-} from "@ory/client"
-import { Card, CardTitle } from "@ory/themes"
+import { VerificationFlow, UpdateVerificationFlowBody } from "@ory/client"
+import { CardTitle } from "@ory/themes"
 import { AxiosError } from "axios"
 import type { NextPage } from "next"
 import Head from "next/head"
@@ -14,7 +11,7 @@ import { Flow, ActionCard, CenterLink, MarginCard } from "../pkg"
 import ory from "../pkg/sdk"
 
 const Verification: NextPage = () => {
-  const [flow, setFlow] = useState<SelfServiceVerificationFlow>()
+  const [flow, setFlow] = useState<VerificationFlow>()
 
   // Get ?flow=... from the URL
   const router = useRouter()
@@ -29,7 +26,7 @@ const Verification: NextPage = () => {
     // If ?flow=.. was in the URL, we fetch it
     if (flowId) {
       ory
-        .getSelfServiceVerificationFlow(String(flowId))
+        .getVerificationFlow({ id: String(flowId) })
         .then(({ data }) => {
           setFlow(data)
         })
@@ -49,9 +46,9 @@ const Verification: NextPage = () => {
 
     // Otherwise we initialize it
     ory
-      .initializeSelfServiceVerificationFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined,
-      )
+      .createBrowserVerificationFlow({
+        returnTo: returnTo ? String(returnTo) : undefined,
+      })
       .then(({ data }) => {
         setFlow(data)
       })
@@ -66,14 +63,17 @@ const Verification: NextPage = () => {
       })
   }, [flowId, router, router.isReady, returnTo, flow])
 
-  const onSubmit = async (values: SubmitSelfServiceVerificationFlowBody) => {
+  const onSubmit = async (values: UpdateVerificationFlowBody) => {
     await router
       // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
       // their data when they reload the page.
       .push(`/verification?flow=${flow?.id}`, undefined, { shallow: true })
 
     ory
-      .submitSelfServiceVerificationFlow(String(flow?.id), values, undefined)
+      .updateVerificationFlow({
+        flow: String(flow?.id),
+        updateVerificationFlowBody: values,
+      })
       .then(({ data }) => {
         // Form submission was successful, show the message to the user!
         setFlow(data)
@@ -93,9 +93,7 @@ const Verification: NextPage = () => {
                 shallow: true,
               })
 
-            ory
-              .getSelfServiceVerificationFlow(newFlowID)
-              .then(({ data }) => setFlow(data))
+            ory.getVerificationFlow(newFlowID).then(({ data }) => setFlow(data))
             return
         }
 
