@@ -64,28 +64,28 @@ const Home: NextPage = () => {
           <DocsButton
             unresponsive
             testid="login"
-            href="/login"
+            href="login"
             disabled={hasSession}
             title={'Login'}
           />
           <DocsButton
             unresponsive
             testid="sign-up"
-            href="/registration"
+            href="registration"
             disabled={hasSession}
             title={'Sign Up'}
           />
           <DocsButton
             unresponsive
             testid="recover-account"
-            href="/recovery"
+            href="recovery"
             disabled={hasSession}
             title="Recover Account"
           />
           <DocsButton
             unresponsive
             testid="verify-account"
-            href="/verification"
+            href="verification"
             title="Verify Account"
           />
           {/* <DocsButton

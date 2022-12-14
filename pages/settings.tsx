@@ -10,9 +10,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState } from 'react'
 
-import { Flow, Methods, Messages, ActionCard, CenterLink } from '../pkg'
+import { Flow, Methods, Messages, ActionCard, CenterLink,createLogoutHandler } from '../pkg'
 import { handleFlowError } from '../pkg/errors'
 import ory from '../pkg/sdk'
+const onLogout = createLogoutHandler()
+
 
 interface Props {
   flow?: SelfServiceSettingsFlow
@@ -84,7 +86,9 @@ const Settings: NextPage = () => {
           .submitSelfServiceSettingsFlow(String(flow?.id), undefined, values)
           .then(({ data }) => {
             // The settings have been saved and the flow was updated. Let's show it to the user!
-            setFlow(data)
+            // setFlow(data)
+            // onLogout()
+            createLogoutHandler()()
           })
           .catch(handleFlowError(router, 'settings', setFlow))
           .catch(async (err: AxiosError) => {
