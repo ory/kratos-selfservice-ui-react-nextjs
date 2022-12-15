@@ -6,6 +6,9 @@ resources:
   - managedcertificate.yaml
   - ingress.yaml
   - frontendconfig.yaml
+  - backendconfig.yaml
+patchesStrategicMerge:
+  - patches.yaml
 secretGenerator:
   - name: kratos-login-secrets
     files:
