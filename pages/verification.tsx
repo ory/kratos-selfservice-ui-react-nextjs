@@ -93,7 +93,9 @@ const Verification: NextPage = () => {
                 shallow: true,
               })
 
-            ory.getVerificationFlow(newFlowID).then(({ data }) => setFlow(data))
+            ory
+              .getVerificationFlow({ id: newFlowID })
+              .then(({ data }) => setFlow(data))
             return
         }
 
