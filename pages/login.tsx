@@ -97,7 +97,7 @@ const Login: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Sign in - Ory NextJS Integration Example - Cooler Master</title>
+        <title>Sign in - Ory NextJS Integration Example</title>
         <meta name="description" content="NextJS + React + Vercel + Ory" />
       </Head>
       <MarginCard>
@@ -108,7 +108,7 @@ const Login: NextPage = () => {
             } else if (flow?.requested_aal === "aal2") {
               return "Two-Factor Authentication"
             }
-            return "Sign In"
+            return "Sign In (ID can be Email or Username)"
           })()}
         </CardTitle>
         <Flow onSubmit={onSubmit} flow={flow} />
