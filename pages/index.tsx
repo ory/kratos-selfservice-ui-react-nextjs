@@ -51,7 +51,7 @@ const Home: NextPage = () => {
       </Head>
 
       <MarginCard wide>
-        <CardTitle>Welcome to Ory!</CardTitle>
+        <CardTitle>Welcome to Ory! - Cooler Master</CardTitle>
         <P>
           Welcome to the Ory Managed UI. This UI implements a run-of-the-mill
           user interface for all self-service flows (login, registration,
