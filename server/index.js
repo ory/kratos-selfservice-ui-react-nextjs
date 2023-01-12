@@ -11,6 +11,9 @@ const PORT = 8000
 const app = next({ dev, HOSTNAME, PORT })
 const handle = app.getRequestHandler()
 
+// Routes
+const authorizationRouter = require("./src/routes/authorization.route")
+
 app.prepare().then(() => {
   // create server once nextjs app is ready
   // initialize express app
@@ -20,9 +23,7 @@ app.prepare().then(() => {
   server.use(express.json())
 
   // example custom route to handle authorization
-  server.get("/test", (req, res) => {
-    res.status(200).json({ data: "it worked" })
-  })
+  server.use("/authorization", authorizationRouter)
 
   // else let nextjs' own method handle the rest of the application's routes (passing them the final req, res)
   server.get("*", async (req, res) => {
