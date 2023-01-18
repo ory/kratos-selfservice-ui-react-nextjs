@@ -30,36 +30,39 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       console.log(challenge)
 
       if (challenge !== 'undefined') {
-        hydraAdmin.getOAuth2LoginRequest(challenge).then(({ body }) => {
-          console.log('body', body)
-          // If hydra was already able to authenticate the user, skip will be true and we don't need to re-authenticate
-          // the user.
-          if (body.skip) {
-            // You can apply logic here, for example update the number of times the user logged in.
-            // ...
+        console.log(hydraAdmin.listOAuth2Clients());
+        // hydraAdmin.getOAuth2LoginRequest(challenge).then(({ body }) => {
+        //   // console.log('body', body)
+        //   // If hydra was already able to authenticate the user, skip will be true and we don't need to re-authenticate
+        //   // the user.
+        //   if (body.skip) {
+        //     // You can apply logic here, for example update the number of times the user logged in.
+        //     // ...
 
-            // Now it's time to grant the login request. You could also deny the request if something went terribly wrong
-            // (for example your arch-enemy logging in!)
-            return hydraAdmin
-              .acceptOAuth2LoginRequest(challenge, {
-                // All we need to do is to confirm that we indeed want to log in the user.
-                subject: String(body.subject),
-              })
-              .then(({ body }) => {
-                // All we need to do now is to redirect the user back to hydra!
-                res.redirect(String(body
-                  .redirect_to))
-              })
-          }
+        //     // Now it's time to grant the login request. You could also deny the request if something went terribly wrong
+        //     // (for example your arch-enemy logging in!)
+        //     return hydraAdmin
+        //       .acceptOAuth2LoginRequest(challenge, {
+        //         // All we need to do is to confirm that we indeed want to log in the user.
+        //         subject: String(body.subject),
+        //       })
+        //       .then(({ body }) => {
+        //         // All we need to do now is to redirect the user back to hydra!
+        //         res.redirect(String(body
+        //           .redirect_to))
+        //       })
+        //   }
 
-          // If authentication can't be skipped we MUST show the login UI.
-          // res.render("login", {
-          //   csrfToken: req.csrfToken(),
-          //   challenge: challenge,
-          // })
-        }).catch(err => {
-          console.log(err)
-        })
+        //   console.log('cannot skip! going to login page');
+
+        //   // If authentication can't be skipped we MUST show the login UI.
+        //   // res.render("login", {
+        //   //   csrfToken: req.csrfToken(),
+        //   //   challenge: challenge,
+        //   // })
+        // }).catch(err => {
+        //   console.log('err', err.response.data)
+        // })
       }
 
 
