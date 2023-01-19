@@ -10,6 +10,8 @@ import { useEffect, useState } from "react"
 import { ActionCard, CenterLink, LogoutLink, Flow, MarginCard } from "../pkg"
 import { handleGetFlowError, handleFlowError } from "../pkg/errors"
 import ory from "../pkg/sdk"
+import { request_type } from "../types/enum"
+import { fetchHydraData, fetchData, postData } from "../utils/api/requestHelper"
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<LoginFlow>()
@@ -61,39 +63,64 @@ const Login: NextPage = () => {
       .catch(handleFlowError(router, "login", setFlow))
   }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
-  const onSubmit = (values: UpdateLoginFlowBody) =>
-    router
-      // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
-      // his data when she/he reloads the page.
-      .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
-      .then(() =>
-        ory
-          .updateLoginFlow({
+  const onSubmit = async (values: UpdateLoginFlowBody) => {
+    console.log("[@OAuth2.0 flow] values:", values)
+
+    try {
+      // const routerAction = await router.push(
+      //   `/login?flow=${flow?.id}`,
+      //   undefined,
+      //   { shallow: true },
+      // )
+      const routerAction = "test"
+      if (routerAction) {
+        try {
+          // performs authentication via Ory Kratos
+          const oryLoginFlow = await ory.updateLoginFlow({
             flow: String(flow?.id),
             updateLoginFlowBody: values,
           })
-          // We logged in successfully! Let's bring the user home.
-          .then(() => {
-            if (flow?.return_to) {
-              window.location.href = flow?.return_to
-              return
-            }
-            router.push("/")
-          })
-          .then(() => {})
-          .catch(handleFlowError(router, "login", setFlow))
-          .catch((err: AxiosError) => {
-            // If the previous handler did not catch the error it's most likely a form validation error
-            if (err.response?.status === 400) {
-              // Yup, it is!
-              setFlow(err.response?.data)
-              return
-            }
+          if (flow?.return_to) {
+            window.location.href = flow?.return_to
+            return
+          }
 
-            return Promise.reject(err)
-          }),
-      )
+          console.log("[@OAuth2.0 flow] oryLoginFlow", oryLoginFlow)
 
+          // fetch extra data about the login challenge
+          const oauth2LoginData = await fetchData(`/api/hydra/oauth2/getLogin`)
+          console.log("[@OAuth2.0 flow] oauth2LoginData:", oauth2LoginData)
+          // post to hydra accept the login challenge after authenticating
+          const acceptLoginChallenge = await postData(
+            `/api/hydra/oauth2/acceptLogin`,
+            { subject: "test" },
+            { type: request_type.POST },
+          )
+          console.log(
+            "[@OAuth2.0 flow] acceptLoginChallenge:",
+            acceptLoginChallenge,
+          )
+
+          // redirect to next flow
+
+          router.push(acceptLoginChallenge?.data?.redirect_to)
+        } catch (err: AxiosError) {
+          if (err.response?.status === 400) {
+            console.log(
+              "error caught while attemping login flow:",
+              err.response,
+            )
+            setFlow(err.response?.data)
+            return
+          }
+
+          return Promise.reject(err)
+        }
+      }
+    } catch (err) {
+      handleFlowError(router, "login", setFlow)
+    }
+  }
   return (
     <>
       <Head>

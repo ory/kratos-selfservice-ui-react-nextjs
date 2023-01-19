@@ -18,7 +18,6 @@
     "test": "cypress run",
     "test:dev": "cypress open"
   },
-  
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
@@ -26,6 +25,7 @@
     "@ory/client": "1.0.2",
     "@ory/integrations": "0.2.8",
     "@ory/themes": "~0.0.101",
+    "axios": "^1.2.3",
     "classnames": "^2.3.1",
     "express": "^4.18.2",
     "next": "12.1.6",
