@@ -81,38 +81,54 @@ const Login: NextPage = () => {
       .catch(handleFlowError(router, "login", setFlow))
   }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
-  const onSubmit = (values: UpdateLoginFlowBody) =>
-    router
-      // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
-      // his data when she/he reloads the page.
-      .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
-      .then(() =>
-        ory
-          .updateLoginFlow({
-            flow: String(flow?.id),
-            updateLoginFlowBody: values,
-          })
-          // We logged in successfully! Let's bring the user home.
-          .then(() => {
-            if (flow?.return_to) {
-              window.location.href = flow?.return_to
-              return
-            }
-            router.push("/")
-          })
-          .then(() => {})
-          .catch(handleFlowError(router, "login", setFlow))
-          .catch((err: AxiosError) => {
-            // If the previous handler did not catch the error it's most likely a form validation error
-            if (err.response?.status === 400) {
-              // Yup, it is!
-              setFlow(err.response?.data)
-              return
-            }
+  const onSubmit = async (values: UpdateLoginFlowBody) => {
+    console.log("submit login form")
+    console.log(router.asPath.split("=")[1])
+    const response = await fetch("/api/hydra/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({
+        login_challenge: router.asPath.split("=")[1],
+      }),
+    })
+    return Promise.reject("test")
+    // return (
+    //   router
+    //     // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
+    //     // his data when she/he reloads the page.
+    //     .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
+    //     .then(() =>
+    //       ory
+    //         .updateLoginFlow({
+    //           flow: String(flow?.id),
+    //           updateLoginFlowBody: values,
+    //         })
+    //         // We logged in successfully! Let's bring the user home.
+    //         .then(() => {
+    //           if (flow?.return_to) {
+    //             window.location.href = flow?.return_to
+    //             return
+    //           }
+    //           router.push("/")
+    //         })
+    //         .then(() => {})
+    //         .catch(handleFlowError(router, "login", setFlow))
+    //         .catch((err: AxiosError) => {
+    //           // If the previous handler did not catch the error it's most likely a form validation error
+    //           if (err.response?.status === 400) {
+    //             // Yup, it is!
+    //             setFlow(err.response?.data)
+    //             return
+    //           }
 
-            return Promise.reject(err)
-          }),
-      )
+    //           return Promise.reject(err)
+    //         }),
+    //     )
+    // )
+  }
 
   return (
     <>

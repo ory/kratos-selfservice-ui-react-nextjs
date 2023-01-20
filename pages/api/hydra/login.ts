@@ -51,7 +51,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           }
           // If authentication can't be skipped we MUST show the login UI.
           // console.log(req.csrfToken())
-          console.log('challenge', challenge)
+          // console.log('challenge', challenge)
 
         }).catch((err) => {
           console.log(err)
@@ -68,7 +68,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Handle any other HTTP method
     if (req.method === 'POST') {
       // The challenge is now a hidden input field, so let's take it from the request body instead
-      const challenge = req.body.challenge
+      console.log(req.body);
+      const challenge = req.body.login_challenge
+      console.log('login challenge', challenge);
+      return res.status(200).json({ result: 'ok!!' })
     }
   }
 }
