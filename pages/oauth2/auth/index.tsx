@@ -1,12 +1,12 @@
 import { useRouter } from "next/router"
-import pkceChallenge from "pkce-challenge"
+// import pkceChallenge from "pkce-challenge"
 import { useEffect } from "react"
 
 interface AuthProps {}
 
 const Auth: React.FC<AuthProps> = () => {
   const router = useRouter()
-  const pixie = pkceChallenge()
+  // const pixie = pkceChallenge()
 
   useEffect(() => {
     router.push(

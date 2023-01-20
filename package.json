@@ -22,7 +22,7 @@
   "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@ory/client": "1.0.2",
+    "@ory/client": "^1.1.5",
     "@ory/hydra-client": "^2.0.2",
     "@ory/integrations": "0.2.8",
     "@ory/themes": "~0.0.101",

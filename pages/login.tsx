@@ -51,7 +51,7 @@ const Login: NextPage = () => {
   }
 
   useEffect(() => {
-    // hydraLoginService()
+    hydraLoginService()
     // If the router is not ready yet, or we already have a flow, do nothing.
     if (!router.isReady || flow) {
       return
