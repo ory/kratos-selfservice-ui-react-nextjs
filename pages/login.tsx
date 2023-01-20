@@ -35,7 +35,7 @@ const Login: NextPage = () => {
     const login_challenge = router.query.login_challenge
     console.log("hydraLoginService")
     const response = await fetch(
-      "/api/hydra/loginGet?login_challenge=" + login_challenge,
+      "/api/hydra/login?login_challenge=" + login_challenge,
       {
         method: "GET",
       },

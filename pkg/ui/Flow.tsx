@@ -165,6 +165,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
       >
         {!hideGlobalMessages ? <Messages messages={flow.ui.messages} /> : null}
         {nodes.map((node, k) => {
+          console.log(node)
           const id = getNodeId(node) as keyof Values
           return (
             <Node

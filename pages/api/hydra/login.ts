@@ -32,6 +32,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         hydraAdmin.getOAuth2LoginRequest({ loginChallenge: challenge }).then(({ data: body }) => {
           // If hydra was already able to authenticate the user, skip will be true and we do not need to re-authenticate
           // the user.
+          console.log('body', body);
+
           if (body.skip) {
             // You can apply logic here, for example update the number of times the user logged in.
             // ...
@@ -64,5 +66,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Process a POST request
   } else {
     // Handle any other HTTP method
+    if (req.method === 'POST') {
+      // The challenge is now a hidden input field, so let's take it from the request body instead
+      const challenge = req.body.challenge
+    }
   }
 }
