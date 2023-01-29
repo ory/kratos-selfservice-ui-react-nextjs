@@ -53,7 +53,7 @@ const Login: NextPage = () => {
   }
 
   useEffect(() => {
-    hydraLoginService()
+    // hydraLoginService()
 
     // If the router is not ready yet, or we already have a flow, do nothing.
     if (!router.isReady || flow) {
@@ -85,7 +85,8 @@ const Login: NextPage = () => {
   }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
   const onSubmit = async (values: UpdateLoginFlowBody) => {
-    console.log("submit login form")
+    const login_challenge = router.query.login_challenge
+    console.log("[@login_challenge] login_challenge", login_challenge)
     console.log(router.asPath.split("=")[1])
     const response = await fetch("/api/hydra/login", {
       method: "POST",
@@ -94,10 +95,18 @@ const Login: NextPage = () => {
         // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: JSON.stringify({
-        login_challenge: router.asPath.split("=")[1],
+        login_challenge: login_challenge,
       }),
     })
-    // return Promise.reject("test")
+
+    console.log("[@login_challenge] POST hydra/login response", response)
+    // login response was successful re-route to consent-page
+    if (response.status === 200) {
+      router.push("/consent")
+    }
+    return
+
+    // ORIGINAL SUBMIT FLOW
     return (
       router
         // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing

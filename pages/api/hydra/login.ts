@@ -1,38 +1,49 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import csrf from "csurf"
+import { NextApiRequest, NextApiResponse } from "next"
 import url from "url"
-import { hydraAdmin } from '../../../config';
+
+import { hydraAdmin } from "../../../config"
+
 // import { AdminApi } from "@ory/hydra-client"
 // import urljoin from "url-join"
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'GET') {
-    console.log('1212121212');
-    // Sets up csrf protection
-    const csrfProtection = csrf({
-      cookie: {
-        sameSite: "lax",
-      },
-    })
+  // Sets up csrf protection
+  const csrfProtection = csrf({
+    cookie: {
+      sameSite: "lax",
+    },
+  })
 
-    try {
-      // Parses the URL query
-      const query = url.parse(req.url as string, true).query
+  const query = url.parse(req.url as string, true).query
+  const challenge = String(query.login_challenge)
+  console.log("[@login.ts req.body]", req.body)
+  console.log("[@login.ts challenge]", challenge)
 
-      // The challenge is used to fetch information about the login request from ORY Hydra.
-      const challenge = String(query.login_challenge)
-      if (!challenge || challenge === "undefined") {
-        console.log('no challenge')
-        throw new Error("Expected a login challenge to be set but received none.")
-      }
+  try {
+    // Parses the URL query
+
+    // The challenge is used to fetch information about the login request from ORY Hydra.
+    if (!challenge) {
+      console.log("There was no challenge present.")
+      throw new Error("Expected a login challenge to be set but received none.")
+    }
+    console.log(challenge)
+
+    // need to handle two types of requests
+
+    // GET REQUEST
+
+    // POST REQUEST
+
+    if (challenge !== "undefined") {
       console.log(challenge)
-
-      if (challenge !== 'undefined') {
-        console.log(challenge)
-        hydraAdmin.getOAuth2LoginRequest({ loginChallenge: challenge }).then(({ data: body }) => {
+      hydraAdmin
+        .getOAuth2LoginRequest({ loginChallenge: challenge })
+        .then(({ data: body }) => {
           // If hydra was already able to authenticate the user, skip will be true and we do not need to re-authenticate
           // the user.
-          console.log('body', body);
+          console.log("body", body)
 
           if (body.skip) {
             // You can apply logic here, for example update the number of times the user logged in.
@@ -52,26 +63,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           // If authentication can't be skipped we MUST show the login UI.
           // console.log(req.csrfToken())
           // console.log('challenge', challenge)
-
-        }).catch((err) => {
+        })
+        .catch((err) => {
           console.log(err)
         })
-      }
-    } catch (error) {
-      console.log(error)
     }
-
-
-    return res.status(200).json({ result: 'ok!!' })
-    // Process a POST request
-  } else {
-    // Handle any other HTTP method
-    if (req.method === 'POST') {
-      // The challenge is now a hidden input field, so let's take it from the request body instead
-      console.log(req.body);
-      const challenge = req.body.login_challenge
-      console.log('login challenge', challenge);
-      return res.status(200).json({ result: 'ok!!' })
-    }
+  } catch (error) {
+    console.log(error)
   }
+
+  // always return 200 for testing
+  return res.status(200).json({ result: "ok!!" })
 }
