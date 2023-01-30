@@ -102,9 +102,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         }
 
         // console.log(req.csrfToken())
-        return res
-          .status(200)
-          .json({ status: 200, result: "Successfully passed login" })
       })
       .catch((err) => {
         console.log(err)
