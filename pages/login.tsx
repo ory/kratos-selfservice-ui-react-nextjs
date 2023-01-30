@@ -11,6 +11,8 @@ import { ActionCard, CenterLink, LogoutLink, Flow, MarginCard } from "../pkg"
 import { handleGetFlowError, handleFlowError } from "../pkg/errors"
 import ory from "../pkg/sdk"
 
+import { api } from "./axios/api"
+
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<LoginFlow>()
 
@@ -88,18 +90,25 @@ const Login: NextPage = () => {
     const login_challenge = router.query.login_challenge
     console.log("[@login_challenge] login_challenge", login_challenge)
     console.log(router.asPath.split("=")[1])
-    const response = await fetch("/api/hydra/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify({
-        login_challenge: login_challenge,
-      }),
+
+    // new OAuth2.0 flow with hydra
+    const response = await api.post("/api/hydra/login", {
+      login_challenge,
+      subject: "test",
     })
+    // const response = await fetch("/api/hydra/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     // 'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    //   body: JSON.stringify({
+    //     login_challenge: login_challenge,
+    //   }),
+    // })
 
     console.log("[@login_challenge] POST hydra/login response", response)
+
     // login response was successful re-route to consent-page
     if (response.status === 200) {
       router.push("/consent")

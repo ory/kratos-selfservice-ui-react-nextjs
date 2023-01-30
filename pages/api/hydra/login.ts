@@ -7,6 +7,11 @@ import { hydraAdmin } from "../../../config"
 // import { AdminApi } from "@ory/hydra-client"
 // import urljoin from "url-join"
 
+interface ResponseType {
+  status: 404 | 400 | 401 | 500 | 200
+  message: string
+}
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // Sets up csrf protection
   const csrfProtection = csrf({
@@ -15,8 +20,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     },
   })
 
-  const query = url.parse(req.url as string, true).query
-  const challenge = String(query.login_challenge)
+  // const query = url.parse(req.url as string, true).query
+  // const challenge = String(query.login_challenge)
+  const challenge = req.body.login_challenge
   console.log("[@login.ts req.body]", req.body)
   console.log("[@login.ts challenge]", challenge)
 
@@ -28,50 +34,71 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       console.log("There was no challenge present.")
       throw new Error("Expected a login challenge to be set but received none.")
     }
-    console.log(challenge)
 
     // need to handle two types of requests
 
-    // GET REQUEST
+    // 1) check hydra login info / status
+    return hydraAdmin
+      .getOAuth2LoginRequest({ loginChallenge: challenge })
+      .then(async ({ data: body }) => {
+        // If hydra was already able to authenticate the user, skip will be true and we do not need to re-authenticate
+        // the user.
 
-    // POST REQUEST
+        if (body.skip) {
+          // 2) authorize the very last step via hydra if skip was true
+          return hydraAdmin
+            .acceptOAuth2LoginRequest({
+              loginChallenge: challenge,
+              acceptOAuth2LoginRequest: {
+                subject: "test",
+              },
+            })
+            .then(({ data: body }) => {
+              // All we need to do now is to redirect the user back to hydra!
+              res.redirect(String(body.redirect_to))
+            })
+        }
 
-    if (challenge !== "undefined") {
-      console.log(challenge)
-      hydraAdmin
-        .getOAuth2LoginRequest({ loginChallenge: challenge })
-        .then(({ data: body }) => {
-          // If hydra was already able to authenticate the user, skip will be true and we do not need to re-authenticate
-          // the user.
-          console.log("body", body)
+        // OR
+        // 2) authorize login via hydra
+        try {
+          const hydraLoginAcceptRes = await hydraAdmin.acceptOAuth2LoginRequest(
+            {
+              loginChallenge: challenge,
+              acceptOAuth2LoginRequest: {
+                subject: "test",
+              },
+            },
+          )
 
-          if (body.skip) {
-            // You can apply logic here, for example update the number of times the user logged in.
-            // ...
+          console.log("hydraLoginAcceptRes:", hydraLoginAcceptRes)
+        } catch (err: any) {
+          // console.log(
+          //   "Err caught hydraLoginAcceptRes status:",
+          //   err.response.status,
+          // )
 
-            // Now it's time to grant the login request. You could also deny the request if something went terribly wrong
-            // (e.g. your arch-enemy logging in...)
+          console.log(
+            "Err caught hydraLoginAcceptRes err.response:",
+            err.response.data,
+          )
+          const { status, data } = err.response
+          return res.status(err.response.status).json({
+            status,
+            result: data.error,
+            desc: data.error_description,
+          })
+        }
 
-            // All we need to do is to confirm that we indeed want to log in the user.
-            return hydraAdmin
-              .acceptOAuth2LoginRequest({ loginChallenge: challenge })
-              .then(({ data: body }) => {
-                // All we need to do now is to redirect the user back to hydra!
-                res.redirect(String(body.redirect_to))
-              })
-          }
-          // If authentication can't be skipped we MUST show the login UI.
-          // console.log(req.csrfToken())
-          // console.log('challenge', challenge)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
+        // console.log(req.csrfToken())
+        return res
+          .status(200)
+          .json({ status: 200, result: "Successfully passed login" })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   } catch (error) {
     console.log(error)
   }
-
-  // always return 200 for testing
-  return res.status(200).json({ result: "ok!!" })
 }

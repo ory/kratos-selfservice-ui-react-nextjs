@@ -26,6 +26,7 @@
     "@ory/hydra-client": "^2.0.2",
     "@ory/integrations": "0.2.8",
     "@ory/themes": "~0.0.101",
+    "axios": "^1.2.6",
     "classnames": "^2.3.1",
     "csurf": "^1.11.0",
     "express": "^4.18.2",
