@@ -111,7 +111,8 @@ const Login: NextPage = () => {
 
     // login response was successful re-route to consent-page
     if (response.status === 200) {
-      router.push("/consent")
+      // redirect with challenge:
+      router.push(response.data?.redirect_to)
     }
     return
 

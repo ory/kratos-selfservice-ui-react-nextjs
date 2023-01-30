@@ -55,6 +55,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             })
             .then(({ data: body }) => {
               // All we need to do now is to redirect the user back to hydra!
+              console.log("Redirecting to:", String(body.redirect_to))
               res.redirect(String(body.redirect_to))
             })
         }
@@ -71,7 +72,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             },
           )
 
-          console.log("hydraLoginAcceptRes:", hydraLoginAcceptRes)
+          const { data } = hydraLoginAcceptRes
+          console.log("hydraLoginAcceptRes:", data)
+          // redirect to hydra's next step
+          // doing this on the backend doesn't work
+          // res.redirect(data.redirect_to)
+          return (
+            res
+              .status(200)
+              // pass it to the frontend to re-route back to hydra
+              .json({ status: 200, redirect_to: String(data.redirect_to) })
+          )
         } catch (err: any) {
           // console.log(
           //   "Err caught hydraLoginAcceptRes status:",
