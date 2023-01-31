@@ -95,41 +95,45 @@ const Login: NextPage = () => {
   const onSubmit = async (values: UpdateLoginFlowBody) => {
     const login_challenge = router.query.login_challenge
     console.log(login_challenge)
-    // ORIGINAL SUBMIT FLOW
     return (
-      router
-        // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
-        // his data when she/he reloads the page.
-        .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
-        .then(() =>
-          ory
-            .updateLoginFlow({
-              flow: String(flow?.id),
-              updateLoginFlowBody: values,
-            })
-            // We logged in successfully! Let's bring the user home.
-            .then((data) => {
-              // console.log("data", data)
-              // console.log("flow", flow)
-              doConsentProcess(login_challenge as string)
-              // if (flow?.return_to) {
-              //   window.location.href = flow?.return_to
-              //   return
-              // }
-              // router.push("/")
-            })
-            .then(() => {})
-            .catch(handleFlowError(router, "login", setFlow))
-            .catch((err: AxiosError) => {
-              // If the previous handler did not catch the error it's most likely a form validation error
-              if (err.response?.status === 400) {
-                // Yup, it is!
-                setFlow(err.response?.data)
-                return
-              }
-              return Promise.reject(err)
-            }),
-        )
+      // original Kratos flow - not needed anymore since we don't need use router to push to the url with flow id
+      // router
+      //   // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
+      //   // his data when she/he reloads the page.
+      //   // .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
+      //   .push("/login")
+      //   .then(() =>
+      ory
+        .updateLoginFlow({
+          flow: String(flow?.id),
+          updateLoginFlowBody: values,
+        })
+        // We logged in successfully! Let's bring the user home.
+        .then((data) => {
+          // new flow
+          doConsentProcess(login_challenge as string)
+
+          // Original Kratos flow
+          // console.log("data", data)
+          // console.log("flow", flow)
+          // if (flow?.return_to) {
+          //   window.location.href = flow?.return_to
+          //   return
+          // }
+          // router.push("/")
+        })
+        .then(() => {})
+        .catch(handleFlowError(router, "login", setFlow))
+        .catch((err: AxiosError) => {
+          // If the previous handler did not catch the error it's most likely a form validation error
+          console.log("handleFlowError errored with:", err)
+          if (err.response?.status === 400) {
+            // Yup, it is!
+            setFlow(err.response?.data)
+            return
+          }
+          return Promise.reject(err)
+        })
     )
   }
 
