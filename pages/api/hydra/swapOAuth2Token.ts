@@ -14,7 +14,9 @@ export default async function handler(
       {
         code,
         client_id: clientID,
-        grantType: grantType,
+        grant_type: grantType,
+        redirect_uri: "http://127.0.0.1:3000/",
+        refresh_token: "",
       },
     )
     return res.status(200).json({

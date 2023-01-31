@@ -13,19 +13,22 @@ const Callback: NextPage = () => {
   const [token, setToken] = useState("")
 
   useEffect(() => {
-    const getToken = async () => {
-      if (typeof code === "string") {
+    if (typeof code === "string") {
+      const getToken = async () => {
+        console.log("INIT")
         const response = await getCodeGrantToken(
-          "https://zealous-bouman-mzrsnyv9e8.projects.oryapis.com",
+          "0f9f8fc9-6eec-46fb-8253-3bad2b0f3040",
           code,
-          "code_grant",
+          "authorizationCode",
         )
         console.log("Token response:", response)
         setToken(response)
       }
+      getToken()
     }
-    getToken()
-  }, [])
+  }, [code])
+
+  console.log("final token:\n", token)
 
   return (
     <div>
