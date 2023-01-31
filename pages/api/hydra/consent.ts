@@ -12,7 +12,9 @@ export default async function handler(
     const consentChallengeRes = await hydraAdmin.acceptOAuth2ConsentRequest({
       consentChallenge: consentChallenge,
       // WIP - need to study grant scope and session
-      acceptOAuth2ConsentRequest: {},
+      acceptOAuth2ConsentRequest: {
+        grant_scope: ["offline", "openid"],
+      },
     })
 
     return res.status(200).json({

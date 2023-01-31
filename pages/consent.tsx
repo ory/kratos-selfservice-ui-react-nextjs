@@ -2,7 +2,7 @@ import { NextPage } from "next"
 import { useRouter } from "next/router"
 import { FormEvent } from "react"
 
-import { api } from "./axios/api"
+import { api } from "../axios/api"
 
 const Consent: NextPage = () => {
   const router = useRouter()

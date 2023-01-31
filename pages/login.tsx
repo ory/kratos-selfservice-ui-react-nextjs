@@ -7,11 +7,10 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
+import { api } from "../axios/api"
 import { ActionCard, CenterLink, LogoutLink, Flow, MarginCard } from "../pkg"
 import { handleGetFlowError, handleFlowError } from "../pkg/errors"
 import ory from "../pkg/sdk"
-
-import { api } from "./axios/api"
 
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<LoginFlow>()
