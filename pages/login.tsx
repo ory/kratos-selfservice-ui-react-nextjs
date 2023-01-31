@@ -65,10 +65,13 @@ const Login: NextPage = () => {
       .catch(handleFlowError(router, "login", setFlow))
   }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
-  const onSubmit = async (values: UpdateLoginFlowBody) => {
-    const login_challenge = router.query.login_challenge
-    console.log("[@login_challenge] login_challenge", login_challenge)
-    console.log(router.asPath.split("=")[1])
+  const doConsentProcess = async (login_challenge: string) => {
+    // const login_challenge = router.query.login_challenge
+    console.log(
+      "[@login_challenge-doConsentProcess] login_challenge",
+      login_challenge,
+    )
+    // console.log(router.asPath.split("=")[1])
 
     // new OAuth2.0 flow with hydra
     const response = await api.post("/api/hydra/login", {
@@ -83,8 +86,11 @@ const Login: NextPage = () => {
       // redirect with challenge:
       router.push(response.data?.redirect_to)
     }
-    return
+  }
 
+  const onSubmit = async (values: UpdateLoginFlowBody) => {
+    const login_challenge = router.query.login_challenge
+    console.log(login_challenge)
     // ORIGINAL SUBMIT FLOW
     return (
       router
@@ -98,12 +104,15 @@ const Login: NextPage = () => {
               updateLoginFlowBody: values,
             })
             // We logged in successfully! Let's bring the user home.
-            .then(() => {
-              if (flow?.return_to) {
-                window.location.href = flow?.return_to
-                return
-              }
-              router.push("/")
+            .then((data) => {
+              // console.log("data", data)
+              // console.log("flow", flow)
+              doConsentProcess(login_challenge as string)
+              // if (flow?.return_to) {
+              //   window.location.href = flow?.return_to
+              //   return
+              // }
+              // router.push("/")
             })
             .then(() => {})
             .catch(handleFlowError(router, "login", setFlow))
@@ -114,7 +123,6 @@ const Login: NextPage = () => {
                 setFlow(err.response?.data)
                 return
               }
-
               return Promise.reject(err)
             }),
         )
