@@ -8,6 +8,8 @@ export default async function handler(
 ) {
   const { code, clientID, grantType } = req.body
 
+  console.log("code:", code, "\nclientID:", clientID, "\ngrantType:", grantType)
+
   try {
     const { data } = await api.post(
       "https://zealous-bouman-mzrsnyv9e8.projects.oryapis.com/oauth2/token",
@@ -16,7 +18,7 @@ export default async function handler(
         client_id: clientID,
         grant_type: grantType,
         redirect_uri: "http://127.0.0.1:3000/",
-        refresh_token: "",
+        refresh_token: "false",
       },
     )
     return res.status(200).json({

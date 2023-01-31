@@ -130,6 +130,7 @@ const Login: NextPage = () => {
 
   return (
     <>
+      {/* CUSTOMIZE UI BASED ON CLIENT ID */}
       <Head>
         <title>Sign in - Ory NextJS Integration Example</title>
         <meta name="description" content="NextJS + React + Vercel + Ory" />

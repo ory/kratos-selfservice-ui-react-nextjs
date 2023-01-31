@@ -19,7 +19,7 @@ const Callback: NextPage = () => {
         const response = await getCodeGrantToken(
           "0f9f8fc9-6eec-46fb-8253-3bad2b0f3040",
           code,
-          "authorizationCode",
+          "authorization_code",
         )
         console.log("Token response:", response)
         setToken(response)
