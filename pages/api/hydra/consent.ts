@@ -11,9 +11,10 @@ export default async function handler(
   try {
     const consentChallengeRes = await hydraAdmin.acceptOAuth2ConsentRequest({
       consentChallenge: consentChallenge,
+      // WIP - need to study grant scope and session
+      acceptOAuth2ConsentRequest: {},
     })
 
-    console.log("consentChallengeRes:", consentChallengeRes.data)
     return res.status(200).json({
       status: 200,
       redirect_to: String(consentChallengeRes.data.redirect_to),

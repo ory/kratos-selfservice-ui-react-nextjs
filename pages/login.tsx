@@ -33,27 +33,6 @@ const Login: NextPage = () => {
   // to sign out if they are performing two-factor authentication!
   const onLogout = LogoutLink([aal, refresh])
 
-  const hydraLoginService = async () => {
-    const login_challenge = router.query.login_challenge
-    console.log("hydraLoginService")
-    const response = await fetch(
-      "/api/hydra/login?login_challenge=" + login_challenge,
-      {
-        method: "GET",
-      },
-    )
-    // return response
-    // const response = await fetch(
-    //   "http://localhost:3011/login2?login_challenge=" + login_challenge,
-    //   {
-    //     method: "GET",
-    //   },
-    // )
-
-    console.log("login_challenge, reponse:", login_challenge, response)
-    return response
-  }
-
   useEffect(() => {
     // hydraLoginService()
 
@@ -96,16 +75,6 @@ const Login: NextPage = () => {
       login_challenge,
       subject: "test",
     })
-    // const response = await fetch("/api/hydra/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //   },
-    //   body: JSON.stringify({
-    //     login_challenge: login_challenge,
-    //   }),
-    // })
 
     console.log("[@login_challenge] POST hydra/login response", response)
 

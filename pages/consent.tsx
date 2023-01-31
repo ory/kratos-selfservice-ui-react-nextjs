@@ -25,7 +25,7 @@ const Consent: NextPage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3>Consent</h3>
+      <h3>CMID Consent</h3>
 
       <p>Do you consent this application to use your CMID information?</p>
 

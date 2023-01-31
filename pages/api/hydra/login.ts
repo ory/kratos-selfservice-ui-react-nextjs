@@ -61,7 +61,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         }
 
         // OR
-        // 2) authorize login via hydra
+        // 2) authorize login via hydra to proceed to consent step
         try {
           const hydraLoginAcceptRes = await hydraAdmin.acceptOAuth2LoginRequest(
             {
@@ -74,9 +74,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
           const { data } = hydraLoginAcceptRes
           console.log("hydraLoginAcceptRes:", data)
-          // redirect to hydra's next step
-          // doing this on the backend doesn't work
-          // res.redirect(data.redirect_to)
+          // redirect to hydra's next step by providing frontend the hydra redirect url along with the required parameters
           return (
             res
               .status(200)

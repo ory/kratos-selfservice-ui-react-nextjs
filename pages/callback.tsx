@@ -1,7 +1,7 @@
 import { NextPage } from "next"
 import { useRouter } from "next/router"
 
-const Authorize: NextPage = () => {
+const Callback: NextPage = () => {
   const router = useRouter()
   const code_grant = router.query.code_grant
 
@@ -9,7 +9,7 @@ const Authorize: NextPage = () => {
 
   return (
     <div>
-      <h3>Authorize</h3>
+      <h3>CMID Authorize</h3>
 
       <p>You have successfully authorized with CMID</p>
 
@@ -18,4 +18,4 @@ const Authorize: NextPage = () => {
   )
 }
 
-export default Authorize
+export default Callback
