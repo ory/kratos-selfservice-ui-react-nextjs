@@ -45,6 +45,7 @@ const Login: NextPage = () => {
       ory
         .getLoginFlow({ id: String(flowId) })
         .then(({ data }) => {
+          console.log(data)
           setFlow(data)
         })
         .catch(handleGetFlowError(router, "login", setFlow))
@@ -59,6 +60,10 @@ const Login: NextPage = () => {
         returnTo: returnTo ? String(returnTo) : undefined,
       })
       .then(({ data }) => {
+        if (router.query.login_challenge) {
+          data.oauth2_login_challenge = router.query.login_challenge as string
+        }
+        console.log(data)
         setFlow(data)
       })
       .catch(handleFlowError(router, "login", setFlow))

@@ -6,20 +6,25 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { code, clientID, grantType } = req.body
-
-  console.log("code:", code, "\nclientID:", clientID, "\ngrantType:", grantType)
+  const { code, grantType } = req.body
+  const clientID = process.env.ORY_CLIENT_ID
+  const clientSecret = process.env.ORY_CLIENT_SECRET
 
   try {
     const { data } = await api.post(
-      "https://zealous-bouman-mzrsnyv9e8.projects.oryapis.com/oauth2/token",
+      process.env.HYDRA_ADMIN_URL + "/oauth2/token",
       {
         code,
         client_id: clientID,
-        grant_type: grantType,
-        redirect_uri: "http://127.0.0.1:3000/",
-        refresh_token: "false",
+        client_secret: clientSecret,
+        grant_type: "authorization_code",
+        redirect_uri: "http://127.0.0.1:3000/callback",
       },
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        }
+      }
     )
     return res.status(200).json({
       status: 200,

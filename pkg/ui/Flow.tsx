@@ -70,6 +70,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
   }
 
   componentDidMount() {
+    console.log(this.filterNodes())
     this.initializeValues(this.filterNodes())
   }
 
@@ -96,6 +97,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
           return
         }
         values[node.attributes.name as keyof Values] = node.attributes.value
+        // console.log(values)
       }
     })
 
@@ -105,6 +107,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
 
   filterNodes = (): Array<UiNode> => {
     const { flow, only } = this.props
+    console.log(flow)
     if (!flow) {
       return []
     }
