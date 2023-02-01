@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import fetch from 'node-fetch';
+import fetch from "node-fetch"
+
 import { api } from "../../../axios/api"
 
 export default async function handler(
@@ -30,16 +31,20 @@ export default async function handler(
     //   status: 200,
     //   data,
     // })
-    const params = new URLSearchParams();
-    params.append('code', code);
-    params.append('client_id', clientID);
-    params.append('client_secret', clientSecret);
-    params.append('grant_type', 'authorization_code');
-    params.append('redirect_uri', 'http://127.0.0.1:3000/callback');
+    const params = new URLSearchParams()
+    params.append("code", code)
+    params.append("client_id", clientID)
+    params.append("client_secret", clientSecret)
+    params.append("grant_type", "authorization_code")
+    params.append("redirect_uri", "http://127.0.0.1:3000/callback")
 
-    const response = await fetch(process.env.HYDRA_ADMIN_URL + "/oauth2/token", { method: 'POST', body: params });
-    const data: any = await response.json();
-    console.log('data', data);
+    const response = await fetch(
+      process.env.HYDRA_ADMIN_URL + "/oauth2/token",
+      { method: "POST", body: params },
+    )
+
+    const data: any = await response.json()
+    console.log("data", data)
     if (data.access_token && data.refresh_token) {
       return res.status(200).json({
         status: 200,
