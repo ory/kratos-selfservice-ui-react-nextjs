@@ -10,7 +10,10 @@ const Callback: NextPage = () => {
   const router = useRouter()
   const code = router.query.code
 
-  const [token, setToken] = useState("")
+  const [accessToken, setAccessToken] = useState(null)
+  const [expiresIn, setExpiresIn] = useState(null)
+  const [idToken, setIdToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
 
   useEffect(() => {
     console.log(code)
@@ -18,14 +21,18 @@ const Callback: NextPage = () => {
       const getToken = async () => {
         console.log("INIT")
         const response = await getCodeGrantToken(code)
-        console.log("Token response:", response)
-        setToken(response)
+        console.log("Token response:", response.data.data)
+        const result = response.data.data
+        setAccessToken(result.access_token)
+        setExpiresIn(result.expires_in)
+        setIdToken(result.id_token)
+        setRefreshToken(result.refresh_token)
       }
       getToken()
     }
   }, [code])
 
-  console.log("final token:\n", token)
+  console.log("final tokens:\n", accessToken, expiresIn, idToken, refreshToken)
 
   return (
     <div>
@@ -33,7 +40,11 @@ const Callback: NextPage = () => {
 
       <p>You have successfully authorized with CMID</p>
 
-      <p>Your token details:</p>
+      <h4>Your token details:</h4>
+      <p style={{ fontFamily: "monospace" }}>access_token: {accessToken}</p>
+      <p style={{ fontFamily: "monospace" }}>expires_in: {expiresIn}</p>
+      <p style={{ fontFamily: "monospace" }}>id_token: {idToken}</p>
+      <p style={{ fontFamily: "monospace" }}>refresh_token: {refreshToken}</p>
     </div>
   )
 }
