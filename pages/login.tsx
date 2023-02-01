@@ -151,6 +151,13 @@ const Login: NextPage = () => {
             return "Sign In (ID can be Email or Username)"
           })()}
         </CardTitle>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src="https://res.cloudinary.com/dfkw9hdq3/image/upload/v1675237431/CI-Temp/CMID_ubofj6.png"
+            width={150}
+          />
+        </div>
+
         <Flow onSubmit={onSubmit} flow={flow} />
       </MarginCard>
       {aal || refresh ? (

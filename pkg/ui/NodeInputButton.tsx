@@ -33,6 +33,7 @@ export function NodeInputButton<T>({
   return (
     <>
       <Button
+        className="button"
         name={attributes.name}
         onClick={(e) => {
           onClick(e)
