@@ -6,4 +6,5 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   console.log('hellooooooooooooooooooooo')
+  res.status(200).json({ name: 'John Doe' })
 }
