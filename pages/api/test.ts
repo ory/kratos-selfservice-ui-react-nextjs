@@ -6,13 +6,13 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   console.log('ttteeesstt');
-  const challenge = req.body.login_challenge
-  console.log("[@test.ts req.body]", req.body)
-  console.log("[@test.ts challenge]", challenge)
+  // const challenge = req.body.login_challenge
+  // console.log("[@test.ts req.body]", req.body)
+  // console.log("[@test.ts challenge]", challenge)
 
   try {
     return hydraAdmin
-      .getOAuth2LoginRequest({ loginChallenge: challenge })
+      .getOAuth2LoginRequest({ loginChallenge: '40b8e0e9dd2c487f9c42e2271b676df5' })
       .then(async ({ data: body }) => {
         console.log(body);
         res.status(200).json({ message: body })
