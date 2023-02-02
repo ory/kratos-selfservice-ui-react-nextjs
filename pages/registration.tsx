@@ -74,15 +74,17 @@ const Registration: NextPage = () => {
             return router.push(flow?.return_to || "/").then(() => {})
           })
           .catch(handleFlowError(router, "registration", setFlow))
-          .catch((err: AxiosError) => {
-            // If the previous handler did not catch the error it's most likely a form validation error
-            if (err.response?.status === 400) {
-              // Yup, it is!
-              setFlow(err.response?.data)
-              return
-            }
+          .catch((err: any) => {
+            if (err && err.reponse) {
+              // If the previous handler did not catch the error it's most likely a form validation error
+              if (err.response?.status === 400) {
+                // Yup, it is!
+                setFlow(err.response?.data)
+                return
+              }
 
-            return Promise.reject(err)
+              return Promise.reject(err)
+            }
           }),
       )
 

@@ -10,7 +10,7 @@ export function handleGetFlowError<S>(
   resetFlow: Dispatch<SetStateAction<S | undefined>>,
 ) {
   console.log("error handler init")
-  return async (err: AxiosError) => {
+  return async (err: any) => {
     console.log("error handler within", err.response?.data)
     switch (err.response?.data.error?.id) {
       case "session_aal2_required":

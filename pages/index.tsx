@@ -17,6 +17,10 @@ const Home: NextPage = () => {
   const onLogout = LogoutLink()
 
   useEffect(() => {
+    ory.toSession().then(({ data }) => {
+      console.log("ory session data:", data)
+    })
+
     ory
       .toSession()
       .then(({ data }) => {

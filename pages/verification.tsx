@@ -52,7 +52,7 @@ const Verification: NextPage = () => {
       .then(({ data }) => {
         setFlow(data)
       })
-      .catch((err: AxiosError) => {
+      .catch((err: any) => {
         switch (err.response?.status) {
           case 400:
             // Status code 400 implies the user is already signed in
@@ -78,7 +78,7 @@ const Verification: NextPage = () => {
         // Form submission was successful, show the message to the user!
         setFlow(data)
       })
-      .catch((err: AxiosError) => {
+      .catch((err: any) => {
         switch (err.response?.status) {
           case 400:
             // Status code 400 implies the form validation had an error
