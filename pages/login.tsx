@@ -41,7 +41,7 @@ const Login: NextPage = () => {
   }
 
   useEffect(() => {
-    // test()
+    test()
 
     // If the router is not ready yet, or we already have a flow, do nothing.
     if (!router.isReady || flow) {
@@ -85,7 +85,7 @@ const Login: NextPage = () => {
     )
     // console.log(router.asPath.split("=")[1])
 
-    test()
+    // test()
     // new OAuth2.0 flow with hydra
     const response = await api
       .post("/api/hydra/login", {
