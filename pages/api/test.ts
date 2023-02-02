@@ -6,6 +6,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   console.log('ttteeesstt');
+  console.log('hydraAdmin', hydraAdmin);
   // const challenge = req.body.login_challenge
   // console.log("[@test.ts req.body]", req.body)
   // console.log("[@test.ts challenge]", challenge)
