@@ -15,6 +15,7 @@ export default async function handler(
       .getOAuth2LoginRequest({ loginChallenge: challenge })
       .then(async ({ data: body }) => {
         console.log(body);
+        res.status(200).json({ message: body })
       }).catch((err) => {
         console.log("Testing challenge error:", err)
       })
