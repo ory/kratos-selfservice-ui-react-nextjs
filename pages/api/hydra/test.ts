@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import { json } from "stream/consumers"
 
 import { hydraAdmin } from "../../../config"
 
@@ -6,22 +7,20 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // const consentChallenge = req.body.consent_challenge
-
+  const consentChallenge = req.body.consent_challenge
+  let consentChallengeRes
+  console.log("init")
   try {
-    // const consentChallengeRes = await hydraAdmin.acceptOAuth2ConsentRequest({
-    //   consentChallenge: consentChallenge,
-    //   // WIP - need to study grant scope and session
-    //   acceptOAuth2ConsentRequest: {
-    //     grant_scope: ["offline", "openid"],
-    //   },
-    // })
-
-    return res.status(200).json({
-      status: 200,
-      data: `Just testing, ${req.body.testPayload}`,
+    consentChallengeRes = await hydraAdmin.getOAuth2LoginRequest({
+      loginChallenge: "3e6b97e525fc409d8f6ec481411943fe",
     })
+    console.log("init2", consentChallengeRes)
   } catch (err) {
     console.log("Testing challenge error:", err)
   }
+  return res.status(200).json({
+    status: 200,
+    data: `Just testing, ${req.body.testPayload}`,
+    sdkResData: consentChallengeRes?.data,
+  })
 }
