@@ -36,7 +36,7 @@ export default async function handler(
     params.append("client_id", clientID)
     params.append("client_secret", clientSecret)
     params.append("grant_type", "authorization_code")
-    params.append("redirect_uri", "http://127.0.0.1:3000/callback")
+    params.append("redirect_uri", "https://cm-client-demo.vercel.app/api/auth/callback")
 
     const response = await fetch(
       process.env.HYDRA_ADMIN_URL + "/oauth2/token",
