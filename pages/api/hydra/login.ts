@@ -107,6 +107,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       })
   } catch (error) {
     console.log(error)
-    return res.json({ message2: error })
+    return res.status(500).json({ message2: error })
   }
 }
