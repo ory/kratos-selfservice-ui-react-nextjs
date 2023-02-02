@@ -12,15 +12,17 @@ export default async function handler(
   // console.log("[@test.ts challenge]", challenge)
 
   try {
-    return hydraAdmin
-      .getOAuth2LoginRequest({ loginChallenge: '40b8e0e9dd2c487f9c42e2271b676df5' })
-      .then(async ({ data: body }) => {
-        console.log(body);
-        res.status(200).json({ message: body })
-      }).catch((err) => {
-        console.log("Testing challenge error:", err)
-        return res.status(500).json({ message: err })
-      })
+    console.log('hydraAdmin', hydraAdmin);
+    res.status(200).json({ message: hydraAdmin })
+    // return hydraAdmin
+    //   .getOAuth2LoginRequest({ loginChallenge: '40b8e0e9dd2c487f9c42e2271b676df5' })
+    //   .then(async ({ data: body }) => {
+    //     console.log(body);
+    //     res.status(200).json({ message: body })
+    //   }).catch((err) => {
+    //     console.log("Testing challenge error:", err)
+    //     return res.status(500).json({ message: err })
+    //   })
   } catch (error) {
     console.log(error)
     return res.status(502).json({ message: error })
