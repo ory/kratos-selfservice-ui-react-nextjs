@@ -5,6 +5,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
+import { api } from "../axios/api"
 import { DocsButton, MarginCard, LogoutLink } from "../pkg"
 import ory from "../pkg/sdk"
 
@@ -15,6 +16,13 @@ const Home: NextPage = () => {
   const [hasSession, setHasSession] = useState<boolean>(false)
   const router = useRouter()
   const onLogout = LogoutLink()
+
+  useEffect(() => {
+    ;(async function getData() {
+      const { data } = await api.get("/api/hydra/test")
+      console.log("TEST RESPONSE WAS:", data)
+    })()
+  }, [])
 
   useEffect(() => {
     ory.toSession().then(({ data }) => {
