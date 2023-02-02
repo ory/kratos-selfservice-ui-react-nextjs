@@ -18,6 +18,7 @@ export default async function handler(
         res.status(200).json({ message: body })
       }).catch((err) => {
         console.log("Testing challenge error:", err)
+        return res.status(500).json({ message: err })
       })
   } catch (error) {
     console.log(error)
