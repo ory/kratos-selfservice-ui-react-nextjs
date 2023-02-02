@@ -20,7 +20,7 @@ export default async function handler(
   }
   return res.status(200).json({
     status: 200,
-    data: `Just testing, ${req.body.testPayload}`,
+    data2: `Just 123, ${req.body.testPayload}`,
     sdkResData: consentChallengeRes?.data,
   })
 }
