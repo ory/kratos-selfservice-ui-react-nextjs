@@ -13,13 +13,6 @@ interface ResponseType {
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Sets up csrf protection
-  const csrfProtection = csrf({
-    cookie: {
-      sameSite: "lax",
-    },
-  })
-
   // const query = url.parse(req.url as string, true).query
   // const challenge = String(query.login_challenge)
   const challenge = req.body.login_challenge
