@@ -34,9 +34,10 @@ const Login: NextPage = () => {
 
   const test = async () => {
     console.log("test")
-    await api.get("/api/test").then((res) => {
+    const res = await api.get("/api/test").then((res) => {
       console.log("[@] GET /api/test", res)
     })
+    console.log(res)
   }
 
   useEffect(() => {
