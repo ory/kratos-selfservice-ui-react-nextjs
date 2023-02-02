@@ -32,8 +32,15 @@ const Login: NextPage = () => {
   // to sign out if they are performing two-factor authentication!
   const onLogout = LogoutLink([aal, refresh])
 
+  const test = async () => {
+    console.log("test")
+    await api.get("/api/test").then((res) => {
+      console.log("[@] GET /api/test", res)
+    })
+  }
+
   useEffect(() => {
-    // hydraLoginService()
+    test()
 
     // If the router is not ready yet, or we already have a flow, do nothing.
     if (!router.isReady || flow) {
@@ -78,18 +85,22 @@ const Login: NextPage = () => {
     // console.log(router.asPath.split("=")[1])
 
     // new OAuth2.0 flow with hydra
-    const response = await api.post("/api/hydra/login", {
-      login_challenge,
-      subject: "test",
-    })
-
-    console.log("[@login_challenge] POST hydra/login response", response)
-
-    // login response was successful re-route to consent-page
-    if (response.status === 200) {
-      // redirect with challenge:
-      router.push(response.data?.redirect_to)
-    }
+    const response = await api
+      .post("/api/hydra/login", {
+        login_challenge,
+        subject: "test",
+      })
+      .then((res) => {
+        console.log("[@] POST hydra/login response", response)
+        // login response was successful re-route to consent-page
+        if (res.status === 200) {
+          // redirect with challenge:
+          router.push(res.data?.redirect_to)
+        }
+      })
+      .catch((err: AxiosError) => {
+        console.log("[@post-api-hydra] POST hydra/login error", err)
+      })
   }
 
   const onSubmit = async (values: UpdateLoginFlowBody) => {

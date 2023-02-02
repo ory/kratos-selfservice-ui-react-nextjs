@@ -107,7 +107,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
 
   filterNodes = (): Array<UiNode> => {
     const { flow, only } = this.props
-    console.log(flow)
+    // console.log(flow)
     if (!flow) {
       return []
     }
@@ -168,7 +168,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
       >
         {!hideGlobalMessages ? <Messages messages={flow.ui.messages} /> : null}
         {nodes.map((node, k) => {
-          console.log(node)
+          // console.log(node)
           const id = getNodeId(node) as keyof Values
           return (
             <Node
