@@ -19,7 +19,7 @@ export default async function handler(
 
     return res.status(200).json({
       status: 200,
-      data: "Just testing",
+      data: `Just testing, ${req.body.testPayload}`,
     })
   } catch (err) {
     console.log("Testing challenge error:", err)

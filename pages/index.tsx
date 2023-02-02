@@ -19,7 +19,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     ;(async function getData() {
-      const { data } = await api.get("/api/hydra/test")
+      const { data } = await api.post("/api/hydra/test", { testPayload: "why" })
       console.log("TEST RESPONSE WAS:", data)
     })()
   }, [])
