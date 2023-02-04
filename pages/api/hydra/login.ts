@@ -16,9 +16,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // const query = url.parse(req.url as string, true).query
   // const challenge = String(query.login_challenge)
   const challenge = req.body.login_challenge
+  const subject = req.body.subject
   console.log("[@login.ts req.body]", req.body)
   console.log("[@login.ts challenge]", challenge)
-
+  console.log("[@login.ts subject]", subject)
   //  return res.status(200).json({ message: 'ok' })
   try {
     // Parses the URL query
@@ -44,7 +45,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             .acceptOAuth2LoginRequest({
               loginChallenge: challenge,
               acceptOAuth2LoginRequest: {
-                subject: "test",
+                subject,
               },
             })
             .then(({ data: body }) => {
@@ -61,7 +62,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             {
               loginChallenge: challenge,
               acceptOAuth2LoginRequest: {
-                subject: "test",
+                subject,
               },
             },
           )

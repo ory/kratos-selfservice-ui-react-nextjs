@@ -83,7 +83,7 @@ const Login: NextPage = () => {
       "[@login_challenge-doConsentProcess] login_challenge",
       login_challenge,
     )
-    // console.log(router.asPath.split("=")[1])
+    console.log(subject)
 
     // test()
     // new OAuth2.0 flow with hydra
