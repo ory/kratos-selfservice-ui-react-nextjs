@@ -32,16 +32,16 @@ const Login: NextPage = () => {
   // to sign out if they are performing two-factor authentication!
   const onLogout = LogoutLink([aal, refresh])
 
-  const test = async () => {
-    console.log("test")
-    const res = await api.get("/api/test").then((res) => {
-      console.log("[@] GET /api/test", res)
-    })
-    console.log(res)
-  }
+  // const test = async () => {
+  //   console.log("test")
+  //   const res = await api.get("/api/test").then((res) => {
+  //     console.log("[@] GET /api/test", res)
+  //   })
+  //   console.log(res)
+  // }
 
   useEffect(() => {
-    test()
+    // test()
 
     // If the router is not ready yet, or we already have a flow, do nothing.
     if (!router.isReady || flow) {
@@ -77,7 +77,7 @@ const Login: NextPage = () => {
       .catch(handleFlowError(router, "login", setFlow))
   }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
-  const doConsentProcess = async (login_challenge: string) => {
+  const doConsentProcess = async (login_challenge: string, subject: string) => {
     // const login_challenge = router.query.login_challenge
     console.log(
       "[@login_challenge-doConsentProcess] login_challenge",
@@ -105,9 +105,14 @@ const Login: NextPage = () => {
       })
   }
 
-  const onSubmit = async (values: UpdateLoginFlowBody) => {
+  // const onSubmit = async (values: UpdateLoginFlowBody) => {
+  const onSubmit = async (values: any) => {
     const login_challenge = router.query.login_challenge
-    console.log(login_challenge)
+    let subject = ""
+    if (values?.identifier) {
+      console.log("values", values.identifier)
+      subject = values.identifier
+    }
     return (
       // original Kratos flow - not needed anymore since we don't need use router to push to the url with flow id
       // router
@@ -124,7 +129,7 @@ const Login: NextPage = () => {
         // We logged in successfully! Let's bring the user home.
         .then((data) => {
           // new flow
-          doConsentProcess(login_challenge as string)
+          doConsentProcess(login_challenge as string, subject)
 
           // Original Kratos flow
           // console.log("data", data)
