@@ -90,7 +90,7 @@ const Login: NextPage = () => {
     const response = await api
       .post("/api/hydra/login", {
         login_challenge,
-        subject: "test",
+        subject,
       })
       .then((res) => {
         console.log("[@] POST hydra/login response", response)
