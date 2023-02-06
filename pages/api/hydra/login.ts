@@ -58,6 +58,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         // OR
         // 2) authorize login via hydra to proceed to consent step
         try {
+          console.log("Body:", body)
           const hydraLoginAcceptRes = await hydraAdmin.acceptOAuth2LoginRequest(
             {
               loginChallenge: challenge,
@@ -98,7 +99,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       })
       .catch((err) => {
         console.log(err)
-        return res.status(err.status).json({ message: 'error1 ' + err.message })
+        return res.status(err.status).json({ message: "error1 " + err.message })
       })
   } catch (error) {
     // console.log(error)
