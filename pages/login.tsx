@@ -108,6 +108,8 @@ const Login: NextPage = () => {
   // const onSubmit = async (values: UpdateLoginFlowBody) => {
   const onSubmit = async (values: any) => {
     const login_challenge = router.query.login_challenge
+
+    // TODO - this is temp method to add subject, need to get subject from account
     let subject = ""
     if (values?.identifier) {
       console.log("values", values.identifier)
@@ -126,6 +128,7 @@ const Login: NextPage = () => {
           flow: String(flow?.id),
           updateLoginFlowBody: values,
         })
+
         // We logged in successfully! Let's bring the user home.
         .then((data) => {
           // new flow

@@ -10,6 +10,8 @@ import {
   UpdateSettingsFlowBody,
   UpdateVerificationFlowBody,
   UiNode,
+  UiNodeGroupEnum,
+  UiTextTypeEnum,
 } from "@ory/client"
 import { getNodeId } from "@ory/integrations/ui"
 import { isUiNodeInputAttributes } from "@ory/integrations/ui"
@@ -25,6 +27,10 @@ export type Values = Partial<
   | UpdateSettingsFlowBody
   | UpdateVerificationFlowBody
 >
+
+// interface ValuesCustomProps extends Values {
+//   noEmail: boolean
+// }
 
 export type Methods =
   | "oidc"
@@ -60,7 +66,10 @@ type State<T> = {
   isLoading: boolean
 }
 
-export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
+export class Flow<T extends ValuesCustomProps> extends Component<
+  Props<T>,
+  State<T>
+> {
   constructor(props: Props<T>) {
     super(props)
     this.state = {
@@ -170,6 +179,10 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
         {nodes.map((node, k) => {
           // console.log(node)
           const id = getNodeId(node) as keyof Values
+          console.log("node:", node)
+          // if (this.props.noEmail && node.meta.label?.text === "E-Mail") return
+          // if (node.meta.label?.text === "E-Mail") return
+
           return (
             <Node
               key={`${id}-${k}`}
