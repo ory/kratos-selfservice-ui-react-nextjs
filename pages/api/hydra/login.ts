@@ -15,7 +15,9 @@ interface ResponseType {
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "GET") {
-    const challenge = req.body.login_challenge
+    const query = url.parse(req.url as string, true).query
+    // The challenge is used to fetch information about the login request from ORY Hydra.
+    const challenge = String(query.login_challenge)
     const subject = req.body.subject
     console.log("[@GET login.ts req.body]", req.body)
     console.log("[@GET login.ts challenge]", challenge)
