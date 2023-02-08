@@ -81,6 +81,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                 loginChallenge: challenge,
                 acceptOAuth2LoginRequest: {
                   subject,
+                  remember: true,
                 },
               },
             )
