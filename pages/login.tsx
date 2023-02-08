@@ -32,19 +32,20 @@ const Login: NextPage = () => {
   // to sign out if they are performing two-factor authentication!
   const onLogout = LogoutLink([aal, refresh])
 
-  // const test = async () => {
-  //   console.log("test")
-  //   const res = await api.get("/api/test").then((res) => {
-  //     console.log("[@] GET /api/test", res)
-  //   })
-  //   console.log(res)
-  // }
+  const hydraLoginService = async () => {
+    const login_challenge = router.query.login_challenge
+    console.log("hydraLoginService")
+    const response = await fetch(
+      "/api/hydra/login?login_challenge=" + login_challenge,
+      {
+        method: "GET",
+      },
+    )
+    return response
+  }
 
   useEffect(() => {
-    // test()
-    api.get("/api/hydra/login").then((res) => {
-      console.log("[@] GET /api/hydra/login", res)
-    })
+    hydraLoginService()
     // If the router is not ready yet, or we already have a flow, do nothing.
     if (!router.isReady || flow) {
       return

@@ -16,49 +16,49 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "GET") {
     console.log('1', req.url);
-    // const query = url.parse(req.url ? req.url : '', true).query
-    // console.log('2', query);
-    // // The challenge is used to fetch information about the login request from ORY Hydra.
-    // const challenge = String(query.login_challenge)
-    // const subject = req.body.subject
-    // console.log("[@GET login.ts req.body]", req.body)
-    // console.log("[@GET login.ts challenge]", challenge)
-    // console.log("[@GET login.ts subject]", subject)
+    const query = url.parse(req.url ? req.url : '', true).query
+    console.log('2', query);
+    // The challenge is used to fetch information about the login request from ORY Hydra.
+    const challenge = String(query.login_challenge)
+    const subject = req.body.subject
+    console.log("[@GET login.ts req.body]", req.body)
+    console.log("[@GET login.ts challenge]", challenge)
+    console.log("[@GET login.ts subject]", subject)
     try {
       // Parses the URL query
       // The challenge is used to fetch information about the login request from ORY Hydra.
-      // if (!challenge) {
-      //   console.log("There was no challenge present.")
-      //   throw new Error("Expected a login challenge to be set but received none.")
-      // }
-      // // need to handle two types of requests
-      // // 1) check hydra login info / status
-      // return hydraAdmin
-      //   .getOAuth2LoginRequest({ loginChallenge: challenge })
-      //   .then(async ({ data: body }) => {
-      //     // If hydra was already able to authenticate the user, skip will be true and we do not need to re-authenticate
-      //     // the user.
-      //     if (body.skip) {
-      //       // 2) authorize the very last step via hydra if skip was true
-      //       return hydraAdmin
-      //         .acceptOAuth2LoginRequest({
-      //           loginChallenge: challenge,
-      //           acceptOAuth2LoginRequest: {
-      //             subject,
-      //           },
-      //         })
-      //         .then(({ data: body }) => {
-      //           // All we need to do now is to redirect the user back to hydra!
-      //           console.log("Redirecting to:", String(body.redirect_to))
-      //           res.redirect(String(body.redirect_to))
-      //         })
-      //     }
-      res.status(200).send('ok')
-      //   })
-      //   .catch((err) => {
-      //     console.log(err)
-      //     return res.status(err.status).json({ message: "error1 " + err.message })
-      //   })
+      if (!challenge) {
+        console.log("There was no challenge present.")
+        throw new Error("Expected a login challenge to be set but received none.")
+      }
+      // need to handle two types of requests
+      // 1) check hydra login info / status
+      return hydraAdmin
+        .getOAuth2LoginRequest({ loginChallenge: challenge })
+        .then(async ({ data: body }) => {
+          // If hydra was already able to authenticate the user, skip will be true and we do not need to re-authenticate
+          // the user.
+          if (body.skip) {
+            // 2) authorize the very last step via hydra if skip was true
+            return hydraAdmin
+              .acceptOAuth2LoginRequest({
+                loginChallenge: challenge,
+                acceptOAuth2LoginRequest: {
+                  subject,
+                },
+              })
+              .then(({ data: body }) => {
+                // All we need to do now is to redirect the user back to hydra!
+                console.log("Redirecting to:", String(body.redirect_to))
+                res.redirect(String(body.redirect_to))
+              })
+          }
+          res.status(200).send(body)
+        })
+        .catch((err) => {
+          console.log(err)
+          return res.status(err.status).json({ message: "error1 " + err.message })
+        })
     } catch (error) {
       return res.status(501).json({ message: error })
     }
