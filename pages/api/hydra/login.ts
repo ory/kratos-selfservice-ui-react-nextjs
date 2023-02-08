@@ -53,7 +53,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       //           res.redirect(String(body.redirect_to))
       //         })
       //     }
-      //     res.status(200).send(body)
+      res.status(200).send('ok')
       //   })
       //   .catch((err) => {
       //     console.log(err)
