@@ -18,10 +18,13 @@ const Home: NextPage = () => {
   const onLogout = LogoutLink()
 
   useEffect(() => {
-    ;(async function getData() {
-      const { data } = await api.post("/api/hydra/test", { testPayload: "why" })
-      console.log("TEST RESPONSE WAS:", data)
-    })()
+    // ;(async function getData() {
+    //   const { data } = await api.post("/api/hydra/test", { testPayload: "why" })
+    //   console.log("TEST RESPONSE WAS:", data)
+    // })()
+    api.get("/api/hydra/login").then((res) => {
+      console.log("[@] GET /api/hydra/login", res)
+    })
   }, [])
 
   useEffect(() => {
