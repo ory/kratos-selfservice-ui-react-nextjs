@@ -13,96 +13,101 @@ interface ResponseType {
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  // const query = url.parse(req.url as string, true).query
-  // const challenge = String(query.login_challenge)
-  const challenge = req.body.login_challenge
-  const subject = req.body.subject
-  console.log("[@login.ts req.body]", req.body)
-  console.log("[@login.ts challenge]", challenge)
-  console.log("[@login.ts subject]", subject)
-  //  return res.status(200).json({ message: 'ok' })
-  try {
-    // Parses the URL query
 
-    // The challenge is used to fetch information about the login request from ORY Hydra.
-    if (!challenge) {
-      console.log("There was no challenge present.")
-      throw new Error("Expected a login challenge to be set but received none.")
+  if (req.method === "GET") {
+    const challenge = req.body.login_challenge
+    const subject = req.body.subject
+    console.log("[@GET login.ts req.body]", req.body)
+    console.log("[@GET login.ts challenge]", challenge)
+    console.log("[@GET login.ts subject]", subject)
+    try {
+      // Parses the URL query
+      // The challenge is used to fetch information about the login request from ORY Hydra.
+      if (!challenge) {
+        console.log("There was no challenge present.")
+        throw new Error("Expected a login challenge to be set but received none.")
+      }
+      // need to handle two types of requests
+      // 1) check hydra login info / status
+      return hydraAdmin
+        .getOAuth2LoginRequest({ loginChallenge: challenge })
+        .then(async ({ data: body }) => {
+          // If hydra was already able to authenticate the user, skip will be true and we do not need to re-authenticate
+          // the user.
+          if (body.skip) {
+            // 2) authorize the very last step via hydra if skip was true
+            return hydraAdmin
+              .acceptOAuth2LoginRequest({
+                loginChallenge: challenge,
+                acceptOAuth2LoginRequest: {
+                  subject,
+                },
+              })
+              .then(({ data: body }) => {
+                // All we need to do now is to redirect the user back to hydra!
+                console.log("Redirecting to:", String(body.redirect_to))
+                res.redirect(String(body.redirect_to))
+              })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          return res.status(err.status).json({ message: "error1 " + err.message })
+        })
+    } catch (error) {
+      return res.status(501).json({ message: error })
     }
-
-    // need to handle two types of requests
-
-    // 1) check hydra login info / status
-    return hydraAdmin
-      .getOAuth2LoginRequest({ loginChallenge: challenge })
-      .then(async ({ data: body }) => {
-        // If hydra was already able to authenticate the user, skip will be true and we do not need to re-authenticate
-        // the user.
-
-        if (body.skip) {
-          // 2) authorize the very last step via hydra if skip was true
-          return hydraAdmin
-            .acceptOAuth2LoginRequest({
-              loginChallenge: challenge,
-              acceptOAuth2LoginRequest: {
-                subject,
-              },
-            })
-            .then(({ data: body }) => {
-              // All we need to do now is to redirect the user back to hydra!
-              console.log("Redirecting to:", String(body.redirect_to))
-              res.redirect(String(body.redirect_to))
-            })
-        }
-
-        // OR
-        // 2) authorize login via hydra to proceed to consent step
-        try {
-          console.log("Body:", body)
-          const hydraLoginAcceptRes = await hydraAdmin.acceptOAuth2LoginRequest(
-            {
-              loginChallenge: challenge,
-              acceptOAuth2LoginRequest: {
-                subject,
-              },
-            },
-          )
-
-          const { data } = hydraLoginAcceptRes
-          console.log("hydraLoginAcceptRes:", data)
-          // redirect to hydra's next step by providing frontend the hydra redirect url along with the required parameters
-          return (
-            res
-              .status(200)
-              // pass it to the frontend to re-route back to hydra
-              .json({ status: 200, redirect_to: String(data.redirect_to) })
-          )
-        } catch (err: any) {
-          // console.log(
-          //   "Err caught hydraLoginAcceptRes status:",
-          //   err.response.status,
-          // )
-
-          console.log(
-            "Err caught hydraLoginAcceptRes err.response:",
-            err.response.data,
-          )
-          const { status, data } = err.response
-          return res.status(err.response.status).json({
-            status,
-            result: data.error,
-            desc: data.error_description,
-          })
-        }
-
-        // console.log(req.csrfToken())
-      })
-      .catch((err) => {
-        console.log(err)
-        return res.status(err.status).json({ message: "error1 " + err.message })
-      })
-  } catch (error) {
-    // console.log(error)
-    return res.status(501).json({ message: error })
   }
+
+  if (req.method === "POST") {
+    const challenge = req.body.login_challenge
+    const subject = req.body.subject
+    console.log("[@POST login.ts req.body]", req.body)
+    console.log("[@POST login.ts challenge]", challenge)
+    console.log("[@POST login.ts subject]", subject)
+    try {
+      return hydraAdmin
+        .getOAuth2LoginRequest({ loginChallenge: challenge })
+        .then(async ({ data: body }) => {
+          try {
+            console.log("Body:", body)
+            const hydraLoginAcceptRes = await hydraAdmin.acceptOAuth2LoginRequest(
+              {
+                loginChallenge: challenge,
+                acceptOAuth2LoginRequest: {
+                  subject,
+                },
+              },
+            )
+            const { data } = hydraLoginAcceptRes
+            console.log("hydraLoginAcceptRes:", data)
+            // redirect to hydra's next step by providing frontend the hydra redirect url along with the required parameters
+            return (
+              res
+                .status(200)
+                // pass it to the frontend to re-route back to hydra
+                .json({ status: 200, redirect_to: String(data.redirect_to) })
+            )
+          } catch (err: any) {
+            console.log(
+              "Err caught hydraLoginAcceptRes err.response:",
+              err.response.data,
+            )
+            const { status, data } = err.response
+            return res.status(err.response.status).json({
+              status,
+              result: data.error,
+              desc: data.error_description,
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          return res.status(err.status).json({ message: "error1 " + err.message })
+        })
+    } catch (error) {
+      return res.status(501).json({ message: error })
+    }
+  }
+
 }
