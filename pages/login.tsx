@@ -42,7 +42,9 @@ const Login: NextPage = () => {
 
   useEffect(() => {
     // test()
-
+    api.get("/api/hydra/login").then((res) => {
+      console.log("[@] GET /api/hydra/login", res)
+    })
     // If the router is not ready yet, or we already have a flow, do nothing.
     if (!router.isReady || flow) {
       return
