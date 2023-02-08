@@ -123,6 +123,7 @@ const Login: NextPage = () => {
       //   // .push(`/login?flow=${flow?.id}`, undefined, { shallow: true })
       //   .push("/login")
       //   .then(() =>
+
       ory
         .updateLoginFlow({
           flow: String(flow?.id),
