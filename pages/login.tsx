@@ -138,16 +138,16 @@ const Login: NextPage = () => {
           // new flow
           if (login_challenge) {
             doConsentProcess(login_challenge as string, subject)
+          } else {
+            // Original Kratos flow
+            // console.log("data", data)
+            // console.log("flow", flow)
+            if (flow?.return_to) {
+              window.location.href = flow?.return_to
+              return
+            }
+            router.push("/")
           }
-
-          // Original Kratos flow
-          // console.log("data", data)
-          // console.log("flow", flow)
-          // if (flow?.return_to) {
-          //   window.location.href = flow?.return_to
-          //   return
-          // }
-          // router.push("/")
         })
         .then(() => {})
         .catch(handleFlowError(router, "login", setFlow))
