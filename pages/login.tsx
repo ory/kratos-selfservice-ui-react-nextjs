@@ -136,7 +136,9 @@ const Login: NextPage = () => {
         // We logged in successfully! Let's bring the user home.
         .then((data) => {
           // new flow
-          doConsentProcess(login_challenge as string, subject)
+          if (login_challenge) {
+            doConsentProcess(login_challenge as string, subject)
+          }
 
           // Original Kratos flow
           // console.log("data", data)
