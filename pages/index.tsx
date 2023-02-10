@@ -18,13 +18,6 @@ const Home: NextPage = () => {
   const onLogout = LogoutLink()
 
   useEffect(() => {
-    ;(async function getData() {
-      const { data } = await api.post("/api/hydra/test", { testPayload: "why" })
-      console.log("TEST RESPONSE WAS:", data)
-    })()
-  }, [])
-
-  useEffect(() => {
     ory.toSession().then(({ data }) => {
       console.log("ory session data:", data)
     })

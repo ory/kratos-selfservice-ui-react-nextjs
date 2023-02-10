@@ -32,17 +32,20 @@ const Login: NextPage = () => {
   // to sign out if they are performing two-factor authentication!
   const onLogout = LogoutLink([aal, refresh])
 
-  // const test = async () => {
-  //   console.log("test")
-  //   const res = await api.get("/api/test").then((res) => {
-  //     console.log("[@] GET /api/test", res)
-  //   })
-  //   console.log(res)
-  // }
+  const hydraLoginService = async () => {
+    const login_challenge = router.query.login_challenge
+    console.log("hydraLoginService")
+    const response = await fetch(
+      "/api/hydra/login?login_challenge=" + login_challenge,
+      {
+        method: "GET",
+      },
+    )
+    return response
+  }
 
   useEffect(() => {
-    // test()
-
+    hydraLoginService()
     // If the router is not ready yet, or we already have a flow, do nothing.
     if (!router.isReady || flow) {
       return
@@ -133,16 +136,18 @@ const Login: NextPage = () => {
         // We logged in successfully! Let's bring the user home.
         .then((data) => {
           // new flow
-          doConsentProcess(login_challenge as string, subject)
-
-          // Original Kratos flow
-          // console.log("data", data)
-          // console.log("flow", flow)
-          // if (flow?.return_to) {
-          //   window.location.href = flow?.return_to
-          //   return
-          // }
-          // router.push("/")
+          if (login_challenge) {
+            doConsentProcess(login_challenge as string, subject)
+          } else {
+            // Original Kratos flow
+            // console.log("data", data)
+            // console.log("flow", flow)
+            if (flow?.return_to) {
+              window.location.href = flow?.return_to
+              return
+            }
+            router.push("/")
+          }
         })
         .then(() => {})
         .catch(handleFlowError(router, "login", setFlow))
