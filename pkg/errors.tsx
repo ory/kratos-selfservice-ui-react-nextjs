@@ -60,10 +60,12 @@ export function handleGetFlowError<S>(
       case "browser_location_change_required":
         console.log("reached 8")
         // Ory Kratos asked us to point the user to this URL.
-        console.log("", err.response.data)
-        setTimeout(() => {
-          window.location.href = err.response.data.redirect_browser_to
-        }, 30000)
+        alert("debug: stay on this page to read errors before redirecting")
+        window.location.href = err.response.data.redirect_browser_to
+        // console.log("", err.response.data)
+        // setTimeout(() => {
+        //   window.location.href = err.response.data.redirect_browser_to
+        // }, 30000)
         return
     }
 
