@@ -82,16 +82,16 @@ const Registration: NextPage = () => {
             })
             .catch(handleFlowError(router, "registration", setFlow))
             .catch((err: any) => {
-              if (err && err.reponse) {
-                // If the previous handler did not catch the error it's most likely a form validation error
-                if (err.response?.status === 400) {
-                  // Yup, it is!
-                  setFlow(err.response?.data)
-                  return
-                }
-
-                return Promise.reject(err)
+              // if (err) {
+              // If the previous handler did not catch the error it's most likely a form validation error
+              if (err.response?.status === 400) {
+                // Yup, it is!
+                setFlow(err.response?.data)
+                return
               }
+
+              return Promise.reject(err)
+              // }
             }),
         )
     )
