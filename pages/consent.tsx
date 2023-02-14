@@ -8,7 +8,7 @@ const Consent: NextPage = () => {
   const router = useRouter()
   const consent_challenge = router.query.consent_challenge
 
-  console.log("consent_challenge:", consent_challenge)
+  // console.log("consent_challenge:", consent_challenge)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

@@ -34,7 +34,6 @@ const Login: NextPage = () => {
 
   const hydraLoginService = async () => {
     const login_challenge = router.query.login_challenge
-    console.log("hydraLoginService")
     const response = await fetch(
       "/api/hydra/login?login_challenge=" + login_challenge,
       {
@@ -81,14 +80,12 @@ const Login: NextPage = () => {
   }, [flowId, router, router.isReady, aal, refresh, returnTo, flow])
 
   const doConsentProcess = async (login_challenge: string, subject: string) => {
-    // const login_challenge = router.query.login_challenge
     console.log(
       "[@login_challenge-doConsentProcess] login_challenge",
       login_challenge,
     )
     console.log(subject)
 
-    // test()
     // new OAuth2.0 flow with hydra
     const response = await api
       .post("/api/hydra/login", {

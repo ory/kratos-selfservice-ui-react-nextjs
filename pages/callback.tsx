@@ -16,12 +16,10 @@ const Callback: NextPage = () => {
   const [refreshToken, setRefreshToken] = useState(null)
 
   useEffect(() => {
-    console.log(code)
     if (typeof code === "string") {
       const getToken = async () => {
-        console.log("INIT")
         const response = await getCodeGrantToken(code)
-        console.log("Token response:", response.data.data)
+        // console.log("Token response:", response.data.data)
         const result = response.data.data
         setAccessToken(result.access_token)
         setExpiresIn(result.expires_in)
@@ -32,7 +30,7 @@ const Callback: NextPage = () => {
     }
   }, [code])
 
-  console.log("final tokens:\n", accessToken, expiresIn, idToken, refreshToken)
+  // console.log("final tokens:\n", accessToken, expiresIn, idToken, refreshToken)
 
   return (
     <div>
