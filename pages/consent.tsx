@@ -1,33 +1,36 @@
 import { NextPage } from "next"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
+import { FormEvent } from "react"
+
+import { api } from "../axios/api"
 
 const Consent: NextPage = () => {
   const router = useRouter()
+  const consent_challenge = router.query.consent_challenge
 
-  const handleAcceptConsent = () => {
-    const url = new URL(window.location.href)
+  // console.log("consent_challenge:", consent_challenge)
 
-    const consentChallenge = url.searchParams.get("consent_challenge")
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const response = await api.post("/api/hydra/consent", {
+      consent_challenge,
+    })
 
-    console.log("[@OAuth2.0 flow] consentChallenge")
+    // if consent call status passed
+    if (response.status === 200) {
+      // redirect to hydra to swap for code grant
+      router.push(response.data.redirect_to)
+    }
   }
 
   return (
-    <div>
-      <p>Wants access resources from CMID to log onto Master Control.</p>
-      <p>
-        {" "}
-        Do you want to be asked next time when this application wants to access
-        your data? The application will not be able to ask for more permissions
-        without your consent.
-      </p>
-      <input type="checkbox" /> Do not ask me again
-      <div>
-        <button onClick={handleAcceptConsent}>Allow access</button>
-        <button>Deny access</button>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <h3>CMID Consent</h3>
+
+      <p>Do you consent this application to use your CMID information?</p>
+
+      <button type="submit">Accept</button>
+    </form>
   )
 }
 

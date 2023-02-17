@@ -957,4 +957,26 @@
     -ms-flex-order: 1;
     order: 1;
   }
+
+  .button {
+    background-color: #a62bc3 !important;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    opacity: 0.8;
+    color: white;
+  }
+
+  * {
+    font-family: "Mulish" !important;
+  }
 }

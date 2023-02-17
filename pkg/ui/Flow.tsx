@@ -10,6 +10,8 @@ import {
   UpdateSettingsFlowBody,
   UpdateVerificationFlowBody,
   UiNode,
+  UiNodeGroupEnum,
+  UiTextTypeEnum,
 } from "@ory/client"
 import { getNodeId } from "@ory/integrations/ui"
 import { isUiNodeInputAttributes } from "@ory/integrations/ui"
@@ -25,6 +27,10 @@ export type Values = Partial<
   | UpdateSettingsFlowBody
   | UpdateVerificationFlowBody
 >
+
+// interface ValuesCustomProps extends Values {
+//   noEmail: boolean
+// }
 
 export type Methods =
   | "oidc"
@@ -70,6 +76,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
   }
 
   componentDidMount() {
+    console.log(this.filterNodes())
     this.initializeValues(this.filterNodes())
   }
 
@@ -96,6 +103,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
           return
         }
         values[node.attributes.name as keyof Values] = node.attributes.value
+        // console.log(values)
       }
     })
 
@@ -105,6 +113,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
 
   filterNodes = (): Array<UiNode> => {
     const { flow, only } = this.props
+    // console.log(flow)
     if (!flow) {
       return []
     }
@@ -165,7 +174,12 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
       >
         {!hideGlobalMessages ? <Messages messages={flow.ui.messages} /> : null}
         {nodes.map((node, k) => {
+          // console.log(node)
           const id = getNodeId(node) as keyof Values
+          console.log("node:", node)
+          // if (this.props.noEmail && node.meta.label?.text === "E-Mail") return
+          // if (node.meta.label?.text === "E-Mail") return
+
           return (
             <Node
               key={`${id}-${k}`}

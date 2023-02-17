@@ -11,11 +11,62 @@ import { Flow, ActionCard, CenterLink, MarginCard } from "../pkg"
 import ory from "../pkg/sdk"
 
 const Verification: NextPage = () => {
+  const [initFlow, setInitFlow] = useState(false)
   const [flow, setFlow] = useState<VerificationFlow>()
 
   // Get ?flow=... from the URL
   const router = useRouter()
-  const { flow: flowId, return_to: returnTo } = router.query
+  const { flow: flowId, return_to: returnTo, user } = router.query
+
+  console.log("flow verification:", flow)
+
+  // directly initializing verifcation flow by entering user's email carried here from previous step
+  useEffect(() => {
+    // pull the generated csrf token provided by kratos from the hidden input field
+    const csrf = document.querySelector(
+      'input[name="csrf_token"]',
+    ) as HTMLInputElement
+    const csrf_token = csrf?.value
+    // if user email was attached then this followed from the correct previous step
+    if (user && flow) {
+      ory
+        .updateVerificationFlow({
+          flow: String(flow?.id),
+          updateVerificationFlowBody: {
+            csrf_token: csrf_token,
+            email: typeof user === "string" ? user : "",
+            method: "code",
+          },
+        })
+        .then(({ data }) => {
+          // Form submission was successful, show the message to the user!
+          setFlow(data)
+        })
+        .catch((err: any) => {
+          switch (err.response?.status) {
+            case 400:
+              // Status code 400 implies the form validation had an error
+              setFlow(err.response?.data)
+              return
+            case 410:
+              const newFlowID = err.response.data.use_flow_id
+              router
+                // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
+                // their data when they reload the page.
+                .push(`/verification?flow=${newFlowID}`, undefined, {
+                  shallow: true,
+                })
+
+              ory
+                .getVerificationFlow({ id: newFlowID })
+                .then(({ data }) => setFlow(data))
+              return
+          }
+
+          throw err
+        })
+    }
+  }, [initFlow])
 
   useEffect(() => {
     // If the router is not ready yet, or we already have a flow, do nothing.
@@ -29,6 +80,7 @@ const Verification: NextPage = () => {
         .getVerificationFlow({ id: String(flowId) })
         .then(({ data }) => {
           setFlow(data)
+          setInitFlow(true)
         })
         .catch((err: AxiosError) => {
           switch (err.response?.status) {
@@ -51,8 +103,9 @@ const Verification: NextPage = () => {
       })
       .then(({ data }) => {
         setFlow(data)
+        setInitFlow(true)
       })
-      .catch((err: AxiosError) => {
+      .catch((err: any) => {
         switch (err.response?.status) {
           case 400:
             // Status code 400 implies the user is already signed in
@@ -64,6 +117,7 @@ const Verification: NextPage = () => {
   }, [flowId, router, router.isReady, returnTo, flow])
 
   const onSubmit = async (values: UpdateVerificationFlowBody) => {
+    console.log("[@signupflow verification values]:", values)
     await router
       // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
       // their data when they reload the page.
@@ -78,7 +132,7 @@ const Verification: NextPage = () => {
         // Form submission was successful, show the message to the user!
         setFlow(data)
       })
-      .catch((err: AxiosError) => {
+      .catch((err: any) => {
         switch (err.response?.status) {
           case 400:
             // Status code 400 implies the form validation had an error
@@ -112,6 +166,7 @@ const Verification: NextPage = () => {
       <MarginCard>
         <CardTitle>Verify your account</CardTitle>
         <Flow onSubmit={onSubmit} flow={flow} />
+        {/* <Flow onSubmit={onSubmit} flow={flow} noEmail /> */}
       </MarginCard>
       <ActionCard>
         <Link href="/" passHref>

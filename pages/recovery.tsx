@@ -42,12 +42,14 @@ const Recovery: NextPage = () => {
         setFlow(data)
       })
       .catch(handleFlowError(router, "recovery", setFlow))
-      .catch((err: AxiosError) => {
+      .catch((err: any) => {
         // If the previous handler did not catch the error it's most likely a form validation error
         if (err.response?.status === 400) {
           // Yup, it is!
-          setFlow(err.response?.data)
-          return
+          if (err && err.response) {
+            setFlow(err.response?.data)
+            return
+          }
         }
 
         return Promise.reject(err)
@@ -70,15 +72,17 @@ const Recovery: NextPage = () => {
             setFlow(data)
           })
           .catch(handleFlowError(router, "recovery", setFlow))
-          .catch((err: AxiosError) => {
-            switch (err.response?.status) {
-              case 400:
-                // Status code 400 implies the form validation had an error
-                setFlow(err.response?.data)
-                return
-            }
+          .catch((err: any) => {
+            if (err && err.response) {
+              switch (err.response?.status) {
+                case 400:
+                  // Status code 400 implies the form validation had an error
+                  setFlow(err.response?.data)
+                  return
+              }
 
-            throw err
+              throw err
+            }
           }),
       )
 

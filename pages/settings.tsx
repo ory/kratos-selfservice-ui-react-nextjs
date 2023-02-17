@@ -87,7 +87,7 @@ const Settings: NextPage = () => {
             setFlow(data)
           })
           .catch(handleFlowError(router, "settings", setFlow))
-          .catch(async (err: AxiosError) => {
+          .catch(async (err: any) => {
             // If the previous handler did not catch the error it's most likely a form validation error
             if (err.response?.status === 400) {
               // Yup, it is!
