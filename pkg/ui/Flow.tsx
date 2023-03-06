@@ -118,7 +118,7 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
   // Handles form submission
   handleSubmit = (event: FormEvent<HTMLFormElement> | MouseEvent) => {
     // Prevent all native handlers
-    //event.stopPropagation()
+    event.stopPropagation()
     event.preventDefault()
 
     // Prevent double submission!
@@ -153,15 +153,11 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
 
     this.setState((state) => ({
       ...state,
-      values: {
-        ...state.values,
-        ...body,
-      },
       isLoading: true,
     }))
 
     return this.props
-      .onSubmit({ ...this.state.values, ...body })
+      .onSubmit({ ...body, ...this.state.values })
       .finally(() => {
         // We wait for reconciliation and update the state after 50ms
         // Done submitting - update loading status
