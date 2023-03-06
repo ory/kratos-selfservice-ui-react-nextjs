@@ -1,9 +1,7 @@
-import { UiNode, UiNodeInputAttributes } from "@ory/client"
 import { getNodeLabel } from "@ory/integrations/ui"
-import { Button, Checkbox, TextInput } from "@ory/themes"
-import { FormEvent } from "react"
+import { Button } from "@ory/themes"
 
-import { FormDispatcher, NodeInputProps, ValueSetter } from "./helpers"
+import { NodeInputProps } from "./helpers"
 
 export function NodeInputButton<T>({
   node,
@@ -13,7 +11,7 @@ export function NodeInputButton<T>({
   dispatchSubmit,
 }: NodeInputProps) {
   // Some attributes have dynamic JavaScript - this is for example required for WebAuthn.
-  const onClick = (e: MouseEvent | FormEvent) => {
+  const onClick = (e: React.MouseEvent | React.FormEvent<HTMLFormElement>) => {
     // This section is only used for WebAuthn. The script is loaded via a <script> node
     // and the functions are available on the global window level. Unfortunately, there
     // is currently no better way than executing eval / function here at this moment.

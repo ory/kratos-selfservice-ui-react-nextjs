@@ -1,8 +1,7 @@
-import { UiNode, UiNodeInputAttributes } from "@ory/client"
 import { getNodeLabel } from "@ory/integrations/ui"
-import { Button, Checkbox, TextInput } from "@ory/themes"
+import { Button } from "@ory/themes"
 
-import { FormDispatcher, NodeInputProps, ValueSetter } from "./helpers"
+import { NodeInputProps } from "./helpers"
 
 export function NodeInputSubmit<T>({
   node,
@@ -15,10 +14,10 @@ export function NodeInputSubmit<T>({
     <>
       <Button
         name={attributes.name}
-        onClick={(e) => {
-          // On click, we set this value, and once set, dispatch the submission!
-          setValue(attributes.value).then(() => dispatchSubmit(e))
-        }}
+        // onClick={(e) => {
+        //   // On click, we set this value, and once set, dispatch the submission!
+        //   setValue(attributes.value).then(() => dispatchSubmit(e))
+        // }}
         value={attributes.value || ""}
         disabled={attributes.disabled || disabled}
       >
