@@ -1,5 +1,4 @@
-import { UiNodeAnchorAttributes } from "@ory/client"
-import { UiNode } from "@ory/client"
+import { UiNode, UiNodeAnchorAttributes } from "@ory/client"
 import { Button } from "@ory/themes"
 
 interface Props {
