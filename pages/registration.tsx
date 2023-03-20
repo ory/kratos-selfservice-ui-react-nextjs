@@ -53,38 +53,50 @@ const Registration: NextPage = () => {
       .catch(handleFlowError(router, "registration", setFlow))
   }, [flowId, router, router.isReady, returnTo, flow])
 
-  const onSubmit = (values: UpdateRegistrationFlowBody) =>
-    router
+  const onSubmit = async (values: UpdateRegistrationFlowBody) => {
+    await router
       // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
       // his data when she/he reloads the page.
       .push(`/registration?flow=${flow?.id}`, undefined, { shallow: true })
-      .then(() =>
-        ory
-          .updateRegistrationFlow({
-            flow: String(flow?.id),
-            updateRegistrationFlowBody: values,
-          })
-          .then(({ data }) => {
-            // If we ended up here, it means we are successfully signed up!
-            //
-            // You can do cool stuff here, like having access to the identity which just signed up:
-            console.log("This is the user session: ", data, data.identity)
 
-            // For now however we just want to redirect home!
-            return router.push(flow?.return_to || "/").then(() => {})
-          })
-          .catch(handleFlowError(router, "registration", setFlow))
-          .catch((err: AxiosError) => {
-            // If the previous handler did not catch the error it's most likely a form validation error
-            if (err.response?.status === 400) {
-              // Yup, it is!
-              setFlow(err.response?.data)
-              return
+    ory
+      .updateRegistrationFlow({
+        flow: String(flow?.id),
+        updateRegistrationFlowBody: values,
+      })
+      .then(async ({ data }) => {
+        // If we ended up here, it means we are successfully signed up!
+        //
+        // You can do cool stuff here, like having access to the identity which just signed up:
+        console.log("This is the user session: ", data, data.identity)
+
+        // continue_with is a list of actions that the user might need to take before the registration is complete.
+        // It could, for example, contain a link to the verification form.
+        if (data.continue_with) {
+          for (const item of data.continue_with) {
+            switch (item.action) {
+              case "verification_ui":
+                await router.push("/verification?flow=" + item.flow.id)
+                return
             }
+          }
+        }
 
-            return Promise.reject(err)
-          }),
-      )
+        // If continue_with did not contain anything, we can just return to the home page.
+        await router.push(flow?.return_to || "/")
+      })
+      .catch(handleFlowError(router, "registration", setFlow))
+      .catch((err: AxiosError) => {
+        // If the previous handler did not catch the error it's most likely a form validation error
+        if (err.response?.status === 400) {
+          // Yup, it is!
+          setFlow(err.response?.data)
+          return
+        }
+
+        return Promise.reject(err)
+      })
+  }
 
   return (
     <>
