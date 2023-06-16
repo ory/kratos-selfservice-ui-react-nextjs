@@ -37,7 +37,9 @@ const Recovery: NextPage = () => {
 
     // Otherwise we initialize it
     ory
-      .createBrowserRecoveryFlow()
+      .createBrowserRecoveryFlow({
+        returnTo: String(returnTo || ""),
+      })
       .then(({ data }) => {
         setFlow(data)
       })

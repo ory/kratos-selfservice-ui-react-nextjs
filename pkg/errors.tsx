@@ -11,6 +11,9 @@ export function handleGetFlowError<S>(
 ) {
   return async (err: AxiosError) => {
     switch (err.response?.data.error?.id) {
+      case "session_inactive":
+        await router.push("/login")
+        return
       case "session_aal2_required":
         // 2FA is enabled and enforced, but user did not perform 2fa yet!
         window.location.href = err.response?.data.redirect_browser_to

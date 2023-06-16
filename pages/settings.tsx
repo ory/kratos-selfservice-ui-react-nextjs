@@ -63,7 +63,7 @@ const Settings: NextPage = () => {
     // Otherwise we initialize it
     ory
       .createBrowserSettingsFlow({
-        returnTo: returnTo ? String(returnTo) : undefined,
+        returnTo: String(returnTo || ""),
       })
       .then(({ data }) => {
         setFlow(data)
@@ -97,6 +97,12 @@ const Settings: NextPage = () => {
                 }
               }
             }
+
+            if (data.return_to) {
+              window.location.href = data.return_to
+              return
+            }
+
           })
           .catch(handleFlowError(router, "settings", setFlow))
           .catch(async (err: AxiosError) => {
