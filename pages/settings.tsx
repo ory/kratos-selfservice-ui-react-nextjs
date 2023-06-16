@@ -102,7 +102,6 @@ const Settings: NextPage = () => {
               window.location.href = data.return_to
               return
             }
-
           })
           .catch(handleFlowError(router, "settings", setFlow))
           .catch(async (err: AxiosError) => {
