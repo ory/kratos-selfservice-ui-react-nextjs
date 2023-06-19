@@ -10,13 +10,23 @@ export function handleGetFlowError<S>(
   resetFlow: Dispatch<SetStateAction<S | undefined>>,
 ) {
   return async (err: AxiosError) => {
+    console.log(err.response?.data.error)
     switch (err.response?.data.error?.id) {
       case "session_inactive":
-        await router.push("/login")
+        await router.push("/login?return_to=" + window.location.href)
         return
       case "session_aal2_required":
-        // 2FA is enabled and enforced, but user did not perform 2fa yet!
-        window.location.href = err.response?.data.redirect_browser_to
+        if (err.response?.data.redirect_browser_to) {
+          const redirectTo = new URL(err.response?.data.redirect_browser_to)
+          if (flowType === "settings") {
+            redirectTo.searchParams.set("return_to", window.location.href)
+          }
+          console.log("redirecting to", redirectTo.toString())
+          // 2FA is enabled and enforced, but user did not perform 2fa yet!
+          window.location.href = redirectTo.toString()
+          return
+        }
+        await router.push("/login?aal=aal2&return_to=" + window.location.href)
         return
       case "session_already_available":
         // User is already signed in, let's redirect them home!
