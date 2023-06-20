@@ -20,7 +20,9 @@ context("Ory Kratos pages", () => {
     cy.get('[name="traits.email"]').type(email)
     cy.get('[name="password"]').type(password)
     cy.get('[name="method"]').click()
-    cy.location("pathname").should("eq", "/")
+    cy.location("pathname").should("eq", "/verification")
+
+    cy.visit("/")
     cy.get('[data-testid="logout"]').should(
       "have.attr",
       "aria-disabled",
