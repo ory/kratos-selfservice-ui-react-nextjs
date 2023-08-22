@@ -14,6 +14,8 @@ import ory from "../pkg/sdk"
 const Login: NextPage = () => {
   const [flow, setFlow] = useState<LoginFlow>()
 
+  const isLoginFlow = (data: any): data is LoginFlow => "state" in data
+
   // Get ?flow=... from the URL
   const router = useRouter()
   const {
@@ -74,7 +76,7 @@ const Login: NextPage = () => {
           })
           // We logged in successfully! Let's bring the user home.
           .then(({ data }) => {
-            if (values?.method === "code") {
+            if (values.method === "code" && isLoginFlow(data) && data.state === "sent_email") {
               setFlow(data as unknown as LoginFlow)
               return
             }
@@ -84,7 +86,7 @@ const Login: NextPage = () => {
             }
             router.push("/")
           })
-          .then(() => {})
+          .then(() => {  })
           .catch(handleFlowError(router, "login", setFlow))
           .catch((err: AxiosError) => {
             // If the previous handler did not catch the error it's most likely a form validation error

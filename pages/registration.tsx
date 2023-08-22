@@ -23,6 +23,8 @@ const Registration: NextPage = () => {
   // Get ?flow=... from the URL
   const { flow: flowId, return_to: returnTo } = router.query
 
+  const isRegistrationFlow = (data: any): data is RegistrationFlow => "state" in data
+
   // In this effect we either initiate a new registration flow, or we fetch an existing registration flow.
   useEffect(() => {
     // If the router is not ready yet, or we already have a flow, do nothing.
@@ -65,8 +67,8 @@ const Registration: NextPage = () => {
         updateRegistrationFlowBody: values,
       })
       .then(async ({ data }) => {
-        if (values.method === "code") {
-          setFlow(data as unknown as RegistrationFlow)
+        if (values.method === "code" && isRegistrationFlow(data) && data.state === "sent_email") {
+          setFlow(data)
           return
         }
         // If we ended up here, it means we are successfully signed up!
