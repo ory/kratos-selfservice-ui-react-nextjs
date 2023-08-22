@@ -5,13 +5,15 @@ import { useState, useEffect, DependencyList } from "react"
 import ory from "./sdk"
 
 // Returns a function which will log the user out
-export function LogoutLink(deps?: DependencyList) {
+export function LogoutLink(deps?: DependencyList, returnTo?: string) {
   const [logoutToken, setLogoutToken] = useState<string>("")
   const router = useRouter()
 
   useEffect(() => {
     ory
-      .createBrowserLogoutFlow()
+      .createBrowserLogoutFlow({
+        returnTo: returnTo || "",
+      })
       .then(({ data }) => {
         setLogoutToken(data.logout_token)
       })

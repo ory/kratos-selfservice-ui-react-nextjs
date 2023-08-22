@@ -65,6 +65,10 @@ const Registration: NextPage = () => {
         updateRegistrationFlowBody: values,
       })
       .then(async ({ data }) => {
+        if (values.method === "code") {
+          setFlow(data as unknown as RegistrationFlow)
+          return
+        }
         // If we ended up here, it means we are successfully signed up!
         //
         // You can do cool stuff here, like having access to the identity which just signed up:
