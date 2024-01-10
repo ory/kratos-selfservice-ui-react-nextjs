@@ -37,3 +37,5 @@ dist/
 
 cypress/videos
 cypress/screenshots
+
+.idea
