@@ -31,6 +31,7 @@ export type Methods =
   | "profile"
   | "totp"
   | "webauthn"
+  | "passkey"
   | "link"
   | "lookup_secret"
 
@@ -155,8 +156,11 @@ export class Flow<T extends Values> extends Component<Props<T>, State<T>> {
       isLoading: true,
     }))
 
+    console.log("form data", body)
+    console.log("form data state values", this.state.values)
+
     return this.props
-      .onSubmit({ ...body, ...this.state.values })
+      .onSubmit({ ...this.state.values, ...body })
       .finally(() => {
         // We wait for reconciliation and update the state after 50ms
         // Done submitting - update loading status
