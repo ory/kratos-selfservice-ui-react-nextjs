@@ -213,6 +213,16 @@ const Settings: NextPage = () => {
           flow={flow}
         />
       </SettingsCard>
+      <SettingsCard only="webauthn" flow={flow}>
+        <H3>Manage Passkeys</H3>
+        <Messages messages={flow?.ui.messages} />
+        <Flow
+          hideGlobalMessages
+          onSubmit={onSubmit}
+          only="passkey"
+          flow={flow}
+        />
+      </SettingsCard>
       <ActionCard wide>
         <Link href="/" passHref>
           <CenterLink>Go back</CenterLink>
