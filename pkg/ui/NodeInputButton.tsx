@@ -1,8 +1,7 @@
 import { getNodeLabel } from "@ory/integrations/ui"
 import { Button } from "@ory/themes"
-import { useEffect } from "react"
 
-import { callWebauthnFunction, NodeInputProps, useOnload } from "./helpers"
+import { callWebauthnFunction, NodeInputProps } from "./helpers"
 
 export function NodeInputButton<T>({
   node,
@@ -19,7 +18,6 @@ export function NodeInputButton<T>({
     //
     // Please note that we also need to prevent the default action from happening.
     if (attributes.onclick) {
-      console.log("onclick", attributes.onclick)
       e.stopPropagation()
       e.preventDefault()
       callWebauthnFunction(attributes.onclick)
@@ -28,8 +26,6 @@ export function NodeInputButton<T>({
 
     setValue(attributes.value).then(() => dispatchSubmit(e))
   }
-
-  // useOnload(attributes as any)
 
   return (
     <>

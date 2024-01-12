@@ -48,7 +48,6 @@ const Registration: NextPage = () => {
         returnTo: returnTo ? String(returnTo) : undefined,
       })
       .then(({ data }) => {
-        console.log("Created a new registration flow: ", data)
         setFlow(data)
       })
       .catch(handleFlowError(router, "registration", setFlow))
@@ -60,15 +59,12 @@ const Registration: NextPage = () => {
       // his data when she/he reloads the page.
       .push(`/registration?flow=${flow?.id}`, undefined, { shallow: true })
 
-    console.log("updateRegistrationFlow values", values)
     ory
       .updateRegistrationFlow({
         flow: String(flow?.id),
         updateRegistrationFlowBody: values,
       })
       .then(async ({ data }) => {
-        console.log("updateRegistrationFlow data", data)
-
         // If we ended up here, it means we are successfully signed up!
         //
         // You can do cool stuff here, like having access to the identity which just signed up:
