@@ -213,7 +213,7 @@ const Settings: NextPage = () => {
           flow={flow}
         />
       </SettingsCard>
-      <SettingsCard only="webauthn" flow={flow}>
+      <SettingsCard only="passkey" flow={flow}>
         <H3>Manage Passkeys</H3>
         <Messages messages={flow?.ui.messages} />
         <Flow
