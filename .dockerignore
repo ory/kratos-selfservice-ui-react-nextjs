@@ -1,0 +1,51 @@
+# Node modules
+node_modules/
+
+# Git repository files
+.git/
+.gitignore
+
+# GitHub workflows
+.github/
+
+# Docker configuration
+Dockerfile
+docker-compose.yml
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output directories
+dist/
+build/
+.next/
+out/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+
+# IDE files
+.vscode/
+.idea/
+
+# Config and metadata files not needed in the image
+*.yaml
+*.yml
+*.md
+
+# Exclude license if not needed
+LICENSE
+
+# Exclude scripts if not needed
+*.sh 

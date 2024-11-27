@@ -1,0 +1,52 @@
+# Project: Web
+# Path: values.yml
+# Description: Helm values for Web
+
+deploymentName: web-${ENVIRONMENT}
+
+namespace: web-${ENVIRONMENT}
+
+container:
+  name: web
+
+replicaCount: 1
+
+image:
+  repository: gcr.io/${PROJECT_ID}
+  path: /images/web
+  name: ${ENVIRONMENT}
+  tag: ${SHA}
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+ports:
+  - name: auth
+    containerPort: ${WEB_PORT}
+    protocol: TCP
+
+service:
+  type: ClusterIP
+  ports:
+    - name: auth
+      port: 80
+      targetPort: ${WEB_PORT}
+      protocol: TCP
+
+readinessProbe:
+  path: /api/health
+  port: ${WEB_PORT}
+  initialDelaySeconds: 10
+  periodSeconds: 15
+
+livenessProbe:
+  path: /api/health
+  port: ${WEB_PORT}
+  initialDelaySeconds: 15
+  periodSeconds: 20

@@ -40,6 +40,8 @@ Example `.env.local`:
 ORY_SDK_URL=http://localhost:4433/
 ```
 
+Run ``` kubectl port-forward -n kratos-staging service/kratos-staging 4433:4433 ```
+
 <br />
 
 **Running Locally**
