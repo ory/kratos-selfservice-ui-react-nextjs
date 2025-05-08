@@ -20,6 +20,15 @@ const Home: NextPage = () => {
     ory
       .toSession()
       .then(({ data }) => {
+        // Elevate the user to AAL2 if they are using a Gmail account
+        // and are currently authenticated at AAL1.
+        if (
+          data.authenticator_assurance_level === "aal1" &&
+          data.identity.traits.email.endsWith("@gmail.com")
+        ) {
+          router.push("/login?aal=aal2")
+        }
+
         setSession(JSON.stringify(data, null, 2))
         setHasSession(true)
       })
