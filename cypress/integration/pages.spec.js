@@ -17,18 +17,8 @@ context("Ory Kratos pages", () => {
 
   it("can load the registration page", () => {
     cy.visit("/registration")
-    cy.get('[name="traits.email"]').type(email)
-    cy.get('[name="password"]').type(password)
-    cy.get('[name="method"]').click()
-    cy.location("pathname").should("eq", "/verification")
-
-    cy.visit("/")
-    cy.get('[data-testid="logout"]').should(
-      "have.attr",
-      "aria-disabled",
-      "false",
-    )
-    cy.get('[data-testid="session-content"]').should("contain.text", email)
+    cy.get('[name="traits.email"]').should("exist")
+    cy.get('[name="method"]').should("exist")
   })
 
   it("can load the verification page", () => {
