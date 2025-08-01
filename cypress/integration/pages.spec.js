@@ -1,4 +1,11 @@
+const randomString = () => (Math.random() + 1).toString(36).substring(7)
+const randomPassword = () => randomString() + randomString()
+const randomEmail = () => randomString() + "@" + randomString() + ".com"
+
 context("Ory Kratos pages", () => {
+  const email = randomEmail()
+  const password = randomPassword()
+
   beforeEach(() => {
     cy.clearCookies({ domain: null })
   })
