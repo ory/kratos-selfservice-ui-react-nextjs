@@ -6,11 +6,11 @@ settings, account recovery, account verification).
 
 If you only want to add authentication to your app, and not customize the login,
 registration, account recovery, ... screens, please check out the
-[Ory Kratos Quickstart](https://www.ory.sh/kratos/docs/quickstart).
+[Ory Kratos Quickstart](https://www.ory.com/kratos/docs/quickstart).
 
 To learn more about using this app, how it is built, and how to customize it
 head over to the
-[accompanying blog post](https://www.ory.sh/nextjs-authentication-spa-custom-flows-open-source)
+[accompanying blog post](https://www.ory.com/nextjs-authentication-spa-custom-flows-open-source)
 which will be released soon!
 
 The app itself you can see live at
@@ -44,10 +44,10 @@ ORY_SDK_URL=http://localhost:4433/
 
 **Running Locally**
 
-The [quickstart documentation](https://www.ory.sh/kratos/docs/quickstart) guides
-developers to use port `4455` for the self-service UI. By default, NextJS uses
-port `3000`. Use the `-p` or `--port` option of the `next dev` / `next start`
-commands to set the port number:
+The [quickstart documentation](https://www.ory.com/kratos/docs/quickstart)
+guides developers to use port `4455` for the self-service UI. By default, NextJS
+uses port `3000`. Use the `-p` or `--port` option of the `next dev` /
+`next start` commands to set the port number:
 
 ```sh
 npm run dev -- -p 4455
