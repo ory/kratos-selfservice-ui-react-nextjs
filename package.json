@@ -4,6 +4,11 @@
   "config": {
     "prettierTarget": "**/*.{tsx,ts,json,md,js,css}"
   },
+  "prettier": {
+    "proseWrap": "always",
+    "semi": false,
+    "trailingComma": "all"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -38,15 +43,13 @@
     "styled-components": "^5.3.1"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^3.1.0",
     "@types/react": "~17.0.19",
     "@types/request": "^2.48.7",
     "@types/styled-components": "^5.1.13",
     "cypress": "^8.7.0",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.3",
-    "ory-prettier-styles": "^1.1.2",
-    "prettier": "^2.3.2",
+    "prettier": "3.8.1",
     "rollup": "^2.56.3",
     "rollup-plugin-dts": "^4.0.0",
     "rollup-plugin-esbuild": "^4.5.0",
