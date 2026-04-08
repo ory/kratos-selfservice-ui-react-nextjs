@@ -70,27 +70,27 @@ const Home: NextPage = () => {
               <div className="row">
                 <DocsButton
                   title="Get Started"
-                  href="https://www.ory.sh/docs/get-started"
+                  href="https://www.ory.com/docs/get-started"
                   testid="get-started"
                 />
                 <DocsButton
                   title="User Flows"
-                  href="https://www.ory.sh/docs/concepts/self-service"
+                  href="https://www.ory.com/docs/concepts/self-service"
                   testid="user-flows"
                 />
                 <DocsButton
                   title="Identities"
-                  href="https://www.ory.sh/docs/concepts/identity"
+                  href="https://www.ory.com/docs/concepts/identity"
                   testid="identities"
                 />
                 <DocsButton
                   title="Sessions"
-                  href="https://www.ory.sh/docs/concepts/session"
+                  href="https://www.ory.com/docs/concepts/session"
                   testid="sessions"
                 />
                 <DocsButton
                   title="Bring Your Own UI"
-                  href="https://www.ory.sh/docs/guides/bring-your-user-interface"
+                  href="https://www.ory.com/docs/guides/bring-your-user-interface"
                   testid="customize-ui"
                 />
               </div>
