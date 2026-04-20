@@ -912,7 +912,14 @@
       },
       "identityCredentialsType": {
         "description": "and so on.",
-        "enum": ["password", "totp", "oidc", "webauthn", "lookup_secret"],
+        "enum": [
+          "password",
+          "totp",
+          "oidc",
+          "webauthn",
+          "lookup_secret",
+          "deviceauthn"
+        ],
         "title": "CredentialsType  represents several different credential types, like password credentials, passwordless credentials,",
         "type": "string"
       },
