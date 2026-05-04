@@ -78,14 +78,14 @@ const Verification: NextPage = () => {
         // Form submission was successful, show the message to the user!
         setFlow(data)
       })
-      .catch((err: AxiosError) => {
+      .catch((err: AxiosError<VerificationFlow & { use_flow_id?: string }>) => {
         switch (err.response?.status) {
           case 400:
             // Status code 400 implies the form validation had an error
             setFlow(err.response?.data)
             return
           case 410:
-            const newFlowID = err.response.data.use_flow_id
+            const newFlowID = String(err.response.data.use_flow_id)
             router
               // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
               // their data when they reload the page.

@@ -3,13 +3,18 @@ import { NextRouter } from "next/router"
 import { Dispatch, SetStateAction } from "react"
 import { toast } from "react-toastify"
 
+type FlowErrorResponse = {
+  error?: { id?: string }
+  redirect_browser_to: string
+}
+
 // A small function to help us deal with errors coming from fetching a flow.
 export function handleGetFlowError<S>(
   router: NextRouter,
   flowType: "login" | "registration" | "settings" | "recovery" | "verification",
   resetFlow: Dispatch<SetStateAction<S | undefined>>,
 ) {
-  return async (err: AxiosError) => {
+  return async (err: AxiosError<FlowErrorResponse>) => {
     switch (err.response?.data.error?.id) {
       case "session_inactive":
         await router.push("/login?return_to=" + window.location.href)

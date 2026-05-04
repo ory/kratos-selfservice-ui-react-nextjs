@@ -86,7 +86,7 @@ const Registration: NextPage = () => {
         await router.push(flow?.return_to || "/")
       })
       .catch(handleFlowError(router, "registration", setFlow))
-      .catch((err: AxiosError) => {
+      .catch((err: AxiosError<RegistrationFlow>) => {
         // If the previous handler did not catch the error it's most likely a form validation error
         if (err.response?.status === 400) {
           // Yup, it is!
