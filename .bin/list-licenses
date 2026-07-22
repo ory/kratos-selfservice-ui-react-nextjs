@@ -16,23 +16,23 @@ fi
 
 # list Go licenses
 if [ -f go.mod ]; then
-	# List all direct Go module dependencies, transform their paths to root module paths
-	# (e.g., github.com/ory/x instead of github.com/ory/x/foo/bar), and generate a license report
-	# for each unique root module. This ensures that the license report is generated for the root
-	# module of a repository, where licenses are typically defined.
-	go_modules=$(
-		go list -f "{{if not .Indirect}}{{.Path}}{{end}}" -m ... |
-			sort -u |
-			awk -F/ '{ if ($1 == "github.com" && NF >= 3) { print $1"/"$2"/"$3 } else { print } }' |
-			sort -u
+	# For each direct Go module dependency, pick one importable package and let
+	# go-licenses report on it. Calling `go-licenses report <module>` directly
+	# does not work for two common cases:
+	#   - Versioned modules carry a /vN suffix that must be present verbatim
+	#     (github.com/golang-jwt/jwt/v5, github.com/dgraph-io/ristretto/v2).
+	#   - Some module roots have no Go file of their own; only sub-packages
+	#     are importable (cloud.google.com/go/secretmanager -> .../apiv1).
+	# Walking the actual import graph with `go list -deps` sidesteps both.
+	go_packages=$(
+		go list -deps -f '{{if .Module}}{{if not .Module.Main}}{{if not .Module.Indirect}}{{.Module.Path}}|{{.ImportPath}}{{end}}{{end}}{{end}}' ./... |
+			sort -u -t'|' -k1,1 |
+			cut -d'|' -f2
 	)
-	if [ -z "$go_modules" ]; then
+	if [ -z "$go_packages" ]; then
 		echo "No Go modules found" >&2
 	else
-		# Workaround until https://github.com/google/go-licenses/issues/307 is fixed
-		# .bin/go-licenses report "$module_name" --template .bin/license-template-go.tpl 2>/dev/null
-		#
-		echo "$go_modules" | xargs -I {} sh -c '.bin/go-licenses report --template .bin/license-template-go.tpl {}' | grep -v '^$'
+		echo "$go_packages" | xargs -I {} sh -c '.bin/go-licenses report --template .bin/license-template-go.tpl {}' | grep -v '^$'
 		echo
 	fi
 fi
